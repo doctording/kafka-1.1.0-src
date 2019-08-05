@@ -68,20 +68,33 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class RecordAccumulator {
 
     private final Logger log;
+    // sender 线程准备关闭
     private volatile boolean closed;
+    // flushes过程计数器
     private final AtomicInteger flushesInProgress;
+    // appends过程计数器
     private final AtomicInteger appendsInProgress;
+    // 批量的大小
     private final int batchSize;
     private final CompressionType compression;
+    // 延迟时间
     private final long lingerMs;
+    // 重试时间
     private final long retryBackoffMs;
     private final BufferPool free;
     private final Time time;
     private final ApiVersions apiVersions;
+    // TopicPartition与ProducerBatch集合的映射关系，
+    // 把消息以ProducerBatch为单位累积缓存。
+    // 多个ProducerBatch保存在Deque队列中。
+    // 当Deque中最新的batch已不能容纳消息时，就会创建新的batch来继续缓存，并将其加入Deque。
     private final ConcurrentMap<TopicPartition, Deque<ProducerBatch>> batches;
     private final IncompleteBatches incomplete;
+    // 以下属性为sender线程调用
     // The following variables are only accessed by the sender thread, so we don't need to protect them.
+    // muted保存了所有已经发送batch到server中，但是没有收到ack的TopicPartition
     private final Set<TopicPartition> muted;
+    // 记录上次发送停止时的位置，下次继续从此位置开始发送。
     private int drainIndex;
     private final TransactionManager transactionManager;
 
@@ -191,6 +204,7 @@ public final class RecordAccumulator {
         ByteBuffer buffer = null;
         if (headers == null) headers = Record.EMPTY_HEADERS;
         try {
+            // 检查 batches 是否有该 TopicPartition 的映射，如果没有，则创建一个
             // check if we have an in-progress batch
             Deque<ProducerBatch> dq = getOrCreateDeque(tp);
             synchronized (dq) {
@@ -200,7 +214,7 @@ public final class RecordAccumulator {
                 if (appendResult != null)
                     return appendResult;
             }
-
+            // 没有正在运行的 record batch 就分配一个新的进行操作
             // we don't have an in-progress record batch try to allocate a new batch
             byte maxUsableMagic = apiVersions.maxUsableProduceMagic();
             int size = Math.max(this.batchSize, AbstractRecords.estimateSizeInBytesUpperBound(maxUsableMagic, compression, key, value, headers));
@@ -245,6 +259,12 @@ public final class RecordAccumulator {
     }
 
     /**
+     *  追加消息到最后一个 ProducerBatch 中
+     *
+     *  如果返回 null , 说明没有可以成功追加此消息的ProducerBatch，有两种情况：
+     *  1. deque是空的，可能是第一次被进入，也可能是batch都被发送完了。
+     *  2. deque存在batch，但是所剩空间已经不足以容纳此消息。
+     *
      *  Try to append to a ProducerBatch.
      *
      *  If it is full, we return null and a new batch is created. We also close the batch for record appends to free up

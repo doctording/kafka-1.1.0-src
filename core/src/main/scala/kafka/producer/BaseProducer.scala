@@ -37,10 +37,12 @@ class NewShinyProducer(producerProps: Properties) extends BaseProducer {
   // decide whether to send synchronously based on producer properties
   val sync = producerProps.getProperty("producer.type", "async").equals("sync")
 
+  // new KafkaProducer，sender线程在初始化时启动
   val producer = new KafkaProducer[Array[Byte],Array[Byte]](producerProps)
 
   override def send(topic: String, key: Array[Byte], value: Array[Byte]) {
     val record = new ProducerRecord[Array[Byte],Array[Byte]](topic, key, value)
+    // 同步发送 or 异步发送
     if(sync) {
       this.producer.send(record).get()
     } else {

@@ -75,39 +75,48 @@ public class Sender implements Runnable {
 
     private final Logger log;
 
+    // 每个节点连接的状态KafkaClient实例client
     /* the state of each nodes connection */
     private final KafkaClient client;
 
+    // 批量记录的记录累加器RecordAccumulator实例accumulator
     /* the record accumulator that batches records */
     private final RecordAccumulator accumulator;
 
+    // 客户端元数据Metadata实例metadata
     /* the metadata for the client */
     private final Metadata metadata;
 
     /* the flag indicating whether the producer should guarantee the message order on the broker or not. */
     private final boolean guaranteeMessageOrder;
 
+    // 试图发送到server端的最大请求大小
     /* the maximum request size to attempt to send to the server */
     private final int maxRequestSize;
 
+    // 从server端获得的请求发送的已确认数量acks
     /* the number of acknowledgements to request from the server */
     private final short acks;
 
+    // 一个失败请求在被放弃之前的重试次数retries
     /* the number of times to retry a failed request before giving up */
     private final int retries;
 
     /* the clock instance used for getting the time */
     private final Time time;
 
+    // Sender线程运行的标志位，为true表示Sender线程一直在运行
     /* true while the sender thread is still running */
     private volatile boolean running;
 
+    // 强制关闭的标志位forceClose
     /* true when the caller wants to ignore all unsent/inflight messages and force close.  */
     private volatile boolean forceClose;
 
     /* metrics */
     private final SenderMetrics sensors;
 
+    // server端响应请求的超时时间
     /* the max time to wait for the server to respond to the request*/
     private final int requestTimeout;
 
@@ -160,6 +169,7 @@ public class Sender implements Runnable {
         // main loop, runs until close is called
         while (running) {
             try {
+                // 调用调用带参数的run()方法处理
                 run(time.milliseconds());
             } catch (Exception e) {
                 log.error("Uncaught error in kafka producer I/O thread: ", e);
@@ -168,11 +178,13 @@ public class Sender implements Runnable {
 
         log.debug("Beginning shutdown of Kafka producer I/O thread, sending remaining records.");
 
+        // 如果不是强制关闭，且消息累加器accumulator尚有消息未发送，或者客户端client尚有正在处理（in-flight）的请求
         // okay we stopped accepting requests but there may still be
         // requests in the accumulator or waiting for acknowledgment,
         // wait until these are completed.
         while (!forceClose && (this.accumulator.hasUndrained() || this.client.inFlightRequestCount() > 0)) {
             try {
+                // 调用调用带参数的run()方法继续处理
                 run(time.milliseconds());
             } catch (Exception e) {
                 log.error("Uncaught error in kafka producer I/O thread: ", e);
@@ -266,6 +278,8 @@ public class Sender implements Runnable {
             }
         }
 
+        // 把累加器中的TopicPartition->Deque<ProducerBatch>的映射关系转换成broker节点->消息队列的映射关系
+        // 以构造发送消息的请求
         // create produce requests
         Map<Integer, List<ProducerBatch>> batches = this.accumulator.drain(cluster, result.readyNodes,
                 this.maxRequestSize, now);
@@ -306,6 +320,7 @@ public class Sender implements Runnable {
             // otherwise the select time will be the time difference between now and the metadata expiry time;
             pollTimeout = 0;
         }
+        // 准备发送消息
         sendProduceRequests(batches, now);
 
         return pollTimeout;
@@ -482,6 +497,7 @@ public class Sender implements Runnable {
                 }
                 this.sensors.recordLatency(response.destination(), response.requestLatencyMs());
             } else {
+                // acks = 0 ，不确认，直接返回
                 // this is the acks = 0 case, just complete all requests
                 for (ProducerBatch batch : batches.values()) {
                     completeBatch(batch, new ProduceResponse.PartitionResponse(Errors.NONE), correlationId, now);
@@ -687,6 +703,7 @@ public class Sender implements Runnable {
         }
         ProduceRequest.Builder requestBuilder = ProduceRequest.Builder.forMagic(minUsedMagic, acks, timeout,
                 produceRecordsByPartition, transactionalId);
+        // callback 处理返回结果
         RequestCompletionHandler callback = new RequestCompletionHandler() {
             public void onComplete(ClientResponse response) {
                 handleProduceResponse(response, recordsByPartition, time.milliseconds());
@@ -694,6 +711,7 @@ public class Sender implements Runnable {
         };
 
         String nodeId = Integer.toString(destination);
+        // 开始网络发送
         ClientRequest clientRequest = client.newClientRequest(nodeId, requestBuilder, now, acks != 0, callback);
         client.send(clientRequest, now);
         log.trace("Sent produce request to {}: {}", nodeId, requestBuilder);
