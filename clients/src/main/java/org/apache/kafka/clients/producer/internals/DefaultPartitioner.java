@@ -42,6 +42,8 @@ public class DefaultPartitioner implements Partitioner {
     public void configure(Map<String, ?> configs) {}
 
     /**
+     * 根据Cluster（即元数据）从可用的partition中hash一个
+     *
      * Compute the partition for the given record.
      *
      * @param topic The topic name

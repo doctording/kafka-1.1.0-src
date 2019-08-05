@@ -28,7 +28,7 @@ Kafka概念和源码学习
 
 ### kafka的ack机制
 
-`request.required.acks`有三个值 0 1 -1
+`request.required.acks`有三个值 0 1 -1(all)
 
 * 0: 生产者不会等待broker的ack，这个延迟最低但是存储的保证最弱当server挂掉的时候就会丢数据
 * 1: 服务端会等待ack值，leader副本确认接收到消息后发送ack但是如果leader挂掉后他不确保是否复制完成新leader也会导致数据丢失
