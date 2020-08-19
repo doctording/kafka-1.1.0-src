@@ -308,6 +308,18 @@ public final class ProducerBatch {
      * This methods closes this batch and sets {@code expiryErrorMessage} if the batch has timed out.
      */
     boolean maybeExpire(int requestTimeoutMs, long retryBackoffMs, long now, long lingerMs, boolean isFull) {
+        /**
+         * requestTimeoutMs 请求发送超时时间，默认 30s
+         * now 当前时间
+         * this.lastAppendTime ProducerBatch 创建的时间（也即上一次重试的时间）
+         * now - this.lastAppendTime 大于 requestTimeoutMs 则说明 当前 ProducerBatch 超时了，还未发送出去
+         * lingerMs ProducerBatch最多等待的时间一定要发送出去，默认：100ms
+         * retryBackoffMs 重试的时间间隔
+         *
+         * 没设置重试，并且发送批次（batch.size）满了，并且配置请求超时时间（request.timeout.ms）小于【当前时间减去最后追加批次的时间】
+         * 没设置重试，并且 request.timeout.ms 小于【创建批次时间减去配置的等待发送的时间（linger.ms）】
+         * 设置重试，并且 request.timeout.ms 小于【当前时间-最后重试时间-重试需要等待的时间（retry.backoff.ms）】
+         */
         if (!this.inRetry() && isFull && requestTimeoutMs < (now - this.lastAppendTime))
             expiryErrorMessage = (now - this.lastAppendTime) + " ms has passed since last append";
         else if (!this.inRetry() && requestTimeoutMs < (createdTimeMs(now) - lingerMs))

@@ -240,8 +240,19 @@ public class Sender implements Runnable {
     }
 
     private long sendProducerData(long now) {
+        /**
+         * 获取到当前的集群信息
+         */
         Cluster cluster = metadata.fetch();
 
+        /**
+         * 获取当前准备发送的partition(每个partition有一个leader broker， 没有则要更新元数据信息)
+         *
+         * ready方法返回
+         * 1. 哪些TopicPartition所对应的Node节点是可以发送信息的。
+         * 2. 下次检查节点是否ready的时间。
+         * 3. 哪些TopicPartition对应的leader找不到。
+         */
         // get the list of partitions with data ready to send
         RecordAccumulator.ReadyCheckResult result = this.accumulator.ready(cluster, now);
 
@@ -255,6 +266,9 @@ public class Sender implements Runnable {
             this.metadata.requestUpdate();
         }
 
+        /**
+         * NetworkClient检查broker leader网络连接情况，不符合条件的Node将从readyNodes中移除
+         */
         // remove any nodes we aren't ready to send to
         Iterator<Node> iter = result.readyNodes.iterator();
         long notReadyTimeout = Long.MAX_VALUE;
@@ -266,6 +280,10 @@ public class Sender implements Runnable {
             }
         }
 
+        /**
+         * 上面确定了哪些broker leader是可以发送数据的，调用RecordAccumulator.drain()方法，获取待发送的消息集合
+         * 返回<brokerId, ProducerBatch的list集合>的一个map结构，并设置TopicPartition为muted
+         */
         // create produce requests
         Map<Integer, List<ProducerBatch>> batches = this.accumulator.drain(cluster, result.readyNodes,
                 this.maxRequestSize, now);
@@ -277,6 +295,11 @@ public class Sender implements Runnable {
             }
         }
 
+        /**
+         * 判断过期的ProducerBatch，再调用failBatch()方法
+         *  会调用 ProducerBatch 的done()方法结束request
+         *  会调用 accumulator.deallocate 去释放内存
+         */
         List<ProducerBatch> expiredBatches = this.accumulator.expiredBatches(this.requestTimeout, now);
         // Reset the producer id if an expired batch has previously been sent to the broker. Also update the metrics
         // for expired batches. see the documentation of @TransactionState.resetProducerId to understand why
@@ -306,6 +329,9 @@ public class Sender implements Runnable {
             // otherwise the select time will be the time difference between now and the metadata expiry time;
             pollTimeout = 0;
         }
+        /**
+         * 会封装成ClientRequest，发送到NetworkClient,再调用NetworkClient.send()将ClientRequest写入KafkaChannel的send字段
+         */
         sendProduceRequests(batches, now);
 
         return pollTimeout;

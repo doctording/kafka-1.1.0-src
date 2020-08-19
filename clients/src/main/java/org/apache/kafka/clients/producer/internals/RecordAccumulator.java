@@ -191,16 +191,27 @@ public final class RecordAccumulator {
         ByteBuffer buffer = null;
         if (headers == null) headers = Record.EMPTY_HEADERS;
         try {
+            /**
+             * 获取(或创建)对应的deque
+             */
             // check if we have an in-progress batch
             Deque<ProducerBatch> dq = getOrCreateDeque(tp);
             synchronized (dq) {
                 if (closed)
                     throw new IllegalStateException("Cannot send after the producer is closed.");
+                /**
+                 * 尝试往队列添加数据
+                 *  数据需要添加到`ProducerBatch`中，需要内存;第一次还没有`ProducerBatch`，会失败
+                 */
                 RecordAppendResult appendResult = tryAppend(timestamp, key, value, headers, callback, dq);
                 if (appendResult != null)
                     return appendResult;
             }
 
+            /**
+             * 计算一个`ProducerBatch`的大小，从`BufferPool`线程池中申请,默认的batchSize=16k
+             *  如果一个record的大小超过了一个batchSize，那么一个record就是一个`ProducerBatch`,数据一条一条的发送
+             */
             // we don't have an in-progress record batch try to allocate a new batch
             byte maxUsableMagic = apiVersions.maxUsableProduceMagic();
             int size = Math.max(this.batchSize, AbstractRecords.estimateSizeInBytesUpperBound(maxUsableMagic, compression, key, value, headers));
@@ -210,17 +221,29 @@ public final class RecordAccumulator {
                 // Need to check if producer is closed again after grabbing the dequeue lock.
                 if (closed)
                     throw new IllegalStateException("Cannot send after the producer is closed.");
-
+                /**
+                 * 继续尝试添加到`ProducerBatch`中
+                 *  第一次申请的内存还没有生成一个`ProducerBatch`,所以append还是会失败
+                  */
                 RecordAppendResult appendResult = tryAppend(timestamp, key, value, headers, callback, dq);
                 if (appendResult != null) {
                     // Somebody else found us a batch, return the one we waited for! Hopefully this doesn't happen often...
                     return appendResult;
                 }
 
+                /**
+                 * 去创建`ProducerBatch`
+                 */
                 MemoryRecordsBuilder recordsBuilder = recordsBuilder(buffer, maxUsableMagic);
                 ProducerBatch batch = new ProducerBatch(tp, recordsBuilder, time.milliseconds());
+                /**
+                 * 继续尝试添加到`ProducerBatch`中
+                 */
                 FutureRecordMetadata future = Utils.notNull(batch.tryAppend(timestamp, key, value, headers, callback, time.milliseconds()));
 
+                /**
+                 * `ProducerBatch`放到deque的尾部
+                 */
                 dq.addLast(batch);
                 incomplete.add(batch);
 
@@ -289,6 +312,9 @@ public final class RecordAccumulator {
                         // are invoked after completing the iterations, since sends invoked from callbacks
                         // may append more batches to the deque being iterated. The batch is deallocated after
                         // callbacks are invoked.
+                        /**
+                         * 判断是否超时，并从deque中删除
+                         */
                         if (batch.maybeExpire(requestTimeout, retryBackoffMs, now, this.lingerMs, isFull)) {
                             expiredBatches.add(batch);
                             batchIterator.remove();
@@ -426,6 +452,9 @@ public final class RecordAccumulator {
         Set<String> unknownLeaderTopics = new HashSet<>();
 
         boolean exhausted = this.free.queued() > 0;
+        /**
+         * 遍历 ConcurrentMap<TopicPartition, Deque<ProducerBatch>> batches;
+         */
         for (Map.Entry<TopicPartition, Deque<ProducerBatch>> entry : this.batches.entrySet()) {
             TopicPartition part = entry.getKey();
             Deque<ProducerBatch> deque = entry.getValue();
@@ -437,15 +466,24 @@ public final class RecordAccumulator {
                     // Note that entries are currently not removed from batches when deque is empty.
                     unknownLeaderTopics.add(part.topic());
                 } else if (!readyNodes.contains(leader) && !muted.contains(part)) {
+                    /**
+                     * 能获取到leader信息到partition，获取Deque队首的`ProducerBatch`
+                     */
                     ProducerBatch batch = deque.peekFirst();
                     if (batch != null) {
                         long waitedTimeMs = batch.waitedTimeMs(nowMs);
+                        // 重试
                         boolean backingOff = batch.attempts() > 0 && waitedTimeMs < retryBackoffMs;
                         long timeToWaitMs = backingOff ? retryBackoffMs : lingerMs;
+                        // batch 满了
                         boolean full = deque.size() > 1 || batch.isFull();
+                        //  batch 过期了，它等待的时间已经超过了 timeToWaitMs
                         boolean expired = waitedTimeMs >= timeToWaitMs;
                         boolean sendable = full || expired || exhausted || closed || flushInProgress();
                         if (sendable && !backingOff) {
+                            /**
+                             * 添加到可以发送到节点集合中
+                             */
                             readyNodes.add(leader);
                         } else {
                             long timeLeftMs = Math.max(timeToWaitMs - waitedTimeMs, 0);
