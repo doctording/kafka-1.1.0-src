@@ -1,0 +1,913 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-hans" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>kafka broker 处理请求 · java-note</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="author" content="doctording">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-ace/ace.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-codeblock-filename/block.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-plus/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-sectionx/sectionx.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-splitter/splitter.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-tbfed-pagefooter/footer.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-code/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-page-treeview/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../styles/website.css">
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="broker_controller.html" />
+    
+    
+    <link rel="prev" href="broker.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="输入并搜索" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="basic.html">
+            
+                <a href="basic.html">
+            
+                    
+                    消息队列基础
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="kafka_basic.html">
+            
+                <a href="kafka_basic.html">
+            
+                    
+                    kafka基础
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" >
+            
+                <span>
+            
+                    
+                    [kafka Producer]
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="producer.html">
+            
+                <a href="producer.html">
+            
+                    
+                    KafkaProducer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="producer2.html">
+            
+                <a href="producer2.html">
+            
+                    
+                    如何处理粘包/拆包问题
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" >
+            
+                <span>
+            
+                    
+                    [kafka Broker & zookeeper]
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="broker.html">
+            
+                <a href="broker.html">
+            
+                    
+                    kafka broker 理论知识
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.5.2" data-path="broker_kafkaapis.html">
+            
+                <a href="broker_kafkaapis.html">
+            
+                    
+                    kafka broker 处理请求
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="broker_controller.html">
+            
+                <a href="broker_controller.html">
+            
+                    
+                    controller & leader
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" >
+            
+                <span>
+            
+                    
+                    [kafka Consumer]
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="consumer.html">
+            
+                <a href="consumer.html">
+            
+                    
+                    constumer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="consumer_offset.html">
+            
+                <a href="consumer_offset.html">
+            
+                    
+                    __consumer_offsets
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="rebalance.html">
+            
+                <a href="rebalance.html">
+            
+                    
+                    再平衡
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="pro.html">
+            
+                <a href="pro.html">
+            
+                    
+                    kafka常见面试题
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本书使用 GitBook 发布
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >kafka broker 处理请求</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div class="search-plus" id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <div class="treeview__container"><div class="treeview__container-title"><span class="treeview__main-title">Treeview</span><span class="treeview__copyright">Copyright @doctording all right reserved, powered by <a href="https://github.com/aleen42" target="_blank">aleen42</a></span></div><ul>
+<li><div><a href="#broker-&#x5904;&#x7406;&#x8BF7;&#x6C42;">broker &#x5904;&#x7406;&#x8BF7;&#x6C42;</a><i class="level__parent level__item level__parent--opened" state="opened" onclick="var curState = this.getAttribute(&apos;state&apos;);var nextState = curState === &apos;opened&apos; ? &apos;hidden&apos; : &apos;opened&apos;;this.setAttribute(&apos;state&apos;, nextState);this.className = this.className.split(curState).join(nextState);var list = this.parentNode.nextElementSibling;if (nextState === &apos;hidden&apos;) {    list.style.display = &apos;none&apos;;} else {    list.style.display = &apos;block&apos;;}"></i></div>
+<ul>
+<li><div><a href="#kafka-broker&#x4E0A;&#x5BF9;&#x4E8E;producer&#x53D1;&#x8FC7;&#x6765;&#x7684;&#x6D88;&#x606F;&#x7684;&#x5904;&#x7406;&#x6D41;&#x7A0B;&#x56FE;">Kafka broker&#x4E0A;&#x5BF9;&#x4E8E;producer&#x53D1;&#x8FC7;&#x6765;&#x7684;&#x6D88;&#x606F;&#x7684;&#x5904;&#x7406;&#x6D41;&#x7A0B;&#x56FE;</a><i></i></div></li>
+<li><div><a href="#log&#x5BF9;&#x8C61;">Log&#x5BF9;&#x8C61;</a><i class="level__parent level__item level__parent--opened" state="opened" onclick="var curState = this.getAttribute(&apos;state&apos;);var nextState = curState === &apos;opened&apos; ? &apos;hidden&apos; : &apos;opened&apos;;this.setAttribute(&apos;state&apos;, nextState);this.className = this.className.split(curState).join(nextState);var list = this.parentNode.nextElementSibling;if (nextState === &apos;hidden&apos;) {    list.style.display = &apos;none&apos;;} else {    list.style.display = &apos;block&apos;;}"></i></div>
+<ul>
+<li><div><a href="#&#x5165;&#x53E3;&#xFF1A;kafkaserverkafkaapishandle">&#x5165;&#x53E3;&#xFF1A;kafka.server.KafkaApis#handle</a><i></i></div></li>
+<li><div><a href="#kafkaserverreplicamanagerappendrecords">kafka.server.ReplicaManager#appendRecords</a><i></i></div></li>
+<li><div><a href="#kafkaclusterpartitionappendrecordstoleader">kafka.cluster.Partition#appendRecordsToLeader</a><i></i></div></li>
+<li><div><a href="#kafkaloglogappendasleader">kafka.log.Log#appendAsLeader</a><i></i></div></li>
+<li><div><a href="#kafkaloglogsegmentappend">kafka.log.LogSegment#append</a><i></i></div></li>
+</ul></li>
+<li><div><a href="#follower-&#x5982;&#x4F55;&#x540C;&#x6B65;leader&#x7684;&#x6570;&#x636E;&#xFF1F;">follower &#x5982;&#x4F55;&#x540C;&#x6B65;leader&#x7684;&#x6570;&#x636E;&#xFF1F;</a><i></i></div></li>
+</ul></li>
+</ul>
+</div>
+
+<h1 id="broker-&#x5904;&#x7406;&#x8BF7;&#x6C42;">broker &#x5904;&#x7406;&#x8BF7;&#x6C42;</h1>
+<h2 id="kafka-broker&#x4E0A;&#x5BF9;&#x4E8E;producer&#x53D1;&#x8FC7;&#x6765;&#x7684;&#x6D88;&#x606F;&#x7684;&#x5904;&#x7406;&#x6D41;&#x7A0B;&#x56FE;">Kafka broker&#x4E0A;&#x5BF9;&#x4E8E;producer&#x53D1;&#x8FC7;&#x6765;&#x7684;&#x6D88;&#x606F;&#x7684;&#x5904;&#x7406;&#x6D41;&#x7A0B;&#x56FE;</h2>
+<p><img src="../imgs/kafka_broker_deal.png" alt=""></p>
+<h2 id="log&#x5BF9;&#x8C61;">Log&#x5BF9;&#x8C61;</h2>
+<p>&#x6BCF;&#x4E2A; replica &#x4F1A;&#x5BF9;&#x5E94;&#x4E00;&#x4E2A; log &#x5BF9;&#x8C61;&#xFF0C;log &#x5BF9;&#x8C61;&#x662F;&#x7BA1;&#x7406;&#x5F53;&#x524D;&#x5206;&#x533A;&#x7684;&#x4E00;&#x4E2A;&#x5355;&#x4F4D;&#xFF0C;&#x5B83;&#x4F1A;&#x5305;&#x542B;&#x8FD9;&#x4E2A;&#x5206;&#x533A;&#x7684;&#x6240;&#x6709; segment &#x6587;&#x4EF6;&#xFF08;&#x5305;&#x62EC;&#x5BF9;&#x5E94;&#x7684; offset &#x7D22;&#x5F15;&#x548C;&#x65F6;&#x95F4;&#x6233;&#x7D22;&#x5F15;&#x6587;&#x4EF6;&#xFF09;&#xFF0C;&#x5B83;&#x4F1A;&#x63D0;&#x4F9B;&#x4E00;&#x4E9B;&#x589E;&#x5220;&#x67E5;&#x7684;&#x65B9;&#x6CD5;&#x3002;</p>
+<p>&#x5728; Log &#x5BF9;&#x8C61;&#x7684;&#x521D;&#x59CB;&#x5316;&#x65F6;&#xFF0C;&#x6709;&#x5982;&#x4E0B;&#x7684;&#x51E0;&#x4E2A;&#x91CD;&#x8981;&#x53D8;&#x91CF;&#xFF1A;</p>
+<ol>
+<li>nextOffsetMetadata&#xFF1A;&#x53EF;&#x4EE5;&#x53EB;&#x505A;&#x4E0B;&#x4E00;&#x4E2A;&#x504F;&#x79FB;&#x91CF;&#x5143;&#x6570;&#x636E;&#xFF0C;&#x5B83;&#x5305;&#x62EC; activeSegment &#x7684;&#x4E0B;&#x4E00;&#x6761;&#x6D88;&#x606F;&#x7684;&#x504F;&#x79FB;&#x91CF;&#xFF0C;&#x8BE5; activeSegment &#x7684;&#x57FA;&#x51C6;&#x504F;&#x79FB;&#x91CF;&#x53CA;&#x65E5;&#x5FD7;&#x5206;&#x6BB5;&#x7684;&#x5927;&#x5C0F;&#xFF1B;</li>
+<li>activeSegment&#xFF1A;&#x6307;&#x7684;&#x662F;&#x8BE5; Log &#x7BA1;&#x7406;&#x7684; segments &#x4E2D;&#x90A3;&#x4E2A;&#x6700;&#x65B0;&#x7684; segment&#xFF08;&#x8FD9;&#x91CC;&#x53EB;&#x505A;&#x6D3B;&#x8DC3;&#x7684; segment&#xFF09;&#xFF0C;&#x4E00;&#x4E2A; Log &#x4E2D;&#x53EA;&#x4F1A;&#x6709;&#x4E00;&#x4E2A;&#x6D3B;&#x8DC3;&#x7684; segment&#xFF0C;&#x5176;&#x4ED6;&#x7684; segment &#x90FD;&#x5DF2;&#x7ECF;&#x88AB;&#x6301;&#x4E45;&#x5316;&#x5230;&#x78C1;&#x76D8;&#x4E86;&#xFF1B;</li>
+<li>logEndOffset&#xFF1A;&#x8868;&#x793A;&#x4E0B;&#x4E00;&#x6761;&#x6D88;&#x606F;&#x7684; offset&#xFF0C;&#x5B83;&#x53D6;&#x81EA; nextOffsetMetadata &#x7684; offset&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;&#x5C31;&#x662F;&#x6D3B;&#x52A8;&#x65E5;&#x5FD7;&#x5206;&#x6BB5;&#x7684;&#x4E0B;&#x4E00;&#x4E2A;&#x504F;&#x79FB;&#x91CF;&#x3002;</li>
+</ol>
+<p>&#x6D88;&#x606F;&#x8FFD;&#x52A0;&#x5230;&#x65E5;&#x5FD7;&#x4E2D;&#x65F6;&#xFF0C;&#x662F;&#x4EE5; segment &#x4E3A;&#x5355;&#x4F4D;&#x7684;&#xFF0C;&#x5F53; segment &#x7684;&#x5927;&#x5C0F;&#x5230;&#x8FBE;&#x9608;&#x503C;&#x5927;&#x5C0F;&#x4E4B;&#x540E;&#xFF0C;&#x4F1A;&#x6EDA;&#x52A8;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x65E5;&#x5FD7;&#x5206;&#x6BB5;&#xFF08;segment&#xFF09;&#x4FDD;&#x5B58;&#x65B0;&#x7684;&#x6D88;&#x606F;&#xFF0C;&#x800C;&#x5206;&#x533A;&#x7684;&#x6D88;&#x606F;&#x603B;&#x662F;&#x8FFD;&#x52A0;&#x5230;&#x6700;&#x65B0;&#x7684;&#x65E5;&#x5FD7;&#x5206;&#x6BB5;&#xFF08;&#x4E5F;&#x5C31;&#x662F; activeSegment&#xFF09;&#x4E2D;&#x3002;&#x6BCF;&#x4E2A;&#x65E5;&#x5FD7;&#x5206;&#x6BB5;&#x90FD;&#x4F1A;&#x6709;&#x4E00;&#x4E2A;&#x57FA;&#x51C6;&#x504F;&#x79FB;&#x91CF;&#xFF08;segmentBaseOffset&#xFF0C;&#x6216;&#x8005;&#x53EB;&#x505A; baseOffset&#xFF09;&#xFF0C;&#x8FD9;&#x4E2A;&#x57FA;&#x51C6;&#x504F;&#x79FB;&#x91CF;&#x5C31;&#x662F;&#x5206;&#x533A;&#x7EA7;&#x522B;&#x7684;&#x7EDD;&#x5BF9;&#x504F;&#x79FB;&#x91CF;&#xFF0C;&#x800C;&#x4E14;&#x8FD9;&#x4E2A;&#x503C;&#x5728;&#x65E5;&#x5FD7;&#x5206;&#x6BB5;&#x662F;&#x56FA;&#x5B9A;&#x7684;&#x3002;&#x6709;&#x4E86;&#x8FD9;&#x4E2A;&#x57FA;&#x51C6;&#x504F;&#x79FB;&#x91CF;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x8BA1;&#x7B97;&#x51FA;&#x6765;&#x6BCF;&#x6761;&#x6D88;&#x606F;&#x5728;&#x5206;&#x533A;&#x4E2D;&#x7684;&#x7EDD;&#x5BF9;&#x504F;&#x79FB;&#x91CF;&#xFF0C;&#x6700;&#x540E;&#x628A;&#x6570;&#x636E;&#x4EE5;&#x53CA;&#x5BF9;&#x5E94;&#x7684;&#x7EDD;&#x5BF9;&#x504F;&#x79FB;&#x91CF;&#x5199;&#x5230;&#x65E5;&#x5FD7;&#x6587;&#x4EF6;&#x4E2D;&#x3002;</p>
+<h3 id="&#x5165;&#x53E3;&#xFF1A;kafkaserverkafkaapishandle">&#x5165;&#x53E3;&#xFF1A;<code>kafka.server.KafkaApis#handle</code></h3>
+<pre class="language-"><code class="lang-java"><span class="token comment">/**
+* Handle a produce request
+*/</span>
+def <span class="token function">handleProduceRequest</span><span class="token punctuation">(</span>request<span class="token operator">:</span> <span class="token class-name">RequestChannel</span><span class="token punctuation">.</span><span class="token class-name">Request</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    <span class="token comment">// call the replica manager to append messages to the replicas</span>
+    replicaManager<span class="token punctuation">.</span><span class="token function">appendRecords</span><span class="token punctuation">(</span>
+        timeout <span class="token operator">=</span> produceRequest<span class="token punctuation">.</span>timeout<span class="token punctuation">.</span>toLong<span class="token punctuation">,</span>
+        requiredAcks <span class="token operator">=</span> produceRequest<span class="token punctuation">.</span>acks<span class="token punctuation">,</span>
+        internalTopicsAllowed <span class="token operator">=</span> internalTopicsAllowed<span class="token punctuation">,</span>
+        isFromClient <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        entriesPerPartition <span class="token operator">=</span> authorizedRequestInfo<span class="token punctuation">,</span>
+        responseCallback <span class="token operator">=</span> sendResponseCallback<span class="token punctuation">,</span>
+        processingStatsCallback <span class="token operator">=</span> processingStatsCallback<span class="token punctuation">)</span>
+
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+</code></pre>
+<h3 id="kafkaserverreplicamanagerappendrecords"><code>kafka.server.ReplicaManager#appendRecords</code></h3>
+<p>&#x5904;&#x7406;&#x903B;&#x8F91;&#x4E3B;&#x8981;&#x5982;&#x4E0B;</p>
+<ol>
+<li>&#x9996;&#x5148;&#x5224;&#x65AD; acks &#x8BBE;&#x7F6E;&#x662F;&#x5426;&#x6709;&#x6548;&#xFF08;-1&#xFF0C;0&#xFF0C;1&#x4E09;&#x4E2A;&#x503C;&#x6709;&#x6548;&#xFF09;&#xFF0C;&#x65E0;&#x6548;&#x7684;&#x8BDD;&#x76F4;&#x63A5;&#x8FD4;&#x56DE;&#x5F02;&#x5E38;&#xFF0C;&#x4E0D;&#x518D;&#x5904;&#x7406;&#xFF1B;</li>
+<li>acks &#x8BBE;&#x7F6E;&#x6709;&#x6548;&#x7684;&#x8BDD;&#xFF0C;&#x8C03;&#x7528; appendToLocalLog() &#x65B9;&#x6CD5;&#x5C06; records &#x8FFD;&#x52A0;&#x5230;&#x672C;&#x5730;&#x5BF9;&#x5E94;&#x7684; log &#x5BF9;&#x8C61;&#x4E2D;&#xFF1B;</li>
+<li>appendToLocalLog() &#x5904;&#x7406;&#x5B8C;&#x540E;&#xFF0C;&#x5982;&#x679C;&#x53D1;&#x73B0; clients &#x8BBE;&#x7F6E;&#x7684; acks=-1&#xFF0C;&#x5373;&#x9700;&#x8981; isr &#x7684;&#x5176;&#x4ED6;&#x7684;&#x526F;&#x672C;&#x540C;&#x6B65;&#x5B8C;&#x6210;&#x624D;&#x80FD;&#x8FD4;&#x56DE; response&#xFF0C;&#x90A3;&#x4E48;&#x5C31;&#x4F1A;&#x521B;&#x5EFA;&#x4E00;&#x4E2A; DelayedProduce &#x5BF9;&#x8C61;&#xFF0C;&#x7B49;&#x5F85; isr &#x7684;&#x5176;&#x4ED6;&#x526F;&#x672C;&#x8FDB;&#x884C;&#x540C;&#x6B65;&#xFF0C;&#x5426;&#x5219;&#x7684;&#x8BDD;&#x76F4;&#x63A5;&#x8FD4;&#x56DE;&#x8FFD;&#x52A0;&#x7684;&#x7ED3;&#x679C;&#x3002;</li>
+</ol>
+<pre class="language-"><code class="lang-java"><span class="token comment">/**
+   * Append messages to leader replicas of the partition, and wait for them to be replicated to other replicas;
+   * the callback function will be triggered either when timeout or the required acks are satisfied;
+   * if the callback function itself is already synchronized on some object then pass this object to avoid deadlock.
+   */</span>
+  def <span class="token function">appendRecords</span><span class="token punctuation">(</span>timeout<span class="token operator">:</span> <span class="token class-name">Long</span><span class="token punctuation">,</span>
+                    requiredAcks<span class="token operator">:</span> <span class="token class-name">Short</span><span class="token punctuation">,</span>
+                    internalTopicsAllowed<span class="token operator">:</span> <span class="token class-name">Boolean</span><span class="token punctuation">,</span>
+                    isFromClient<span class="token operator">:</span> <span class="token class-name">Boolean</span><span class="token punctuation">,</span>
+                    entriesPerPartition<span class="token operator">:</span> <span class="token class-name">Map</span><span class="token punctuation">[</span><span class="token class-name">TopicPartition</span><span class="token punctuation">,</span> <span class="token class-name">MemoryRecords</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+                    responseCallback<span class="token operator">:</span> <span class="token class-name">Map</span><span class="token punctuation">[</span><span class="token class-name">TopicPartition</span><span class="token punctuation">,</span> <span class="token class-name">PartitionResponse</span><span class="token punctuation">]</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token class-name">Unit</span><span class="token punctuation">,</span>
+                    delayedProduceLock<span class="token operator">:</span> <span class="token class-name">Option</span><span class="token punctuation">[</span><span class="token class-name">Lock</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token class-name">None</span><span class="token punctuation">,</span>
+                    processingStatsCallback<span class="token operator">:</span> <span class="token class-name">Map</span><span class="token punctuation">[</span><span class="token class-name">TopicPartition</span><span class="token punctuation">,</span> <span class="token class-name">RecordsProcessingStats</span><span class="token punctuation">]</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token class-name">Unit</span> <span class="token operator">=</span> _ <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">isValidRequiredAcks</span><span class="token punctuation">(</span>requiredAcks<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      val sTime <span class="token operator">=</span> time<span class="token punctuation">.</span>milliseconds
+      <span class="token comment">// &#x5411;&#x672C;&#x5730;&#x7684;&#x526F;&#x672C; log &#x8FFD;&#x52A0;&#x6570;&#x636E;</span>
+      val localProduceResults <span class="token operator">=</span> <span class="token function">appendToLocalLog</span><span class="token punctuation">(</span>internalTopicsAllowed <span class="token operator">=</span> internalTopicsAllowed<span class="token punctuation">,</span>
+        isFromClient <span class="token operator">=</span> isFromClient<span class="token punctuation">,</span> entriesPerPartition<span class="token punctuation">,</span> requiredAcks<span class="token punctuation">)</span>
+      <span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">&quot;Produce to local log in %d ms&quot;</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span>milliseconds <span class="token operator">-</span> sTime<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+      val produceStatus <span class="token operator">=</span> localProduceResults<span class="token punctuation">.</span>map <span class="token punctuation">{</span> <span class="token keyword">case</span> <span class="token punctuation">(</span>topicPartition<span class="token punctuation">,</span> result<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span>
+        topicPartition <span class="token operator">-&gt;</span>
+                <span class="token class-name">ProducePartitionStatus</span><span class="token punctuation">(</span>
+                  result<span class="token punctuation">.</span>info<span class="token punctuation">.</span>lastOffset <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token comment">// required offset</span>
+                  <span class="token keyword">new</span> <span class="token class-name">PartitionResponse</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>error<span class="token punctuation">,</span> result<span class="token punctuation">.</span>info<span class="token punctuation">.</span>firstOffset<span class="token punctuation">,</span> result<span class="token punctuation">.</span>info<span class="token punctuation">.</span>logAppendTime<span class="token punctuation">,</span> result<span class="token punctuation">.</span>info<span class="token punctuation">.</span>logStartOffset<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">// response status</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token function">processingStatsCallback</span><span class="token punctuation">(</span>localProduceResults<span class="token punctuation">.</span><span class="token function">mapValues</span><span class="token punctuation">(</span>_<span class="token punctuation">.</span>info<span class="token punctuation">.</span>recordsProcessingStats<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">delayedProduceRequestRequired</span><span class="token punctuation">(</span>requiredAcks<span class="token punctuation">,</span> entriesPerPartition<span class="token punctuation">,</span> localProduceResults<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// &#x5904;&#x7406; ack=-1 &#x7684;&#x60C5;&#x51B5;,&#x9700;&#x8981;&#x7B49;&#x5230; isr &#x7684; follower &#x90FD;&#x5199;&#x5165;&#x6210;&#x529F;&#x7684;&#x8BDD;,&#x624D;&#x80FD;&#x8FD4;&#x56DE;&#x6700;&#x540E;&#x7ED3;&#x679C;  </span>
+        <span class="token comment">// create delayed produce operation</span>
+        val produceMetadata <span class="token operator">=</span> <span class="token class-name">ProduceMetadata</span><span class="token punctuation">(</span>requiredAcks<span class="token punctuation">,</span> produceStatus<span class="token punctuation">)</span>
+        val delayedProduce <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DelayedProduce</span><span class="token punctuation">(</span>timeout<span class="token punctuation">,</span> produceMetadata<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">,</span> responseCallback<span class="token punctuation">,</span> delayedProduceLock<span class="token punctuation">)</span>
+
+        <span class="token comment">// create a list of (topic, partition) pairs to use as keys for this delayed produce operation</span>
+        val producerRequestKeys <span class="token operator">=</span> entriesPerPartition<span class="token punctuation">.</span>keys<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">TopicPartitionOperationKey</span><span class="token punctuation">(</span>_<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>toSeq
+
+        <span class="token comment">// try to complete the request immediately, otherwise put it into the purgatory</span>
+        <span class="token comment">// this is because while the delayed produce operation is being created, new</span>
+        <span class="token comment">// requests may arrive and hence make this operation completable.</span>
+        delayedProducePurgatory<span class="token punctuation">.</span><span class="token function">tryCompleteElseWatch</span><span class="token punctuation">(</span>delayedProduce<span class="token punctuation">,</span> producerRequestKeys<span class="token punctuation">)</span>
+
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token comment">// we can respond immediately</span>
+        val produceResponseStatus <span class="token operator">=</span> produceStatus<span class="token punctuation">.</span><span class="token function">mapValues</span><span class="token punctuation">(</span>status <span class="token operator">=</span><span class="token operator">&gt;</span> status<span class="token punctuation">.</span>responseStatus<span class="token punctuation">)</span>
+        <span class="token function">responseCallback</span><span class="token punctuation">(</span>produceResponseStatus<span class="token punctuation">)</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      <span class="token comment">// If required.acks is outside accepted range, something is wrong with the client</span>
+      <span class="token comment">// Just return an error and don&apos;t handle the request at all</span>
+      val responseStatus <span class="token operator">=</span> entriesPerPartition<span class="token punctuation">.</span>map <span class="token punctuation">{</span> <span class="token keyword">case</span> <span class="token punctuation">(</span>topicPartition<span class="token punctuation">,</span> _<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span>
+        topicPartition <span class="token operator">-&gt;</span> <span class="token keyword">new</span> <span class="token class-name">PartitionResponse</span><span class="token punctuation">(</span><span class="token class-name">Errors</span><span class="token punctuation">.</span>INVALID_REQUIRED_ACKS<span class="token punctuation">,</span>
+          <span class="token class-name">LogAppendInfo</span><span class="token punctuation">.</span><span class="token class-name">UnknownLogAppendInfo</span><span class="token punctuation">.</span>firstOffset<span class="token punctuation">,</span> <span class="token class-name">RecordBatch</span><span class="token punctuation">.</span>NO_TIMESTAMP<span class="token punctuation">,</span> <span class="token class-name">LogAppendInfo</span><span class="token punctuation">.</span><span class="token class-name">UnknownLogAppendInfo</span><span class="token punctuation">.</span>logStartOffset<span class="token punctuation">)</span>
+      <span class="token punctuation">}</span>
+      <span class="token function">responseCallback</span><span class="token punctuation">(</span>responseStatus<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+</code></pre>
+<ul>
+<li>acks&#xFF1A;-1&#xFF0C;0&#xFF0C;1 &#x4E09;&#x4E2A;&#x503C;</li>
+</ul>
+<pre class="language-"><code class="lang-java"><span class="token keyword">private</span> def <span class="token function">isValidRequiredAcks</span><span class="token punctuation">(</span>requiredAcks<span class="token operator">:</span> <span class="token class-name">Short</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token class-name">Boolean</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    requiredAcks <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token operator">||</span> requiredAcks <span class="token operator">==</span> <span class="token number">1</span> <span class="token operator">||</span> requiredAcks <span class="token operator">==</span> <span class="token number">0</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<ol>
+<li>acks=0&#xFF0C;&#x751F;&#x4EA7;&#x8005;&#x6210;&#x529F;&#x5199;&#x5165;&#x6D88;&#x606F;&#x4E4B;&#x524D;&#x4E0D;&#x4F1A;&#x7B49;&#x5F85;&#x6765;&#x81EA;&#x4EFB;&#x4F55;&#x670D;&#x52A1;&#x5668;&#x7684;&#x54CD;&#x5E94;&#xFF0C;&#x8FD9;&#x79CD;&#x914D;&#x7F6E;&#xFF0C;&#x63D0;&#x9AD8;&#x541E;&#x5410;&#x91CF;&#xFF0C;&#x4F46;&#x662F;&#x6D88;&#x606F;&#x5B58;&#x5728;&#x4E22;&#x5931;&#x98CE;&#x9669;&#x3002;</li>
+<li>acks=1(&#x9ED8;&#x8BA4;)&#xFF0C;&#x53EA;&#x8981;&#x96C6;&#x7FA4;&#x7684;leader&#xFF08;master&#xFF09;&#x6536;&#x5230;&#x4E86;&#x6D88;&#x606F;&#xFF0C;&#x751F;&#x4EA7;&#x8005;&#x5C06;&#x4F1A;&#x53D7;&#x5230;&#x53D1;&#x9001;&#x6210;&#x529F;&#x7684;&#x4E00;&#x4E2A;&#x54CD;&#x5E94;&#xFF0C;&#x5982;&#x679C;&#x6D88;&#x606F;&#x65E0;&#x649E;&#x5230;&#x8FBE;&#x9996;&#x9886;&#x8282;&#x70B9;&#xFF08;&#x6BD4;&#x5982;&#x9996;&#x9886;&#x8282;&#x70B9;&#x5D29;&#x6124;&#xFF0C;&#x65B0;&#x7684;&#x9996;&#x9886;&#x8FD8;&#x6CA1;&#x6709;&#x88AB;&#x9009;&#x4E3E;&#x51FA;&#x6765;&#xFF09;&#xFF0C;&#x751F;&#x4EA7;&#x8005;&#x4F1A;&#x6536;&#x5230;&#x4E00;&#x4E2A;&#x9519;&#x8BEF;&#x54CD;&#x5E94;&#xFF0C;&#x4E3A;&#x4E86;&#x907F;&#x514D;&#x6570;&#x636E;&#x4E22;&#x5931;&#xFF0C;&#x751F;&#x4EA7;&#x8005;&#x4F1A;&#x91CD;&#x53D1;&#x6D88;&#x606F;&#x3002;&#x4E0D;&#x8FC7;&#xFF0C;&#x5982;&#x679C;&#x4E00;&#x4E2A;&#x6CA1;&#x6709;&#x6536;&#x5230;&#x6D88;&#x606F;&#x7684;&#x8282;&#x70B9;&#x6210;&#x4E3A;&#x65B0;&#x9996;&#x9886;&#xFF0C;&#x6D88;&#x606F;&#x8FD8;&#x662F;&#x4F1A;&#x4E22;&#x5931;&#x3002;&#x8FD9;&#x4E2A;&#x65F6;&#x5019;&#x7684;&#x541E;&#x5410;&#x91CF;&#x53D6;&#x51B3;&#x4E8E;&#x4F7F;&#x7528;&#x7684;&#x662F;
+&#x540C;&#x6B65;&#x53D1;&#x9001;&#x8FD8;&#x662F;&#x5F02;&#x6B65;&#x53D1;&#x9001;&#x3002;&#x5982;&#x679C;&#x8BA9;&#x53D1;&#x9001;&#x5BA2;&#x6237;&#x7AEF;&#x7B49;&#x5F85;&#x670D;&#x52A1;&#x5668;&#x7684;&#x54CD;&#x5E94;&#xFF08;&#x901A;&#x8FC7;&#x8C03;&#x7528;Fututre &#x5BF9;&#x8C61;&#x7684;get&#xFF08;&#xFF09;&#x65B9;&#x6CD5;&#xFF0C;&#x663E;&#x7136;&#x4F1A;&#x589E;&#x52A0;&#x5EF6;&#x8FDF;&#xFF08;&#x5728;&#x7F51;&#x7EDC;&#x4E0A;&#x4F20;&#x8F93;&#x4E00;&#x4E2A;&#x6765;&#x56DE;&#x7684;&#x5EF6;&#x8FDF;&#xFF09;&#x3002;&#x5982;&#x679C;&#x5BA2;&#x6237;&#x7AEF;&#x4F7F;&#x7528;&#x56DE;&#x8C03;&#xFF0C;&#x5EF6;&#x8FDF;&#x95EE;&#x9898;&#x5C31;&#x53EF;&#x4EE5;&#x5F97;&#x5230;&#x7F13;&#x89E3;&#xFF0C;&#x4E0D;&#x8FC7;&#x541E;&#x5410;&#x91CF;&#x8FD8;&#x662F;&#x4F1A;&#x53D7;&#x53D1;&#x9001;&#x4E2D;&#x6D88;&#x606F;&#x6570;&#x91CF;&#x7684;&#x9650;&#x5236;&#xFF08;&#x6BD4;&#x5982;&#xFF0C;&#x751F;&#x4EA7;&#x8005;&#x5728;&#x6536;&#x5230;&#x670D;&#x52A1;&#x5668;&#x54CD;&#x5E94;&#x4E4B;&#x524D;&#x53EF;&#x4EE5;&#x53D1;&#x9001;&#x591A;&#x5C11;&#x4E2A;&#x6D88;&#x606F;&#xFF09;&#x3002;</li>
+<li><p>acks=-1&#xFF0C;&#x6240;&#x6709;&#x53C2;&#x4E0E;&#x590D;&#x5236;&#x7684;&#x8282;&#x70B9;&#x5168;&#x90E8;&#x6536;&#x5230;&#x6D88;&#x606F;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x751F;&#x4EA7;&#x8005;&#x624D;&#x4F1A;&#x6536;&#x5230;&#x6765;&#x81EA;&#x670D;&#x52A1;&#x5668;&#x7684;&#x4E00;&#x4E2A;&#x54CD;&#x5E94;&#xFF0C;&#x8FD9;&#x79CD;&#x6A21;&#x5F0F;&#x6700;&#x5B89;&#x5168;&#xFF0C;&#x4F46;&#x662F;&#x541E;&#x5410;&#x91CF;&#x53D7;&#x9650;&#x5236;&#xFF0C;&#x5B83;&#x53EF;&#x4EE5;&#x4FDD;&#x8BC1;&#x4E0D;&#x6B62;&#x4E00;&#x4E2A;&#x670D;&#x52A1;&#x5668;&#x6536;&#x5230;&#x6D88;&#x606F;&#xFF0C;&#x5C31;&#x7B97;&#x67D0;&#x53F0;&#x670D;&#x52A1;&#x5668;&#x5954;&#x6E83;&#xFF0C;&#x90A3;&#x4E48;&#x6574;&#x4E2A;&#x96C6;&#x7FA4;&#x8FD8;&#x662F;&#x4F1A;&#x6B63;&#x4EA7;&#x8FD0;&#x8F6C;&#x3002;</p>
+</li>
+<li><p><code>kafka.server.ReplicaManager#appendToLocalLog</code></p>
+</li>
+</ol>
+<pre class="language-"><code class="lang-java"><span class="token comment">/**
+   * Append the messages to the local replica logs
+   */</span>
+  <span class="token keyword">private</span> def <span class="token function">appendToLocalLog</span><span class="token punctuation">(</span>internalTopicsAllowed<span class="token operator">:</span> <span class="token class-name">Boolean</span><span class="token punctuation">,</span>
+                               isFromClient<span class="token operator">:</span> <span class="token class-name">Boolean</span><span class="token punctuation">,</span>
+                               entriesPerPartition<span class="token operator">:</span> <span class="token class-name">Map</span><span class="token punctuation">[</span><span class="token class-name">TopicPartition</span><span class="token punctuation">,</span> <span class="token class-name">MemoryRecords</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+                               requiredAcks<span class="token operator">:</span> <span class="token class-name">Short</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token class-name">Map</span><span class="token punctuation">[</span><span class="token class-name">TopicPartition</span><span class="token punctuation">,</span> <span class="token class-name">LogAppendResult</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token function">trace</span><span class="token punctuation">(</span>s<span class="token string">&quot;Append [$entriesPerPartition] to local log&quot;</span><span class="token punctuation">)</span>
+    entriesPerPartition<span class="token punctuation">.</span>map <span class="token punctuation">{</span> <span class="token keyword">case</span> <span class="token punctuation">(</span>topicPartition<span class="token punctuation">,</span> records<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span>
+      brokerTopicStats<span class="token punctuation">.</span><span class="token function">topicStats</span><span class="token punctuation">(</span>topicPartition<span class="token punctuation">.</span>topic<span class="token punctuation">)</span><span class="token punctuation">.</span>totalProduceRequestRate<span class="token punctuation">.</span><span class="token function">mark</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      brokerTopicStats<span class="token punctuation">.</span>allTopicsStats<span class="token punctuation">.</span>totalProduceRequestRate<span class="token punctuation">.</span><span class="token function">mark</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+      <span class="token comment">// reject appending to internal topics if it is not allowed</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">Topic</span><span class="token punctuation">.</span><span class="token function">isInternal</span><span class="token punctuation">(</span>topicPartition<span class="token punctuation">.</span>topic<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>internalTopicsAllowed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">(</span>topicPartition<span class="token punctuation">,</span> <span class="token class-name">LogAppendResult</span><span class="token punctuation">(</span>
+          <span class="token class-name">LogAppendInfo</span><span class="token punctuation">.</span><span class="token class-name">UnknownLogAppendInfo</span><span class="token punctuation">,</span>
+          <span class="token class-name">Some</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InvalidTopicException</span><span class="token punctuation">(</span>s<span class="token string">&quot;Cannot append to internal topic ${topicPartition.topic}&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+          val partitionOpt <span class="token operator">=</span> <span class="token function">getPartition</span><span class="token punctuation">(</span>topicPartition<span class="token punctuation">)</span>
+          val info <span class="token operator">=</span> partitionOpt match <span class="token punctuation">{</span>
+            <span class="token keyword">case</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>partition<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span>
+              <span class="token keyword">if</span> <span class="token punctuation">(</span>partition eq <span class="token class-name">ReplicaManager</span><span class="token punctuation">.</span><span class="token class-name">OfflinePartition</span><span class="token punctuation">)</span>
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">KafkaStorageException</span><span class="token punctuation">(</span>s<span class="token string">&quot;Partition $topicPartition is in an offline log directory on broker $localBrokerId&quot;</span><span class="token punctuation">)</span>
+              <span class="token comment">// &#x8FFD;&#x52A0;records&#x5230;leader&#x4E0A;</span>
+              partition<span class="token punctuation">.</span><span class="token function">appendRecordsToLeader</span><span class="token punctuation">(</span>records<span class="token punctuation">,</span> isFromClient<span class="token punctuation">,</span> requiredAcks<span class="token punctuation">)</span>
+
+            <span class="token keyword">case</span> <span class="token class-name">None</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">UnknownTopicOrPartitionException</span><span class="token punctuation">(</span><span class="token string">&quot;Partition %s doesn&apos;t exist on %d&quot;</span>
+              <span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>topicPartition<span class="token punctuation">,</span> localBrokerId<span class="token punctuation">)</span><span class="token punctuation">)</span>
+          <span class="token punctuation">}</span>
+
+          val numAppendedMessages <span class="token operator">=</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>info<span class="token punctuation">.</span>firstOffset <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1L</span> <span class="token operator">||</span> info<span class="token punctuation">.</span>lastOffset <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1L</span><span class="token punctuation">)</span>
+              <span class="token number">0</span>
+            <span class="token keyword">else</span>
+              info<span class="token punctuation">.</span>lastOffset <span class="token operator">-</span> info<span class="token punctuation">.</span>firstOffset <span class="token operator">+</span> <span class="token number">1</span>
+
+          <span class="token comment">// update stats for successfully appended bytes and messages as bytesInRate and messageInRate</span>
+          brokerTopicStats<span class="token punctuation">.</span><span class="token function">topicStats</span><span class="token punctuation">(</span>topicPartition<span class="token punctuation">.</span>topic<span class="token punctuation">)</span><span class="token punctuation">.</span>bytesInRate<span class="token punctuation">.</span><span class="token function">mark</span><span class="token punctuation">(</span>records<span class="token punctuation">.</span>sizeInBytes<span class="token punctuation">)</span>
+          brokerTopicStats<span class="token punctuation">.</span>allTopicsStats<span class="token punctuation">.</span>bytesInRate<span class="token punctuation">.</span><span class="token function">mark</span><span class="token punctuation">(</span>records<span class="token punctuation">.</span>sizeInBytes<span class="token punctuation">)</span>
+          brokerTopicStats<span class="token punctuation">.</span><span class="token function">topicStats</span><span class="token punctuation">(</span>topicPartition<span class="token punctuation">.</span>topic<span class="token punctuation">)</span><span class="token punctuation">.</span>messagesInRate<span class="token punctuation">.</span><span class="token function">mark</span><span class="token punctuation">(</span>numAppendedMessages<span class="token punctuation">)</span>
+          brokerTopicStats<span class="token punctuation">.</span>allTopicsStats<span class="token punctuation">.</span>messagesInRate<span class="token punctuation">.</span><span class="token function">mark</span><span class="token punctuation">(</span>numAppendedMessages<span class="token punctuation">)</span>
+
+          <span class="token function">trace</span><span class="token punctuation">(</span><span class="token string">&quot;%d bytes written to log %s-%d beginning at offset %d and ending at offset %d&quot;</span>
+            <span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>records<span class="token punctuation">.</span>sizeInBytes<span class="token punctuation">,</span> topicPartition<span class="token punctuation">.</span>topic<span class="token punctuation">,</span> topicPartition<span class="token punctuation">.</span>partition<span class="token punctuation">,</span> info<span class="token punctuation">.</span>firstOffset<span class="token punctuation">,</span> info<span class="token punctuation">.</span>lastOffset<span class="token punctuation">)</span><span class="token punctuation">)</span>
+          <span class="token punctuation">(</span>topicPartition<span class="token punctuation">,</span> <span class="token class-name">LogAppendResult</span><span class="token punctuation">(</span>info<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">{</span>
+          <span class="token comment">// NOTE: Failed produce requests metric is not incremented for known exceptions</span>
+          <span class="token comment">// it is supposed to indicate un-expected failures of a broker in handling a produce request</span>
+          <span class="token keyword">case</span> e@ <span class="token punctuation">(</span>_<span class="token operator">:</span> <span class="token class-name">UnknownTopicOrPartitionException</span> <span class="token operator">|</span>
+                   _<span class="token operator">:</span> <span class="token class-name">NotLeaderForPartitionException</span> <span class="token operator">|</span>
+                   _<span class="token operator">:</span> <span class="token class-name">RecordTooLargeException</span> <span class="token operator">|</span>
+                   _<span class="token operator">:</span> <span class="token class-name">RecordBatchTooLargeException</span> <span class="token operator">|</span>
+                   _<span class="token operator">:</span> <span class="token class-name">CorruptRecordException</span> <span class="token operator">|</span>
+                   _<span class="token operator">:</span> <span class="token class-name">KafkaStorageException</span> <span class="token operator">|</span>
+                   _<span class="token operator">:</span> <span class="token class-name">InvalidTimestampException</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span>
+            <span class="token punctuation">(</span>topicPartition<span class="token punctuation">,</span> <span class="token class-name">LogAppendResult</span><span class="token punctuation">(</span><span class="token class-name">LogAppendInfo</span><span class="token punctuation">.</span><span class="token class-name">UnknownLogAppendInfo</span><span class="token punctuation">,</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+          <span class="token keyword">case</span> t<span class="token operator">:</span> <span class="token class-name">Throwable</span> <span class="token operator">=</span><span class="token operator">&gt;</span>
+            val logStartOffset <span class="token operator">=</span> <span class="token function">getPartition</span><span class="token punctuation">(</span>topicPartition<span class="token punctuation">)</span> match <span class="token punctuation">{</span>
+              <span class="token keyword">case</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>partition<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span>
+                partition<span class="token punctuation">.</span>logStartOffset
+              <span class="token keyword">case</span> _ <span class="token operator">=</span><span class="token operator">&gt;</span>
+                <span class="token operator">-</span><span class="token number">1</span>
+            <span class="token punctuation">}</span>
+            brokerTopicStats<span class="token punctuation">.</span><span class="token function">topicStats</span><span class="token punctuation">(</span>topicPartition<span class="token punctuation">.</span>topic<span class="token punctuation">)</span><span class="token punctuation">.</span>failedProduceRequestRate<span class="token punctuation">.</span><span class="token function">mark</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            brokerTopicStats<span class="token punctuation">.</span>allTopicsStats<span class="token punctuation">.</span>failedProduceRequestRate<span class="token punctuation">.</span><span class="token function">mark</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token function">error</span><span class="token punctuation">(</span><span class="token string">&quot;Error processing append operation on partition %s&quot;</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>topicPartition<span class="token punctuation">)</span><span class="token punctuation">,</span> t<span class="token punctuation">)</span>
+            <span class="token punctuation">(</span>topicPartition<span class="token punctuation">,</span> <span class="token class-name">LogAppendResult</span><span class="token punctuation">(</span><span class="token class-name">LogAppendInfo</span><span class="token punctuation">.</span><span class="token function">unknownLogAppendInfoWithLogStartOffset</span><span class="token punctuation">(</span>logStartOffset<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+</code></pre>
+<h3 id="kafkaclusterpartitionappendrecordstoleader"><code>kafka.cluster.Partition#appendRecordsToLeader</code></h3>
+<p>Partition&#x7EC4;&#x4EF6;&#x662F;topic&#x5728;&#x67D0;&#x4E2A;broker&#x4E0A;&#x4E00;&#x4E2A;&#x526F;&#x672C;&#x7684;&#x62BD;&#x8C61;&#x3002;&#x6BCF;&#x4E2A;partition&#x5BF9;&#x8C61;&#x90FD;&#x4F1A;&#x7EF4;&#x62A4;&#x4E00;&#x4E2A;Replica&#x5BF9;&#x8C61;&#xFF0C;Replica&#x5BF9;&#x8C61;&#x4E2D;&#x53C8;&#x7EF4;&#x62A4;Log&#x5BF9;&#x8C61;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x6570;&#x636E;&#x76EE;&#x5F55;&#x7684;&#x62BD;&#x8C61;</p>
+<pre class="language-"><code class="lang-java">def <span class="token function">appendRecordsToLeader</span><span class="token punctuation">(</span>records<span class="token operator">:</span> <span class="token class-name">MemoryRecords</span><span class="token punctuation">,</span> requiredAcks<span class="token operator">:</span> <span class="token class-name">Int</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    val <span class="token punctuation">(</span>info<span class="token punctuation">,</span> leaderHWIncremented<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">inReadLock</span><span class="token punctuation">(</span>leaderIsrUpdateLock<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      leaderReplicaIfLocal match <span class="token punctuation">{</span>
+          <span class="token comment">//&#x5199;&#x4E4B;&#x524D;&#x5148;&#x5224;&#x65AD;&#x8BE5;replica&#x662F;&#x5426;&#x662F;leader&#xFF0C;&#x5982;&#x679C;&#x4E0D;&#x662F;leader&#x5219;&#x6CA1;&#x6709;&#x5199;&#x6743;&#x9650;</span>
+        <span class="token keyword">case</span> <span class="token class-name">Some</span><span class="token punctuation">(</span>leaderReplica<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span>
+          <span class="token comment">//&#x83B7;&#x53D6;&#x8BE5;partition&#x7684;log&#x5BF9;&#x8C61;</span>
+          val log <span class="token operator">=</span> leaderReplica<span class="token punctuation">.</span>log<span class="token punctuation">.</span>get
+          <span class="token comment">//&#x83B7;&#x53D6;&#x914D;&#x7F6E;&#x7684;minInSyncReplicas&#x503C;</span>
+          val minIsr <span class="token operator">=</span> log<span class="token punctuation">.</span>config<span class="token punctuation">.</span>minInSyncReplicas
+          <span class="token comment">//&#x5F53;&#x524D;ISR&#x7684;&#x6570;&#x91CF;</span>
+          val inSyncSize <span class="token operator">=</span> inSyncReplicas<span class="token punctuation">.</span>size
+
+          <span class="token comment">// &#x5982;&#x679C;&#x8BF7;&#x6C42;&#x7684;acks=-1&#xFF0C;&#x4F46;&#x662F;&#x5F53;&#x524D;&#x7684;ISR&#x6BD4;&#x914D;&#x7F6E;&#x7684;minInSyncReplicas&#x8FD8;&#x5C0F;&#xFF0C;&#x90A3;&#x8981;&#x629B;&#x51FA;&#x9519;&#x8BEF;&#xFF0C;&#x8868;&#x793A;&#x5F53;&#x524D;ISR&#x4E0D;&#x8DB3;</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span>inSyncSize <span class="token operator">&lt;</span> minIsr <span class="token operator">&amp;&amp;</span> requiredAcks <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">NotEnoughReplicasException</span><span class="token punctuation">(</span><span class="token string">&quot;Number of insync replicas for partition %s is [%d], below required minimum [%d]&quot;</span>
+              <span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>topicPartition<span class="token punctuation">,</span> inSyncSize<span class="token punctuation">,</span> minIsr<span class="token punctuation">)</span><span class="token punctuation">)</span>
+          <span class="token punctuation">}</span>
+          <span class="token comment">//&#x8C03;&#x7528;log&#x7684;append&#x65B9;&#x6CD5;&#x5199;&#x5165;&#x6D88;&#x606F;</span>
+          val info <span class="token operator">=</span> log<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>records<span class="token punctuation">,</span> assignOffsets <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+          <span class="token comment">// probably unblock some follower fetch requests since log end offset has been updated</span>
+          replicaManager<span class="token punctuation">.</span><span class="token function">tryCompleteDelayedFetch</span><span class="token punctuation">(</span><span class="token class-name">TopicPartitionOperationKey</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>topic<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>partitionId<span class="token punctuation">)</span><span class="token punctuation">)</span>
+          <span class="token comment">// we may need to increment high watermark since ISR could be down to 1</span>
+          <span class="token punctuation">(</span>info<span class="token punctuation">,</span> <span class="token function">maybeIncrementLeaderHW</span><span class="token punctuation">(</span>leaderReplica<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">case</span> <span class="token class-name">None</span> <span class="token operator">=</span><span class="token operator">&gt;</span>
+          <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">NotLeaderForPartitionException</span><span class="token punctuation">(</span><span class="token string">&quot;Leader not local for partition %s on broker %d&quot;</span>
+            <span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>topicPartition<span class="token punctuation">,</span> localBrokerId<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// some delayed operations may be unblocked after HW changed</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>leaderHWIncremented<span class="token punctuation">)</span>
+      <span class="token function">tryCompleteDelayedRequests</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    info
+  <span class="token punctuation">}</span>
+</code></pre>
+<p>&#x8FD9;&#x91CC;&#x7684;&#x6B65;&#x9AA4;&#x603B;&#x7ED3;</p>
+<ol>
+<li>&#x5148;&#x5224;&#x65AD;&#x81EA;&#x5DF1;&#x662F;&#x5426;&#x662F;leader&#xFF0C;&#x53EA;&#x6709;leader&#x624D;&#x53EF;&#x4EE5;&#x63A5;&#x6536;producer&#x8BF7;&#x6C42;&#x7136;&#x540E;&#x5199;&#x6570;&#x636E;</li>
+<li>&#x5224;&#x65AD;&#x5F53;&#x524D;&#x7684;&#x5F53;&#x524D;&#x7684;ISR&#x6570;&#x91CF;&#x662F;&#x5426;&#x6BD4;minInSyncReplicas&#x8FD8;&#x5C0F;&#xFF0C;&#x5982;&#x679C;ISR&#x6570;&#x91CF;&#x5C0F;&#x4E8E;minInSyncReplicas&#x5C31;&#x629B;&#x51FA;&#x5F02;&#x5E38;</li>
+<li>&#x628A;&#x6D88;&#x606F;&#x4EA4;&#x7ED9;&#x81EA;&#x5DF1;&#x7BA1;&#x7406;&#x7684;Log&#x7EC4;&#x4EF6;&#x5904;&#x7406;</li>
+</ol>
+<h3 id="kafkaloglogappendasleader"><code>kafka.log.Log#appendAsLeader</code></h3>
+<p>Log&#x5BF9;&#x8C61;&#x662F;&#x5BF9;partition&#x6570;&#x636E;&#x76EE;&#x5F55;&#x7684;&#x62BD;&#x8C61;&#x3002;&#x7BA1;&#x7406;&#x7740;&#x67D0;&#x4E2A;topic&#x5728;&#x67D0;&#x4E2A;broker&#x7684;&#x4E00;&#x4E2A;partition,&#x5B83;&#x53EF;&#x80FD;&#x662F;&#x4E00;&#x4E2A;leader&#xFF0C;&#x4E5F;&#x53EF;&#x80FD;&#x662F;replica&#x3002;&#x540C;&#x65F6;&#xFF0C;Log&#x5BF9;&#x8C61;&#x8FD8;&#x540C;&#x65F6;&#x7BA1;&#x7406;&#x7740;&#x591A;&#x4E2A;LogSegment&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x65E5;&#x5FD7;&#x7684;&#x5206;&#x6BB5;&#x3002;</p>
+<p>&#x56DE;&#x987E;kafka log&#x6587;&#x4EF6;&#x7ED3;&#x6784;&#xFF1A;</p>
+<p><img src="../imgs/kafka_topic_log.png" alt=""></p>
+<pre class="language-"><code class="lang-java"><span class="token comment">/**
+* Append this message set to the active segment of the log, assigning offsets and Partition Leader Epochs
+*
+* @param records The records to append
+* @param isFromClient Whether or not this append is from a producer
+* @throws KafkaStorageException If the append fails due to an I/O error.
+* @return Information about the appended messages including the first and last offset.
+*/</span>
+def <span class="token function">appendAsLeader</span><span class="token punctuation">(</span>records<span class="token operator">:</span> <span class="token class-name">MemoryRecords</span><span class="token punctuation">,</span> leaderEpoch<span class="token operator">:</span> <span class="token class-name">Int</span><span class="token punctuation">,</span> isFromClient<span class="token operator">:</span> <span class="token class-name">Boolean</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token class-name">LogAppendInfo</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token function">append</span><span class="token punctuation">(</span>records<span class="token punctuation">,</span> isFromClient<span class="token punctuation">,</span> assignOffsets <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span> leaderEpoch<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<ol>
+<li>Log&#x7EC4;&#x4EF6;&#x62FF;&#x5230;&#x6D88;&#x606F;&#x540E;&#xFF0C;&#x5BF9;&#x6D88;&#x606F;&#x5185;&#x5BB9;&#x8FDB;&#x884C;&#x6821;&#x9A8C;&#x4EE5;&#x53CA;&#x88C1;&#x526A;&#xFF0C;&#x7136;&#x540E;&#x8BBE;&#x7F6E;&#x6BCF;&#x4E00;&#x6761;&#x6D88;&#x606F;&#x7684;offset&#x3002;&#x8FD8;&#x4F1A;&#x8BA1;&#x7B97;&#x5F53;&#x524D;&#x8FD9;&#x6279;&#x6D88;&#x606F;&#x7684;&#x6700;&#x5927;&#x65F6;&#x95F4;&#x6233;&#x662F;&#x591A;&#x5C11;&#xFF0C;&#x5373;maxTimestamp&#xFF0C;&#x8FD9;&#x4E2A;&#x65F6;&#x95F4;&#x6233;&#x548C;&#x65E5;&#x5FD7;&#x4FDD;&#x7559;&#x65F6;&#x95F4;&#x6709;&#x7740;&#x5BC6;&#x5207;&#x5173;&#x7CFB;</li>
+<li>&#x8FD8;&#x4F1A;&#x6821;&#x9A8C;&#x8981;&#x5199;&#x5165;&#x7684;&#x6D88;&#x606F;&#x6570;&#x91CF;&#x662F;&#x5426;&#x5927;&#x4E8E;&#x4E00;&#x4E2A;segment&#x6240;&#x80FD;&#x5BB9;&#x7EB3;&#x7684;&#x6700;&#x5927;&#x9650;&#x5236;&#xFF0C;&#x8FD9;&#x4E2A;&#x9650;&#x5236;&#x548C;&#x914D;&#x7F6E;segment.bytes&#x6709;&#x5173;&#x7CFB;</li>
+<li>&#x5199;&#x5165;&#x5230;segment&#x4E4B;&#x524D;&#x8FD8;&#x8981;&#x5224;&#x65AD;&#x5982;&#x679C;&#x628A;&#x8FD9;&#x4E9B;&#x6D88;&#x606F;&#x5199;&#x5165;segment&#xFF0C;&#x4F1A;&#x4E0D;&#x4F1A;&#x5BFC;&#x81F4;segment&#x8D85;&#x51FA;segment.bytes&#x7684;&#x5927;&#x5C0F;&#xFF0C;&#x5982;&#x679C;&#x4F1A;&#x7684;&#x8BDD;&#xFF0C;&#x8981;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x7684;segment&#x7528;&#x4E8E;&#x65E5;&#x5FD7;&#x5199;&#x5165;</li>
+<li>&#x628A;&#x6D88;&#x606F;&#x4F20;&#x8FC7;&#x6700;&#x65B0;&#x6D3B;&#x8DC3;&#x7684;LogSegment&#x5904;&#x7406;</li>
+</ol>
+<pre class="language-"><code class="lang-java">def <span class="token function">append</span><span class="token punctuation">(</span>records<span class="token operator">:</span> <span class="token class-name">MemoryRecords</span><span class="token punctuation">,</span> assignOffsets<span class="token operator">:</span> <span class="token class-name">Boolean</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token class-name">LogAppendInfo</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token comment">//&#x5224;&#x65AD;&#x6D88;&#x606F;&#x683C;&#x5F0F;&#x662F;&#x5426;&#x6B63;&#x786E;.&#x5206;&#x6790;&#x6D88;&#x606F;&#x7684;&#x538B;&#x7F29;&#x683C;&#x5F0F;</span>
+    val appendInfo <span class="token operator">=</span> <span class="token function">analyzeAndValidateRecords</span><span class="token punctuation">(</span>records<span class="token punctuation">)</span>
+
+    <span class="token comment">//&#x5982;&#x679C;&#x6CA1;&#x6709;&#x4E00;&#x6761;&#x6D88;&#x606F;&#x683C;&#x5F0F;&#x6B63;&#x786E;&#xFF0C;&#x76F4;&#x63A5;&#x8FD4;&#x56DE;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>appendInfo<span class="token punctuation">.</span>shallowCount <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+      <span class="token keyword">return</span> appendInfo
+
+    <span class="token comment">//&#x88C1;&#x526A;&#x4E00;&#x4E9B;&#x9519;&#x8BEF;&#x7684;&#x6570;&#x636E;</span>
+    <span class="token keyword">var</span> validRecords <span class="token operator">=</span> <span class="token function">trimInvalidBytes</span><span class="token punctuation">(</span>records<span class="token punctuation">,</span> appendInfo<span class="token punctuation">)</span>
+
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      lock <span class="token keyword">synchronized</span> <span class="token punctuation">{</span>
+        <span class="token comment">//&#x9700;&#x8981;&#x7ED9;&#x6D88;&#x606F;&#x5206;&#x914D;offset&#x7684;&#x8BDD;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>assignOffsets<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token comment">// &#x8BA1;&#x7B97;&#x7B2C;&#x4E00;&#x6761;&#x6D88;&#x606F;&#x7684;offset</span>
+          val offset <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LongRef</span><span class="token punctuation">(</span>nextOffsetMetadata<span class="token punctuation">.</span>messageOffset<span class="token punctuation">)</span>
+          appendInfo<span class="token punctuation">.</span>firstOffset <span class="token operator">=</span> offset<span class="token punctuation">.</span>value
+          val now <span class="token operator">=</span> time<span class="token punctuation">.</span>milliseconds
+          val validateAndOffsetAssignResult <span class="token operator">=</span> <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment">//&#x7ED9;&#x6BCF;&#x4E00;&#x6761;&#x6D88;&#x606F;&#x8BBE;&#x7F6E;offset&#x3002;&#x5E76;&#x4E14;&#x627E;&#x51FA;maxTimestamp&#x4EE5;&#x53CA;maxTimestamp&#x5BF9;&#x4E8E;&#x7684;offset</span>
+            <span class="token class-name">LogValidator</span><span class="token punctuation">.</span><span class="token function">validateMessagesAndAssignOffsets</span><span class="token punctuation">(</span>validRecords<span class="token punctuation">,</span>
+                                                          offset<span class="token punctuation">,</span>
+                                                          now<span class="token punctuation">,</span>
+                                                          appendInfo<span class="token punctuation">.</span>sourceCodec<span class="token punctuation">,</span>
+                                                          appendInfo<span class="token punctuation">.</span>targetCodec<span class="token punctuation">,</span>
+                                                          config<span class="token punctuation">.</span>compact<span class="token punctuation">,</span>
+                                                          config<span class="token punctuation">.</span>messageFormatVersion<span class="token punctuation">.</span>messageFormatVersion<span class="token punctuation">,</span>
+                                                          config<span class="token punctuation">.</span>messageTimestampType<span class="token punctuation">,</span>
+                                                          config<span class="token punctuation">.</span>messageTimestampDifferenceMaxMs<span class="token punctuation">)</span>
+          <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">{</span>
+            <span class="token keyword">case</span> e<span class="token operator">:</span> <span class="token class-name">IOException</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">KafkaException</span><span class="token punctuation">(</span><span class="token string">&quot;Error in validating messages while appending to log &apos;%s&apos;&quot;</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span>
+          <span class="token punctuation">}</span>
+          <span class="token comment">//&#x83B7;&#x53D6;&#x6709;&#x6548;&#x7684;&#x8BB0;&#x5F55;&#xFF0C;&#x7136;&#x540E;&#x6839;&#x636E;&#x8FD9;&#x4E9B;&#x8BB0;&#x5F55;&#x8BBE;&#x7F6E;&#x54CD;&#x5E94;&#x7684;&#x8FD4;&#x56DE;&#x5185;&#x5BB9;</span>
+          validRecords <span class="token operator">=</span> validateAndOffsetAssignResult<span class="token punctuation">.</span>validatedRecords
+          <span class="token comment">//&#x6D88;&#x606F;&#x7684;&#x6700;&#x5927;&#x65F6;&#x95F4;&#x6233;&#x548C;&#x914D;&#x7F6E;&#x7684;messageTimestampType&#x6709;&#x5173;&#x7CFB;&#x3002;&#x5F53;&#x524D;&#x83B7;&#x53D6;&#x6D88;&#x606F;maxTimestamp&#x65F6;&#x95F4;&#x6233;&#x7684;&#x65B9;&#x5F0F;&#x6709;&#x4E24;&#x79CD;&#x3002;</span>
+          <span class="token comment">//1. &#x6839;&#x636E;&#x6D88;&#x606F;&#x7684;timestamp&#x6765;&#x8BBE;&#x7F6E;&#x65F6;&#x95F4;&#x6233;</span>
+          <span class="token comment">//2. &#x6839;&#x636E;&#x6D88;&#x606F;&#x7684;&#x5199;&#x5165;&#x65F6;&#x95F4;&#x6765;&#x8BBE;&#x7F6E;&#x65F6;&#x95F4;&#x6233;,&#x4E5F;&#x5C31;&#x662F;&#x5F53;&#x524D;&#x65F6;&#x95F4;</span>
+          appendInfo<span class="token punctuation">.</span>maxTimestamp <span class="token operator">=</span> validateAndOffsetAssignResult<span class="token punctuation">.</span>maxTimestamp
+          appendInfo<span class="token punctuation">.</span>offsetOfMaxTimestamp <span class="token operator">=</span> validateAndOffsetAssignResult<span class="token punctuation">.</span>shallowOffsetOfMaxTimestamp
+          appendInfo<span class="token punctuation">.</span>lastOffset <span class="token operator">=</span> offset<span class="token punctuation">.</span>value <span class="token operator">-</span> <span class="token number">1</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span>config<span class="token punctuation">.</span>messageTimestampType <span class="token operator">==</span> <span class="token class-name">TimestampType</span><span class="token punctuation">.</span>LOG_APPEND_TIME<span class="token punctuation">)</span>
+            appendInfo<span class="token punctuation">.</span>logAppendTime <span class="token operator">=</span> now
+
+          <span class="token comment">// &#x7531;&#x4E8E;&#x524D;&#x9762;&#x7684;&#x64CD;&#x4F5C;&#x53EF;&#x80FD;&#x5BFC;&#x81F4;&#x6D88;&#x606F;&#x538B;&#x7F29;&#x683C;&#x5F0F;&#x6539;&#x53D8;&#x4EE5;&#x53CA;&#x6D88;&#x606F;&#x683C;&#x5F0F;&#x6539;&#x53D8;&#xFF0C;&#x56E0;&#x6B64;&#x8FD9;&#x91CC;&#x8FD8;&#x9700;&#x8981;&#x91CD;&#x65B0;&#x68C0;&#x67E5;&#x4E00;&#x4E0B;&#x5F53;&#x524D;&#x7684;&#x6BCF;&#x6761;&#x6D88;&#x606F;&#x5927;&#x5C0F;&#x662F;&#x5426;&#x8D85;&#x8FC7;maxMessageSize&#x7684;&#x914D;&#x7F6E;&#x5927;&#x5C0F;</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span>validateAndOffsetAssignResult<span class="token punctuation">.</span>messageSizeMaybeChanged<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span>logEntry <span class="token operator">&lt;</span><span class="token operator">-</span> validRecords<span class="token punctuation">.</span>shallowEntries<span class="token punctuation">.</span>asScala<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+              <span class="token keyword">if</span> <span class="token punctuation">(</span>logEntry<span class="token punctuation">.</span>sizeInBytes <span class="token operator">&gt;</span> config<span class="token punctuation">.</span>maxMessageSize<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment">// we record the original message set size instead of the trimmed size</span>
+                <span class="token comment">// to be consistent with pre-compression bytesRejectedRate recording</span>
+                <span class="token class-name">BrokerTopicStats</span><span class="token punctuation">.</span><span class="token function">getBrokerTopicStats</span><span class="token punctuation">(</span>topicPartition<span class="token punctuation">.</span>topic<span class="token punctuation">)</span><span class="token punctuation">.</span>bytesRejectedRate<span class="token punctuation">.</span><span class="token function">mark</span><span class="token punctuation">(</span>records<span class="token punctuation">.</span>sizeInBytes<span class="token punctuation">)</span>
+                <span class="token class-name">BrokerTopicStats</span><span class="token punctuation">.</span>getBrokerAllTopicsStats<span class="token punctuation">.</span>bytesRejectedRate<span class="token punctuation">.</span><span class="token function">mark</span><span class="token punctuation">(</span>records<span class="token punctuation">.</span>sizeInBytes<span class="token punctuation">)</span>
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RecordTooLargeException</span><span class="token punctuation">(</span><span class="token string">&quot;Message size is %d bytes which exceeds the maximum configured message size of %d.&quot;</span>
+                  <span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>logEntry<span class="token punctuation">.</span>sizeInBytes<span class="token punctuation">,</span> config<span class="token punctuation">.</span>maxMessageSize<span class="token punctuation">)</span><span class="token punctuation">)</span>
+              <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+          <span class="token punctuation">}</span>
+
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+          <span class="token comment">// we are taking the offsets we are given</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>appendInfo<span class="token punctuation">.</span>offsetsMonotonic <span class="token operator">||</span> appendInfo<span class="token punctuation">.</span>firstOffset <span class="token operator">&lt;</span> nextOffsetMetadata<span class="token punctuation">.</span>messageOffset<span class="token punctuation">)</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">&quot;Out of order offsets found in &quot;</span> <span class="token operator">+</span> records<span class="token punctuation">.</span>deepEntries<span class="token punctuation">.</span>asScala<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>_<span class="token punctuation">.</span>offset<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment">// &#x8981;&#x5199;&#x5165;&#x7684;&#x6D88;&#x606F;&#x5927;&#x5C0F;&#x4E0D;&#x80FD;&#x6BD4;&#x4E00;&#x4E2A;segment&#x7684;&#x5927;&#x5C0F;&#x8FD8;&#x5927;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>validRecords<span class="token punctuation">.</span>sizeInBytes <span class="token operator">&gt;</span> config<span class="token punctuation">.</span>segmentSize<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RecordBatchTooLargeException</span><span class="token punctuation">(</span><span class="token string">&quot;Message set size is %d bytes which exceeds the maximum configured segment size of %d.&quot;</span>
+            <span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>validRecords<span class="token punctuation">.</span>sizeInBytes<span class="token punctuation">,</span> config<span class="token punctuation">.</span>segmentSize<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment">// &#x5224;&#x65AD;&#x662F;&#x5426;&#x9700;&#x8981;&#x65B0;&#x5EFA;&#x4E00;&#x4E2A;segment</span>
+        val segment <span class="token operator">=</span> <span class="token function">maybeRoll</span><span class="token punctuation">(</span>messagesSize <span class="token operator">=</span> validRecords<span class="token punctuation">.</span>sizeInBytes<span class="token punctuation">,</span>
+          maxTimestampInMessages <span class="token operator">=</span> appendInfo<span class="token punctuation">.</span>maxTimestamp<span class="token punctuation">,</span>
+          maxOffsetInMessages <span class="token operator">=</span> appendInfo<span class="token punctuation">.</span>lastOffset<span class="token punctuation">)</span>
+
+
+        <span class="token comment">//&#x8C03;&#x7528;segment&#x7684;&#x65B9;&#x6CD5;&#x6DFB;&#x52A0;&#x6D88;&#x606F;</span>
+        segment<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>firstOffset <span class="token operator">=</span> appendInfo<span class="token punctuation">.</span>firstOffset<span class="token punctuation">,</span>
+          largestOffset <span class="token operator">=</span> appendInfo<span class="token punctuation">.</span>lastOffset<span class="token punctuation">,</span>
+          largestTimestamp <span class="token operator">=</span> appendInfo<span class="token punctuation">.</span>maxTimestamp<span class="token punctuation">,</span>
+          shallowOffsetOfMaxTimestamp <span class="token operator">=</span> appendInfo<span class="token punctuation">.</span>offsetOfMaxTimestamp<span class="token punctuation">,</span>
+          records <span class="token operator">=</span> validRecords<span class="token punctuation">)</span>
+
+        <span class="token function">updateLogEndOffset</span><span class="token punctuation">(</span>appendInfo<span class="token punctuation">.</span>lastOffset <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+
+        <span class="token function">trace</span><span class="token punctuation">(</span><span class="token string">&quot;Appended message set to log %s with first offset: %d, next offset: %d, and messages: %s&quot;</span>
+          <span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token punctuation">,</span> appendInfo<span class="token punctuation">.</span>firstOffset<span class="token punctuation">,</span> nextOffsetMetadata<span class="token punctuation">.</span>messageOffset<span class="token punctuation">,</span> validRecords<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token comment">//&#x5224;&#x65AD;&#x662F;&#x5426;&#x9700;&#x8981;&#x5C06;&#x6D88;&#x606F;&#x5237;&#x76D8;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>unflushedMessages <span class="token operator">&gt;=</span> config<span class="token punctuation">.</span>flushInterval<span class="token punctuation">)</span>
+          <span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+        appendInfo
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">{</span>
+      <span class="token keyword">case</span> e<span class="token operator">:</span> <span class="token class-name">IOException</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">KafkaStorageException</span><span class="token punctuation">(</span><span class="token string">&quot;I/O exception in append to log &apos;%s&apos;&quot;</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+</code></pre>
+<h3 id="kafkaloglogsegmentappend"><code>kafka.log.LogSegment#append</code></h3>
+<p>LogSegment&#x662F;partition&#x76EE;&#x5F55;&#x4E2D;&#x6570;&#x636E;&#x6BB5;&#x7684;&#x62BD;&#x8C61;&#xFF0C;kafka&#x4F1A;&#x5C06;&#x4E00;&#x4E2A;&#x526F;&#x672C;&#x4E2D;&#x65E5;&#x5FD7;&#x6839;&#x636E;&#x914D;&#x7F6E;&#x5206;&#x6BB5;&#x3002;&#x8FD9;&#x4E2A;LogSegment&#x5BF9;&#x8C61;&#x7EF4;&#x62A4;&#x6570;&#x636E;&#x6587;&#x4EF6;&#x4EE5;&#x53CA;&#x7D22;&#x5F15;&#x6587;&#x4EF6;&#x7684;&#x4FE1;&#x606F;&#x3002;</p>
+<pre class="language-"><code class="lang-scala"><span class="token keyword">def</span> append<span class="token punctuation">(</span>firstOffset<span class="token operator">:</span> <span class="token builtin">Long</span><span class="token punctuation">,</span> largestOffset<span class="token operator">:</span> <span class="token builtin">Long</span><span class="token punctuation">,</span> largestTimestamp<span class="token operator">:</span> <span class="token builtin">Long</span><span class="token punctuation">,</span> shallowOffsetOfMaxTimestamp<span class="token operator">:</span> <span class="token builtin">Long</span><span class="token punctuation">,</span> records<span class="token operator">:</span> MemoryRecords<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>records<span class="token punctuation">.</span>sizeInBytes <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      trace<span class="token punctuation">(</span><span class="token string">&quot;Inserting %d bytes at offset %d at position %d with largest timestamp %d at shallow offset %d&quot;</span>
+        <span class="token punctuation">.</span>format<span class="token punctuation">(</span>records<span class="token punctuation">.</span>sizeInBytes<span class="token punctuation">,</span> firstOffset<span class="token punctuation">,</span> log<span class="token punctuation">.</span>sizeInBytes<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> largestTimestamp<span class="token punctuation">,</span> shallowOffsetOfMaxTimestamp<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token comment">//&#x8BB0;&#x5F55;&#x8981;&#x63D2;&#x5165;&#x7684;&#x7B2C;&#x4E00;&#x6761;&#x6D88;&#x606F;&#x7684;&#x7269;&#x7406;&#x5730;&#x5740;&#xFF0C;&#x540E;&#x9762;&#x751F;&#x6210;&#x7D22;&#x5F15;&#x7684;&#x65F6;&#x5019;&#x4F1A;&#x7528;&#x5230;</span>
+      <span class="token keyword">val</span> physicalPosition <span class="token operator">=</span> log<span class="token punctuation">.</span>sizeInBytes<span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>physicalPosition <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+        rollingBasedTimestamp <span class="token operator">=</span> Some<span class="token punctuation">(</span>largestTimestamp<span class="token punctuation">)</span>
+      <span class="token comment">//&#x5224;&#x65AD;&#x662F;&#x5426;&#x53EF;&#x4EE5;&#x5B89;&#x5168;&#x5199;&#x5165;&#x6D88;&#x606F;</span>
+      require<span class="token punctuation">(</span>canConvertToRelativeOffset<span class="token punctuation">(</span>largestOffset<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">&quot;largest offset in message set can not be safely converted to relative offset.&quot;</span><span class="token punctuation">)</span>
+      <span class="token comment">//&#x5C06;&#x6D88;&#x606F;&#x5199;&#x5165;&#x5230;fileChannel</span>
+      <span class="token keyword">val</span> appendedBytes <span class="token operator">=</span> log<span class="token punctuation">.</span>append<span class="token punctuation">(</span>records<span class="token punctuation">)</span>
+      trace<span class="token punctuation">(</span>s<span class="token string">&quot;Appended $appendedBytes to ${log.file()} at offset $firstOffset&quot;</span><span class="token punctuation">)</span>
+      <span class="token comment">//&#x968F;&#x65F6;&#x66F4;&#x65B0;segment&#x7684;maxTimestampSoFar&#x503C;&#x3002;</span>
+      <span class="token comment">// &#x8FD9;&#x4E2A;&#x65F6;&#x95F4;&#x7684;&#x83B7;&#x53D6;&#x548C;message.timestamp.type&#x914D;&#x7F6E;&#x6709;&#x5173;&#x7CFB;&#x3002;&#x53EF;&#x80FD;&#x83B7;&#x53D6;&#x5F53;&#x524D;&#x65F6;&#x95F4;&#x4F5C;&#x4E3A;largestTimestamp&#xFF0C;&#x4E5F;&#x53EF;&#x80FD;&#x83B7;&#x53D6;&#x65E5;&#x5FD7;&#x7684;&#x6700;&#x5927;timestamp&#x4F5C;&#x4E3A;largestTimestamp</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>largestTimestamp <span class="token operator">&gt;</span> maxTimestampSoFar<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        maxTimestampSoFar <span class="token operator">=</span> largestTimestamp
+        offsetOfMaxTimestamp <span class="token operator">=</span> shallowOffsetOfMaxTimestamp
+      <span class="token punctuation">}</span>
+      <span class="token comment">//&#x5224;&#x65AD;&#x662F;&#x5426;&#x9700;&#x8981;&#x8FFD;&#x52A0;&#x4E00;&#x6761;&#x7D22;&#x5F15;&#x8BB0;&#x5F55;&#x3002;&#x5F53;bytesSinceLastIndexEntry&#x5927;&#x4E8E;&#x914D;&#x7F6E;&#x7684;indexIntervalBytes&#x503C;&#x65F6;&#x4F1A;&#x8FFD;&#x52A0;&#x65B0;&#x7684;&#x6240;&#x6709;&#x8BB0;&#x5F55;</span>
+      <span class="token comment">//bytesSinceLastIndexEntry&#x4F1A;&#x968F;&#x7740;&#x6D88;&#x606F;&#x7684;&#x5199;&#x5165;&#x4E0D;&#x65AD;&#x589E;&#x52A0;&#xFF0C;&#x76F4;&#x5230;&#x751F;&#x6210;&#x4E00;&#x6761;&#x65B0;&#x7684;&#x7D22;&#x5F15;&#x8BB0;&#x5F55;&#x540E;&#x91CD;&#x7F6E;&#x4E3A;0</span>
+      <span class="token comment">//indexIntervalBytes&#x548C;broker&#x7684;&#x914D;&#x7F6E;&#x6709;&#x5173;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>bytesSinceLastIndexEntry <span class="token operator">&gt;</span> indexIntervalBytes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        index<span class="token punctuation">.</span>append<span class="token punctuation">(</span>firstOffset<span class="token punctuation">,</span> physicalPosition<span class="token punctuation">)</span>
+        timeIndex<span class="token punctuation">.</span>maybeAppend<span class="token punctuation">(</span>maxTimestampSoFar<span class="token punctuation">,</span> offsetOfMaxTimestamp<span class="token punctuation">)</span>
+        bytesSinceLastIndexEntry <span class="token operator">=</span> <span class="token number">0</span>
+      <span class="token punctuation">}</span>
+      bytesSinceLastIndexEntry <span class="token operator">+=</span> records<span class="token punctuation">.</span>sizeInBytes
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+</code></pre>
+<ol>
+<li>logSegment&#x5E95;&#x5C42;&#x4F7F;&#x7528;&#x4E86;FileChannel&#x5199;&#x65E5;&#x5FD7;,&#x5199;&#x5B8C;&#x4E4B;&#x540E;&#x8FD8;&#x4F1A;&#x5224;&#x65AD;&#x662F;&#x5426;&#x8981;&#x66F4;&#x65B0;&#x5F53;&#x524D;logSegment&#x7684;&#x6700;&#x5927;&#x65F6;&#x95F4;&#x6233;</li>
+<li>&#x6BCF;&#x5F53;&#x5199;&#x5165;&#x6D88;&#x606F;&#x7684;&#x5927;&#x5C0F;&#x79EF;&#x7D2F;&#x5230;&#x4E00;&#x5B9A;&#x7A0B;&#x5EA6;&#x65F6;&#xFF0C;&#x4F1A;&#x65B0;&#x63D2;&#x5165;&#x4E00;&#x6761;&#x7D22;&#x5F15;&#x8BB0;&#x5F55;&#x3002;&#x8FD9;&#x4E2A;&#x79EF;&#x7D2F;&#x7684;&#x5927;&#x5C0F;&#x548C;&#x914D;&#x7F6E;index.interval.bytes&#x6709;&#x5173;&#x7CFB;</li>
+</ol>
+<p>Java FileChannel: FileChannel&#x662F;&#x4E00;&#x4E2A;&#x8FDE;&#x63A5;&#x5230;&#x6587;&#x4EF6;&#x7684;&#x901A;&#x9053;&#x3002;&#x9664;&#x4E86;&#x8BFB;&#x5199;&#x64CD;&#x4F5C;&#x4E4B;&#x5916;&#xFF0C;&#x8FD8;&#x6709;&#x88C1;&#x526A;&#x7279;&#x5B9A;&#x5927;&#x5C0F;&#x6587;&#x4EF6;truncate()&#xFF0C;&#x5F3A;&#x5236;&#x5C06;&#x5185;&#x5B58;&#x4E2D;&#x7684;&#x6570;&#x636E;&#x5237;&#x65B0;&#x5230;&#x786C;&#x76D8;&#x4E2D;<code>force()</code>&#xFF0C;&#x5BF9;&#x901A;&#x9053;&#x4E0A;&#x9501;<code>lock()</code>&#x7B49;&#x529F;&#x80FD;&#x3002;&#x96F6;&#x62F7;&#x8D1D;&#x662F;&#x901A;&#x8FC7;java.nio.channels.FileChannel&#x4E2D;&#x7684;transferTo&#x65B9;&#x6CD5;&#x6765;&#x5B9E;&#x73B0;&#x7684;&#x3002;transferTo&#x65B9;&#x6CD5;&#x5E95;&#x5C42;&#x662F;&#x57FA;&#x4E8E;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7684;sendfile&#x8FD9;&#x4E2A;system call&#x6765;&#x5B9E;&#x73B0;&#x7684;</p>
+<h2 id="follower-&#x5982;&#x4F55;&#x540C;&#x6B65;leader&#x7684;&#x6570;&#x636E;&#xFF1F;">follower &#x5982;&#x4F55;&#x540C;&#x6B65;leader&#x7684;&#x6570;&#x636E;&#xFF1F;</h2>
+<p><img src="../imgs/hw_leo3.png" alt=""></p>
+<ol>
+<li>follower&#x4ECE;leader&#x540C;&#x6B65;&#x6570;&#x636E;&#xFF0C;&#x53D1;&#x9001;fetch&#x8BF7;&#x6C42;</li>
+<li>follower&#x83B7;&#x53D6;&#x5230;&#x6570;&#x636E;&#x540E;&#x5199;&#x672C;&#x5730;&#x78C1;&#x76D8;</li>
+<li>follower&#x66F4;&#x65B0;&#x5F53;&#x524D;&#x526F;&#x672C;&#x7684;LEO</li>
+<li>follower&#x518D;&#x6B21;&#x4ECE;leader&#x540C;&#x6B65;&#x6570;&#x636E;&#xFF0C;&#x540C;&#x65F6;fetch&#x8BF7;&#x6C42;&#x91CC;&#x5305;&#x542B;&#x4E86;&#x81EA;&#x5DF1;&#x7684;LEO&#xFF08;&#x5373;&#x628A;&#x81EA;&#x5DF1;&#x7684;LEO&#x544A;&#x8BC9;leader&#xFF09;</li>
+<li>leader&#x66F4;&#x65B0;&#x4FDD;&#x5B58;&#x7684;follower LEO</li>
+<li><p>leader&#x53D6;&#x6240;&#x6709;&#x526F;&#x672C;&#x6700;&#x5C0F;&#x7684;LEO&#x4F5C;&#x4E3A;HW&#xFF08;leader&#x6839;&#x636E;&#x53D6;&#x77ED;&#x677F;LEO&#xFF0C;&#x6700;&#x4E3A;&#x6700;&#x540E;&#x7684;LEO&#xFF09;</p>
+</li>
+<li><p>Kafka&#x4E2D;partition replica&#x590D;&#x5236;&#x673A;&#x5236;&#xFF1A;</p>
+</li>
+</ol>
+<p>Kafka&#x4E2D;&#x6BCF;&#x4E2A;Broker&#x542F;&#x52A8;&#x65F6;&#x90FD;&#x4F1A;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x526F;&#x672C;&#x7BA1;&#x7406;&#x670D;&#x52A1;(ReplicaManager)&#xFF0C;&#x8BE5;&#x670D;&#x52A1;&#x8D1F;&#x8D23;&#x7EF4;&#x62A4;ReplicaFetcherThread&#x4E0E;&#x5176;&#x4ED6;Broker&#x94FE;&#x8DEF;&#x8FDE;&#x63A5;&#x5173;&#x7CFB;&#xFF0C;&#x8BE5;Broker&#x4E2D;&#x5B58;&#x5728;&#x591A;&#x5C11;Follower&#x7684;partitions&#x5BF9;&#x5E94;leader partitions&#x5206;&#x5E03;&#x5728;&#x4E0D;&#x540C;&#x7684;Broker&#x4E0A;&#xFF0C;&#x6709;&#x591A;&#x5C11;Broker&#x5C31;&#x4F1A;&#x521B;&#x5EFA;&#x76F8;&#x540C;&#x6570;&#x91CF;&#x7684;ReplicaFetcherThread&#x7EBF;&#x7A0B;&#x540C;&#x6B65;&#x5BF9;&#x5E94;partition&#x6570;&#x636E;&#xFF0C;Kafka&#x4E2D;partition&#x95F4;&#x590D;&#x5236;&#x6570;&#x636E;&#x662F;&#x7531;follower(&#x626E;&#x6F14;consumer&#x89D2;&#x8272;)&#x4E3B;&#x52A8;&#x5411;leader&#x83B7;&#x53D6;&#x6D88;&#x606F;&#xFF0C;follower&#x6BCF;&#x6B21;&#x8BFB;&#x53D6;&#x6D88;&#x606F;&#x90FD;&#x4F1A;&#x66F4;&#x65B0;HW&#x72B6;&#x6001;&#x3002;</p>
+<p>&#x6BCF;&#x5F53;Follower&#x7684;partitions&#x53D1;&#x751F;&#x53D8;&#x66F4;&#x5F71;&#x54CD;leader&#x6240;&#x5728;Broker&#x53D8;&#x5316;&#x65F6;&#xFF0C;ReplicaManager&#x5C31;&#x4F1A;&#x65B0;&#x5EFA;&#x6216;&#x9500;&#x6BC1;&#x76F8;&#x5E94;&#x7684;ReplicaFetcherThread&#x3002;</p>
+<ul>
+<li>&#x5982;&#x4F55;&#x4FDD;&#x8BC1;&#x4E00;&#x81F4;&#x6027;&#xFF1A;</li>
+</ul>
+<p>&#x5F53;Producer&#x53D1;&#x9001;&#x6D88;&#x606F;&#x5230;leader partition&#x6240;&#x5728;Broker&#x65F6;&#xFF0C;&#x9996;&#x5148;&#x4FDD;&#x8BC1;leader commit&#x6D88;&#x606F;&#x6210;&#x529F;&#xFF0C;&#x7136;&#x540E;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&quot;&#x751F;&#x4EA7;&#x8005;&#x5EF6;&#x8FDF;&#x8BF7;&#x6C42;&#x4EFB;&#x52A1;&quot;&#xFF0C;&#x5E76;&#x5224;&#x65AD;&#x5F53;&#x524D;partition&#x7684;HW&#x662F;&#x5426;&#x5927;&#x4E8E;&#x7B49;&#x4E8E;logEndOffset&#xFF0C;&#x5982;&#x679C;&#x6EE1;&#x8DB3;&#x6761;&#x4EF6;&#x5373;&#x8868;&#x793A;&#x672C;&#x6B21;Producer&#x8BF7;&#x6C42;partition replicas&#x4E4B;&#x95F4;&#x6570;&#x636E;&#x5DF2;&#x7ECF;&#x4E00;&#x81F4;&#xFF0C;&#x7ACB;&#x5373;&#x5411;Producer&#x8FD4;&#x56DE;Ack&#x3002;&#x5426;&#x5219;&#x5F85;Follower&#x6279;&#x91CF;&#x62C9;&#x53D6;Leader&#x7684;partition&#x6D88;&#x606F;&#x65F6;&#xFF0C;&#x540C;&#x65F6;&#x66F4;&#x65B0;Leader ISR&#x4E2D;HW&#xFF0C;&#x7136;&#x540E;&#x68C0;&#x67E5;&#x662F;&#x5426;&#x6EE1;&#x8DB3;&#x4E0A;&#x8FF0;&#x6761;&#x4EF6;&#xFF0C;&#x5982;&#x679C;&#x6EE1;&#x8DB3;&#x5411;Producer&#x8FD4;&#x56DE;Ack</p>
+<p><footer class="page-footer"><span class="copyright">Copyright @doctording all right reserved&#xFF0C;powered by Gitbook</span><span class="footer-modification">&#x8BE5;&#x6587;&#x4EF6;&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;
+2020-12-10 00:28:58
+</span></footer><div id="gitalk-container"></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script></p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="broker.html" class="navigation navigation-prev " aria-label="Previous page: kafka broker 理论知识">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="broker_controller.html" class="navigation navigation-next " aria-label="Next page: controller & leader">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"kafka broker 处理请求","level":"1.5.2","depth":2,"next":{"title":"controller & leader","level":"1.5.3","depth":2,"path":"content/broker_controller.md","ref":"./content/broker_controller.md","articles":[]},"previous":{"title":"kafka broker 理论知识","level":"1.5.1","depth":2,"path":"content/broker.md","ref":"./content/broker.md","articles":[]},"dir":"ltr"},"config":{"plugins":["prism","-highlight","-lunr","-search","-sharing","ace","codeblock-filename","search-plus","sectionx","splitter","tbfed-pagefooter","expandable-chapters","back-to-top-button","code","uml","page-treeview","gittalk"],"styles":{"website":"styles/website.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright @doctording","modify_label":"该文件修改时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"page-treeview":{"collapsed":false,"copyright":"Copyright @doctording","minHeaderCount":"2","minHeaderDeep":"2"},"prism":{},"ace":{},"splitter":{},"code":{"copyButtons":true},"fontsettings":{"theme":"white","family":"sans","size":2},"sectionx":{},"uml":{"format":"svg"},"codeblock-filename":{},"back-to-top-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"gittalk":{"clientID":"094729e19245d3fe84aa","clientSecret":"6c4cf7b48e7ae41c20d453c24eb9d5469e4d19fb","repo":"sword_at_offer","owner":"doctording","admin":["doctording"],"distractionFreeMode":false},"expandable-chapters":{},"search-plus":{}},"theme":"default","author":"doctording","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"java-note","language":"zh-hans","gitbook":"*","description":"kafka源码阅读"},"file":{"path":"content/broker_kafkaapis.md","mtime":"2020-12-09T16:28:58.157Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-01-13T01:27:59.243Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-ace/ace/ace.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-ace/ace.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-plus/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-plus/search.js"></script>
+        
+    
+        
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sectionx/sectionx.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-splitter/splitter.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-code/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-gittalk/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

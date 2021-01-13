@@ -1,0 +1,626 @@
+
+<!DOCTYPE HTML>
+<html lang="zh-hans" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>controller & leader · java-note</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        <meta name="author" content="doctording">
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-ace/ace.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-codeblock-filename/block.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search-plus/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-sectionx/sectionx.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-splitter/splitter.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-tbfed-pagefooter/footer.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-code/plugin.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-page-treeview/style.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../styles/website.css">
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+    <link rel="prev" href="broker_kafkaapis.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="输入并搜索" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="basic.html">
+            
+                <a href="basic.html">
+            
+                    
+                    消息队列基础
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="kafka_basic.html">
+            
+                <a href="kafka_basic.html">
+            
+                    
+                    kafka基础
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" >
+            
+                <span>
+            
+                    
+                    [kafka Producer]
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="producer.html">
+            
+                <a href="producer.html">
+            
+                    
+                    KafkaProducer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="producer2.html">
+            
+                <a href="producer2.html">
+            
+                    
+                    如何处理粘包/拆包问题
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" >
+            
+                <span>
+            
+                    
+                    [kafka Broker & zookeeper]
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.5.1" data-path="broker.html">
+            
+                <a href="broker.html">
+            
+                    
+                    kafka broker 理论知识
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.2" data-path="broker_kafkaapis.html">
+            
+                <a href="broker_kafkaapis.html">
+            
+                    
+                    kafka broker 处理请求
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.5.3" data-path="broker_controller.html">
+            
+                <a href="broker_controller.html">
+            
+                    
+                    controller & leader
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" >
+            
+                <span>
+            
+                    
+                    [kafka Consumer]
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="consumer.html">
+            
+                <a href="consumer.html">
+            
+                    
+                    constumer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="consumer_offset.html">
+            
+                <a href="consumer_offset.html">
+            
+                    
+                    __consumer_offsets
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="rebalance.html">
+            
+                <a href="rebalance.html">
+            
+                    
+                    再平衡
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="pro.html">
+            
+                <a href="pro.html">
+            
+                    
+                    kafka常见面试题
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            本书使用 GitBook 发布
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >controller & leader</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div class="search-plus" id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <div class="treeview__container"><div class="treeview__container-title"><span class="treeview__main-title">Treeview</span><span class="treeview__copyright">Copyright @doctording all right reserved, powered by <a href="https://github.com/aleen42" target="_blank">aleen42</a></span></div><ul>
+<li><div><a href="#kafka-&#x7684;-controller-&#x9009;&#x4E3E;&#x548C;-leader-&#x9009;&#x4E3E;">kafka &#x7684; controller &#x9009;&#x4E3E;&#x548C; leader &#x9009;&#x4E3E;</a><i class="level__parent level__item level__parent--opened" state="opened" onclick="var curState = this.getAttribute(&apos;state&apos;);var nextState = curState === &apos;opened&apos; ? &apos;hidden&apos; : &apos;opened&apos;;this.setAttribute(&apos;state&apos;, nextState);this.className = this.className.split(curState).join(nextState);var list = this.parentNode.nextElementSibling;if (nextState === &apos;hidden&apos;) {    list.style.display = &apos;none&apos;;} else {    list.style.display = &apos;block&apos;;}"></i></div>
+<ul>
+<li><div><a href="#&#x521B;&#x5EFA;topic&#x662F;partition&#x5982;&#x4F55;&#x5206;&#x914D;&#x5230;broker">&#x521B;&#x5EFA;topic&#x662F;partition&#x5982;&#x4F55;&#x5206;&#x914D;&#x5230;broker?</a><i></i></div></li>
+<li><div><a href="#kafka&#x7684;replica">kafka&#x7684;Replica</a><i></i></div></li>
+<li><div><a href="#controller-leader-&#x9009;&#x4E3E;">Controller leader &#x9009;&#x4E3E;</a><i></i></div></li>
+<li><div><a href="#partition-leader-&#x9009;&#x4E3E;">Partition leader &#x9009;&#x4E3E;</a><i class="level__parent level__item level__parent--opened" state="opened" onclick="var curState = this.getAttribute(&apos;state&apos;);var nextState = curState === &apos;opened&apos; ? &apos;hidden&apos; : &apos;opened&apos;;this.setAttribute(&apos;state&apos;, nextState);this.className = this.className.split(curState).join(nextState);var list = this.parentNode.nextElementSibling;if (nextState === &apos;hidden&apos;) {    list.style.display = &apos;none&apos;;} else {    list.style.display = &apos;block&apos;;}"></i></div>
+<ul>
+<li><div><a href="#kafka-partition&#x72B6;&#x6001;">kafka partition&#x72B6;&#x6001;</a><i></i></div></li>
+<li><div><a href="#kafka&#x9009;&#x62E9;&#x5206;&#x533A;leader&#x7B97;&#x6CD5;">kafka&#x9009;&#x62E9;&#x5206;&#x533A;leader&#x7B97;&#x6CD5;</a><i class="level__parent level__item level__parent--opened" state="opened" onclick="var curState = this.getAttribute(&apos;state&apos;);var nextState = curState === &apos;opened&apos; ? &apos;hidden&apos; : &apos;opened&apos;;this.setAttribute(&apos;state&apos;, nextState);this.className = this.className.split(curState).join(nextState);var list = this.parentNode.nextElementSibling;if (nextState === &apos;hidden&apos;) {    list.style.display = &apos;none&apos;;} else {    list.style.display = &apos;block&apos;;}"></i></div>
+<ul>
+<li><div><a href="#noopleaderselector">NoOpLeaderSelector</a><i></i></div></li>
+<li><div><a href="#offlinepartitionleader">offlinePartitionLeader</a><i></i></div></li>
+<li><div><a href="#reassignedpartitionleader">reassignedPartitionLeader</a><i></i></div></li>
+<li><div><a href="#preferredreplicapartitionleader">preferredReplicaPartitionLeader</a><i></i></div></li>
+<li><div><a href="#controlledshutdownleader">ControlledShutdownLeader</a><i></i></div></li>
+</ul></li>
+</ul></li>
+<li><div><a href="#&#x5982;&#x4F55;&#x5904;&#x7406;&#x6240;&#x6709;replica&#x90FD;&#x4E0D;&#x5DE5;&#x4F5C;&#xFF1F;">&#x5982;&#x4F55;&#x5904;&#x7406;&#x6240;&#x6709;Replica&#x90FD;&#x4E0D;&#x5DE5;&#x4F5C;&#xFF1F;</a><i></i></div></li>
+</ul></li>
+</ul>
+</div>
+
+<h1 id="kafka-&#x7684;-controller-&#x9009;&#x4E3E;&#x548C;-leader-&#x9009;&#x4E3E;">kafka &#x7684; controller &#x9009;&#x4E3E;&#x548C; leader &#x9009;&#x4E3E;</h1>
+<p>kafka&#x5728;&#x6240;&#x6709;broker&#x4E2D;&#x9009;&#x51FA;&#x4E00;&#x4E2A;controller(<code>Controller leader</code>)&#xFF0C;&#x6240;&#x6709;Partition&#x7684;Leader&#x9009;&#x4E3E;&#x90FD;&#x7531;controller&#x51B3;&#x5B9A;(<code>Partition leader</code>)&#x3002;controller&#x4F1A;&#x5C06;Leader&#x7684;&#x6539;&#x53D8;&#x76F4;&#x63A5;&#x901A;&#x8FC7;RPC&#x7684;&#x65B9;&#x5F0F;&#xFF08;&#x6BD4;Zookeeper Queue&#x7684;&#x65B9;&#x5F0F;&#x66F4;&#x9AD8;&#x6548;&#xFF09;&#x901A;&#x77E5;&#x9700;&#x4E3A;&#x6B64;&#x4F5C;&#x51FA;&#x54CD;&#x5E94;&#x7684;Broker&#x3002;&#x540C;&#x65F6;controller&#x4E5F;&#x8D1F;&#x8D23;&#x589E;&#x5220;Topic&#x4EE5;&#x53CA;Replica&#x7684;&#x91CD;&#x65B0;&#x5206;&#x914D;&#x3002;</p>
+<h2 id="&#x521B;&#x5EFA;topic&#x662F;partition&#x5982;&#x4F55;&#x5206;&#x914D;&#x5230;broker">&#x521B;&#x5EFA;topic&#x662F;partition&#x5982;&#x4F55;&#x5206;&#x914D;&#x5230;broker?</h2>
+<p>replica assignment&#x6709;&#x4E09;&#x4E2A;&#x76EE;&#x6807;&#xFF1A;</p>
+<ul>
+<li>&#x5728;brokers&#x4E4B;&#x95F4;&#x5747;&#x5206;replicas</li>
+<li>partition&#x4E0E;&#x5B83;&#x7684;&#x5176;&#x4ED6;replicas&#x4E0D;&#x518D;&#x540C;&#x4E00;&#x4E2A;broker&#x4E0A;</li>
+<li>&#x5982;&#x679C;broker&#x6709;rack&#x4FE1;&#x606F;&#xFF0C;&#x5219;partition&#x7684;replicas&#x5C3D;&#x91CF;&#x5206;&#x914D;&#x5728;&#x4E0D;&#x540C;rack&#x4E0A;&#x9762;</li>
+</ul>
+<p>&#x526F;&#x672C;&#x56E0;&#x5B50;&#x4E0D;&#x80FD;&#x5927;&#x4E8E;broker&#x7684;&#x4E2A;&#x6570;</p>
+<ul>
+<li>&#x7B2C;0&#x4E2A;&#x5206;&#x533A;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x526F;&#x672C;&#x653E;&#x7F6E;&#x4F4D;&#x7F6E;&#x662F;&#x968F;&#x673A;&#x4ECE;brokerList&#x4E2D;&#x9009;&#x62E9;&#x7684;</li>
+<li>&#x5176;&#x5B83;&#x5206;&#x533A;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x526F;&#x672C;&#x4F4D;&#x7F6E;&#x662F;&#x76F8;&#x5BF9;&#x4E8E;&#x7B2C;0&#x4E2A;&#x5206;&#x533A;&#x5F80;&#x540E;&#x79FB;&#x52A8;&#xFF08;eg: 5&#x4E2A;broker&#xFF0C;5&#x4E2A;&#x5206;&#x533A;&#xFF0C;&#x5982;&#x679C;&#x7B2C;0&#x5206;&#x533A;&#x653E;&#x5230;&#x4E86;broker4&#x4E0A;&#xFF0C;&#x63A5;&#x7740;&#x7B2C;1&#x5206;&#x533A;&#x653E;broker5, &#x7B2C;2&#x5206;&#x533A;&#x653E;broker1&#xFF0C;&#x7B2C;3&#x5206;&#x533A;&#x653E;broker2&#xFF0C;&#x7B2C;4&#x5206;&#x533A;&#x653E;&#x5230;broker3&#x4E0A;&#xFF09;</li>
+<li>&#x5269;&#x4F59;&#x526F;&#x672C;&#x76F8;&#x5BF9;&#x4E8E;&#x7B2C;&#x4E00;&#x4E2A;&#x526F;&#x672C;&#x653E;&#x7F6E;&#x4F4D;&#x7F6E;&#x5176;&#x5B9E;&#x662F;&#x6709;<code>nextReplicaShift</code>&#x51B3;&#x5B9A;&#x7684;&#xFF0C;&#x800C;&#x8FD9;&#x4E2A;&#x6570;&#x4E5F;&#x662F;&#x968F;&#x673A;&#x4EA7;&#x751F;&#x7684;</li>
+</ul>
+<pre class="language-"><code class="lang-java"><span class="token keyword">private</span> def <span class="token function">assignReplicasToBrokersRackUnaware</span><span class="token punctuation">(</span>nPartitions<span class="token operator">:</span> <span class="token class-name">Int</span><span class="token punctuation">,</span>
+                                                 replicationFactor<span class="token operator">:</span> <span class="token class-name">Int</span><span class="token punctuation">,</span>
+                                                 brokerList<span class="token operator">:</span> <span class="token class-name">Seq</span><span class="token punctuation">[</span><span class="token class-name">Int</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+                                                 fixedStartIndex<span class="token operator">:</span> <span class="token class-name">Int</span><span class="token punctuation">,</span>
+                                                 startPartitionId<span class="token operator">:</span> <span class="token class-name">Int</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token class-name">Map</span><span class="token punctuation">[</span><span class="token class-name">Int</span><span class="token punctuation">,</span> <span class="token class-name">Seq</span><span class="token punctuation">[</span><span class="token class-name">Int</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    val ret <span class="token operator">=</span> mutable<span class="token punctuation">.</span><span class="token class-name">Map</span><span class="token punctuation">[</span><span class="token class-name">Int</span><span class="token punctuation">,</span> <span class="token class-name">Seq</span><span class="token punctuation">[</span><span class="token class-name">Int</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    val brokerArray <span class="token operator">=</span> brokerList<span class="token punctuation">.</span>toArray
+    val startIndex <span class="token operator">=</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>fixedStartIndex <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> fixedStartIndex <span class="token keyword">else</span> rand<span class="token punctuation">.</span><span class="token function">nextInt</span><span class="token punctuation">(</span>brokerArray<span class="token punctuation">.</span>length<span class="token punctuation">)</span>
+    <span class="token keyword">var</span> currentPartitionId <span class="token operator">=</span> math<span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> startPartitionId<span class="token punctuation">)</span>
+    <span class="token keyword">var</span> nextReplicaShift <span class="token operator">=</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>fixedStartIndex <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> fixedStartIndex <span class="token keyword">else</span> rand<span class="token punctuation">.</span><span class="token function">nextInt</span><span class="token punctuation">(</span>brokerArray<span class="token punctuation">.</span>length<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>_ <span class="token operator">&lt;</span><span class="token operator">-</span> <span class="token number">0</span> until nPartitions<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>currentPartitionId <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>currentPartitionId <span class="token operator">%</span> brokerArray<span class="token punctuation">.</span>length <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        nextReplicaShift <span class="token operator">+=</span> <span class="token number">1</span>
+      val firstReplicaIndex <span class="token operator">=</span> <span class="token punctuation">(</span>currentPartitionId <span class="token operator">+</span> startIndex<span class="token punctuation">)</span> <span class="token operator">%</span> brokerArray<span class="token punctuation">.</span>length
+      val replicaBuffer <span class="token operator">=</span> mutable<span class="token punctuation">.</span><span class="token class-name">ArrayBuffer</span><span class="token punctuation">(</span><span class="token function">brokerArray</span><span class="token punctuation">(</span>firstReplicaIndex<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">&lt;</span><span class="token operator">-</span> <span class="token number">0</span> until replicationFactor <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+        replicaBuffer <span class="token operator">+=</span> <span class="token function">brokerArray</span><span class="token punctuation">(</span><span class="token function">replicaIndex</span><span class="token punctuation">(</span>firstReplicaIndex<span class="token punctuation">,</span> nextReplicaShift<span class="token punctuation">,</span> j<span class="token punctuation">,</span> brokerArray<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      ret<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>currentPartitionId<span class="token punctuation">,</span> replicaBuffer<span class="token punctuation">)</span>
+      currentPartitionId <span class="token operator">+=</span> <span class="token number">1</span>
+    <span class="token punctuation">}</span>
+    ret
+  <span class="token punctuation">}</span>
+
+
+  <span class="token keyword">private</span> def <span class="token function">replicaIndex</span><span class="token punctuation">(</span>firstReplicaIndex<span class="token operator">:</span> <span class="token class-name">Int</span><span class="token punctuation">,</span> secondReplicaShift<span class="token operator">:</span> <span class="token class-name">Int</span><span class="token punctuation">,</span> replicaIndex<span class="token operator">:</span> <span class="token class-name">Int</span><span class="token punctuation">,</span> nBrokers<span class="token operator">:</span> <span class="token class-name">Int</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token class-name">Int</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+    val shift <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">+</span> <span class="token punctuation">(</span>secondReplicaShift <span class="token operator">+</span> replicaIndex<span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token punctuation">(</span>nBrokers <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token punctuation">(</span>firstReplicaIndex <span class="token operator">+</span> shift<span class="token punctuation">)</span> <span class="token operator">%</span> nBrokers
+  <span class="token punctuation">}</span>
+</code></pre>
+<h2 id="kafka&#x7684;replica">kafka&#x7684;Replica</h2>
+<p>kafka&#x7684;Replica</p>
+<ol>
+<li><p>kafka&#x7684;topic&#x53EF;&#x4EE5;&#x8BBE;&#x7F6E;&#x6709;N&#x4E2A;&#x526F;&#x672C;&#xFF08;replica&#xFF09;&#xFF0C;&#x526F;&#x672C;&#x6570;&#x6700;&#x597D;&#x8981;&#x5C0F;&#x4E8E;broker&#x7684;&#x6570;&#x91CF;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8981;&#x4FDD;&#x8BC1;&#x4E00;&#x4E2A;broker&#x4E0A;&#x7684;replica&#x6700;&#x591A;&#x6709;&#x4E00;&#x4E2A;&#xFF0C;&#x6240;&#x4EE5;&#x53EF;&#x4EE5;&#x7528;broker id&#x6307;&#x5B9A;Partition replica&#x3002;</p>
+</li>
+<li><p>&#x521B;&#x5EFA;&#x526F;&#x672C;&#x7684;&#x5355;&#x4F4D;&#x662F;topic&#x7684;&#x5206;&#x533A;&#xFF0C;&#x6BCF;&#x4E2A;&#x5206;&#x533A;&#x6709;1&#x4E2A;leader&#x548C;0&#x5230;&#x591A;&#x4E2A;follower&#xFF0C;&#x6211;&#x4EEC;&#x628A;&#x591A;&#x4E2A;replica&#x5206;&#x4E3A;Lerder replica&#x548C;follower replica&#x3002;</p>
+</li>
+<li><p>&#x5F53;producer&#x5728;&#x5411;partition&#x4E2D;&#x5199;&#x6570;&#x636E;&#x65F6;&#xFF0C;&#x6839;&#x636E;ack&#x673A;&#x5236;&#xFF0C;&#x9ED8;&#x8BA4;ack=1&#xFF0C;&#x53EA;&#x4F1A;&#x5411;leader&#x4E2D;&#x5199;&#x5165;&#x6570;&#x636E;&#xFF0C;&#x7136;&#x540E;leader&#x4E2D;&#x7684;&#x6570;&#x636E;&#x4F1A;&#x590D;&#x5236;&#x5230;&#x5176;&#x4ED6;&#x7684;replica&#x4E2D;&#xFF0C;follower&#x4F1A;&#x5468;&#x671F;&#x6027;&#x7684;&#x4ECE;leader&#x4E2D;pull&#x6570;&#x636E;&#xFF0C;&#x4F46;&#x662F;&#x5BF9;&#x4E8E;&#x6570;&#x636E;&#x7684;&#x8BFB;&#x5199;&#x64CD;&#x4F5C;&#x90FD;&#x5728;leader replica&#x4E2D;&#xFF0C;follower&#x526F;&#x672C;&#x53EA;&#x662F;&#x5F53;leader&#x526F;&#x672C;&#x6302;&#x4E86;&#x540E;&#x624D;&#x91CD;&#x65B0;&#x9009;&#x53D6;leader&#xFF0C;follower&#x5E76;&#x4E0D;&#x5411;&#x5916;&#x63D0;&#x4F9B;&#x670D;&#x52A1;&#x3002;</p>
+</li>
+</ol>
+<font colore="red">kafka&#x4E0D;&#x662F;&#x5B8C;&#x5168;&#x540C;&#x6B65;&#xFF0C;&#x4E5F;&#x4E0D;&#x662F;&#x5B8C;&#x5168;&#x5F02;&#x6B65;&#xFF0C;&#x662F;&#x4E00;&#x79CD;&#x7279;&#x6B8A;&#x7684;ISR&#xFF08;In Sync Replica&#xFF09;</font>
+
+<ol>
+<li><p>leader&#x4F1A;&#x7EF4;&#x6301;&#x4E00;&#x4E2A;&#x4E0E;&#x5176;&#x4FDD;&#x6301;&#x540C;&#x6B65;&#x7684;replica&#x96C6;&#x5408;&#xFF0C;&#x8BE5;&#x96C6;&#x5408;&#x5C31;&#x662F;ISR&#xFF0C;&#x6BCF;&#x4E00;&#x4E2A;partition&#x90FD;&#x6709;&#x4E00;&#x4E2A;ISR&#xFF0C;&#x7531;leader&#x52A8;&#x6001;&#x7EF4;&#x62A4;&#x3002;</p>
+</li>
+<li><p>&#x6211;&#x4EEC;&#x8981;&#x4FDD;&#x8BC1;kafka&#x4E0D;&#x4E22;&#x5931;message&#xFF0C;&#x5C31;&#x8981;&#x4FDD;&#x8BC1;ISR&#x8FD9;&#x7EC4;&#x96C6;&#x5408;&#x5B58;&#x6D3B;&#xFF08;&#x81F3;&#x5C11;&#x6709;&#x4E00;&#x4E2A;&#x5B58;&#x6D3B;&#xFF09;&#xFF0C;&#x5E76;&#x4E14;&#x6D88;&#x606F;commit&#x6210;&#x529F;&#x3002;</p>
+</li>
+</ol>
+<p>&#x5206;&#x5E03;&#x5F0F;&#x6D88;&#x606F;&#x7CFB;&#x7EDF;&#x5BF9;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x662F;&#x5426;&#x5B58;&#x6D3B;&#x6709;&#x8FD9;&#x6837;&#x4E24;&#x4E2A;&#x6761;&#x4EF6;&#x5224;&#x65AD;&#xFF1A;</p>
+<ul>
+<li>&#x7B2C;&#x4E00;&#x4E2A;&#xFF0C;&#x8282;&#x70B9;&#x5FC5;&#x987B;&#x7EF4;&#x62A4;&#x548C;zookeeper&#x7684;&#x8FDE;&#x63A5;&#xFF0C;zookeeper&#x901A;&#x8FC7;&#x5FC3;&#x8DF3;&#x673A;&#x5236;&#x68C0;&#x67E5;&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x7684;&#x8FDE;&#x63A5;&#xFF1B;</li>
+<li>&#x7B2C;&#x4E8C;&#x4E2A;&#xFF0C;&#x5982;&#x679C;&#x8282;&#x70B9;&#x65F6;follower&#xFF0C;&#x5B83;&#x5FC5;&#x8981;&#x80FD;&#x53CA;&#x65F6;&#x540C;&#x6B65;&#x4E0E;leader&#x7684;&#x5199;&#x64CD;&#x4F5C;&#xFF0C;&#x4E0D;&#x662F;&#x5EF6;&#x65F6;&#x592A;&#x4E45;&#x3002;</li>
+</ul>
+<h2 id="controller-leader-&#x9009;&#x4E3E;">Controller leader &#x9009;&#x4E3E;</h2>
+<p>&#x5F53;broker&#x542F;&#x52A8;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x90FD;&#x4F1A;&#x521B;&#x5EFA;KafkaController&#x5BF9;&#x8C61;&#xFF0C;&#x4F46;&#x662F;&#x96C6;&#x7FA4;&#x4E2D;&#x53EA;&#x80FD;&#x6709;&#x4E00;&#x4E2A;leader&#x5BF9;&#x5916;&#x63D0;&#x4F9B;&#x670D;&#x52A1;&#xFF0C;&#x8FD9;&#x4E9B;&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x4E0A;&#x7684;KafkaController&#x4F1A;&#x5728;&#x6307;&#x5B9A;&#x7684;zookeeper&#x8DEF;&#x5F84;&#x4E0B;&#x521B;&#x5EFA;&#x4E34;&#x65F6;&#x8282;&#x70B9;&#xFF0C;&#x53EA;&#x6709;&#x7B2C;&#x4E00;&#x4E2A;&#x6210;&#x529F;&#x521B;&#x5EFA;&#x7684;&#x8282;&#x70B9;&#x7684;KafkaController&#x624D;&#x53EF;&#x4EE5;&#x6210;&#x4E3A;leader&#xFF0C;&#x5176;&#x4F59;&#x7684;&#x90FD;&#x662F;follower&#x3002;&#x5F53;leader&#x6545;&#x969C;&#x540E;&#xFF0C;&#x6240;&#x6709;&#x7684;follower&#x4F1A;&#x6536;&#x5230;&#x901A;&#x77E5;&#xFF0C;&#x518D;&#x6B21;&#x7ADE;&#x4E89;&#x5728;&#x8BE5;&#x8DEF;&#x5F84;&#x4E0B;&#x521B;&#x5EFA;&#x8282;&#x70B9;&#x4ECE;&#x800C;&#x9009;&#x4E3E;&#x65B0;&#x7684;leader</p>
+<p><img src="../imgs/kafka_controller.png" alt=""></p>
+<p>&#x5B9E;&#x9645;&#x4E0A;&#x7684;&#x5B9E;&#x73B0;&#x601D;&#x8DEF;&#x5982;&#x4E0A;&#xFF0C;&#x53EA;&#x662F;&#x4F18;&#x5316;&#x4E86;&#x4E0B;&#xFF0C;&#x591A;&#x4E86;&#x4E2A;&#x4EE3;&#x7406;&#x63A7;&#x5236;&#x7BA1;&#x7406;&#x7C7B;&#xFF08;controller&#xFF09;&#x3002;&#x5F15;&#x5165;&#x7684;&#x539F;&#x56E0;&#x662F;&#xFF0C;&#x5F53;kafka&#x96C6;&#x7FA4;&#x4E1A;&#x52A1;&#x5F88;&#x591A;&#xFF0C;partition&#x8FBE;&#x5230;&#x6210;&#x5343;&#x4E0A;&#x4E07;&#x65F6;&#xFF0C;&#x5F53;broker&#x5B95;&#x673A;&#x65F6;&#xFF0C;&#x9020;&#x6210;&#x96C6;&#x7FA4;&#x5185;&#x5927;&#x91CF;&#x7684;&#x8C03;&#x6574;&#xFF0C;&#x4F1A;&#x9020;&#x6210;&#x5927;&#x91CF;Watch&#x4E8B;&#x4EF6;&#x88AB;&#x89E6;&#x53D1;&#xFF0C;Zookeeper&#x8D1F;&#x8F7D;&#x4F1A;&#x8FC7;&#x91CD;&#x3002;&#x800C;zk&#x662F;&#x4E0D;&#x9002;&#x5408;&#x5927;&#x91CF;&#x5199;&#x64CD;&#x4F5C;&#x7684;&#x3002;</p>
+<h2 id="partition-leader-&#x9009;&#x4E3E;">Partition leader &#x9009;&#x4E3E;</h2>
+<p>&#x7531;controller leader&#x6267;&#x884C;</p>
+<ul>
+<li>&#x4ECE;Zookeeper&#x4E2D;&#x8BFB;&#x53D6;&#x5F53;&#x524D;&#x5206;&#x533A;&#x7684;&#x6240;&#x6709;ISR(in-sync replicas)&#x96C6;&#x5408;</li>
+<li>&#x8C03;&#x7528;&#x914D;&#x7F6E;&#x7684;&#x5206;&#x533A;&#x9009;&#x62E9;&#x7B97;&#x6CD5;&#x9009;&#x62E9;&#x5206;&#x533A;&#x7684;leader</li>
+</ul>
+<h3 id="kafka-partition&#x72B6;&#x6001;">kafka partition&#x72B6;&#x6001;</h3>
+<ul>
+<li>NonExistentPartition&#xFF1A;&#x8FD9;&#x4E2A;&#x72B6;&#x6001;&#x8868;&#x793A;&#x8BE5;&#x5206;&#x533A;&#x8981;&#x4E48;&#x6CA1;&#x6709;&#x88AB;&#x521B;&#x5EFA;&#x8FC7;&#x6216;&#x66FE;&#x7ECF;&#x88AB;&#x521B;&#x5EFA;&#x8FC7;&#x4F46;&#x540E;&#x9762;&#x88AB;&#x5220;&#x9664;&#x4E86;&#x3002;</li>
+<li>NewPartition&#xFF1A;&#x5206;&#x533A;&#x521B;&#x5EFA;&#x4E4B;&#x540E;&#x5C31;&#x5904;&#x4E8E;NewPartition&#x72B6;&#x6001;&#x3002;&#x5728;&#x8FD9;&#x4E2A;&#x72B6;&#x6001;&#x4E2D;&#xFF0C;&#x5206;&#x533A;&#x5E94;&#x8BE5;&#x5DF2;&#x7ECF;&#x5206;&#x914D;&#x4E86;&#x526F;&#x672C;&#xFF0C;&#x4F46;&#x662F;&#x8FD8;&#x6CA1;&#x6709;&#x9009;&#x4E3E;&#x51FA;leader&#x548C;ISR&#x3002;</li>
+<li>OnlinePartition&#xFF1A;&#x4E00;&#x65E6;&#x5206;&#x533A;&#x7684;leader&#x88AB;&#x63A8;&#x9009;&#x51FA;&#x6765;&#xFF0C;&#x5B83;&#x5C31;&#x5904;&#x4E8E;OnlinePartition&#x72B6;&#x6001;&#x3002;</li>
+<li>OfflinePartition&#xFF1A;&#x5982;&#x679C;leader&#x9009;&#x4E3E;&#x51FA;&#x6765;&#x540E;&#xFF0C;leader broker&#x5B95;&#x673A;&#x4E86;&#xFF0C;&#x90A3;&#x4E48;&#x8BE5;&#x5206;&#x533A;&#x5C31;&#x5904;&#x4E8E;OfflinePartition&#x72B6;&#x6001;&#x3002;</li>
+</ul>
+<h3 id="kafka&#x9009;&#x62E9;&#x5206;&#x533A;leader&#x7B97;&#x6CD5;">kafka&#x9009;&#x62E9;&#x5206;&#x533A;leader&#x7B97;&#x6CD5;</h3>
+<h4 id="noopleaderselector">NoOpLeaderSelector</h4>
+<p>&#x4E0D;&#x505A;&#x4EFB;&#x4F55;&#x4E8B;&#x60C5;&#xFF0C;&#x4EC5;&#x4EC5;&#x8FD4;&#x56DE;&#x4E0B;&#x5F53;&#x524D;&#x7684;Leader&#xFF0C;ISR&#xFF0C;AR</p>
+<h4 id="offlinepartitionleader">offlinePartitionLeader</h4>
+<p>&#x5F53;KafkaController&#x5C1D;&#x8BD5;&#x5C06;&#x5206;&#x533A;&#x72B6;&#x6001;&#x4ECE;OfflinePartition&#x6216;&#x8005;NewPartion&#x5207;&#x6362;&#x4E3A;OnlinePartition&#x7684;&#x65F6;&#x5019;&#x4F1A;&#x4F7F;&#x7528;&#x8FD9;&#x79CD;&#x7B56;&#x7565;&#x3002;</p>
+<ol>
+<li>&#x7B5B;&#x9009;&#x51FA;&#x5728;&#x7EBF;&#x7684;ISR&#x548C;&#x5728;&#x7EBF;&#x7684;AR</li>
+<li>&#x4F18;&#x5148;&#x5728;&#x5728;&#x7EBF;&#x7684;ISR&#x4E2D;&#x9009;&#x62E9;&#xFF0C;&#x5728;&#x7EBF;&#x7684;ISR&#x5217;&#x8868;&#x4E0D;&#x4E3A;&#x7A7A;&#xFF0C;&#x5219;&#x9009;&#x62E9;&#x5728;&#x7EBF;ISR&#x5217;&#x8868;&#x4E2D;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#xFF0C;&#x7ED3;&#x675F;&#x9009;&#x4E3E;</li>
+<li>&#x5728;&#x7EBF;&#x7684;ISR&#x4E3A;&#x7A7A;&#xFF0C;&#x5219;&#x6839;&#x636E;<code>unclean.leader.election.enable</code>&#x7684;&#x914D;&#x7F6E;&#x662F;&#x5426;&#x5728;&#x5728;&#x7EBF;&#x7684;AR&#x5217;&#x8868;&#x4E2D;&#x9009;&#x62E9;&#xFF0C;<code>unclean.leader.election.enable</code>&#x4EE3;&#x8868;&#x4E86;&#x662F;&#x5426;&#x5141;&#x8BB8;&#x4E0D;&#x5728;ISR&#x5217;&#x8868;&#x4E2D;&#x9009;&#x4E3E;Leader&#xFF0C;&#x9ED8;&#x8BA4;&#x4E3A;true&#xFF0C;&#x5982;&#x679C;&#x4E3A;true&#xFF0C;&#x5219;&#x9009;&#x62E9;&#x5728;&#x7EBF;AR&#x4E2D;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#xFF0C;&#x7ED3;&#x675F;&#x9009;&#x4E3E;&#xFF1B;&#x5982;&#x679C;AR&#x5217;&#x8868;&#x4E3A;&#x7A7A;&#xFF0C;&#x5219;&#x9009;&#x4E3E;&#x5931;&#x8D25;&#x3002;</li>
+</ol>
+<h4 id="reassignedpartitionleader">reassignedPartitionLeader</h4>
+<p>&#x968F;&#x7740;Topic&#x7684;&#x65B0;&#x5EFA;&#x548C;&#x5220;&#x9664;&#x4EE5;&#x53CA;Broker Server&#x7684;&#x4E0A;&#x4E0B;&#x7EBF;&#xFF0C;&#x539F;&#x672C;Topic&#x5206;&#x533A;&#x7684;AR&#x5217;&#x8868;&#x5728;&#x96C6;&#x7FA4;&#x4E2D;&#x7684;&#x5206;&#x5E03;&#x53D8;&#x5F97;&#x8D8A;&#x6765;&#x8D8A;&#x4E0D;&#x5747;&#x5300;&#x4E86;&#xFF0C;&#x6B64;&#x65F6;&#x5982;&#x679C;&#x7BA1;&#x7406;&#x5458;&#x4E0B;&#x53D1;&#x5206;&#x533A;&#x91CD;&#x5206;&#x914D;&#x7684;&#x6307;&#x4EE4;&#xFF0C;&#x5C31;&#x4F1A;&#x5728;Zookeeper&#x7684;<code>/admin/reassgin_partitions</code>&#x76EE;&#x5F55;&#x4E0B;&#x6307;&#x5B9A;Topic&#x5206;&#x533A;&#x7684;AR&#x5217;&#x8868;&#xFF0C;&#x6B64;&#x65F6;Leader&#x72B6;&#x6001;&#x7684;KafkaController&#x68C0;&#x6D4B;&#x5230;&#x8FD9;&#x4E2A;&#x8DEF;&#x5F84;&#x7684;&#x6570;&#x636E;&#x53D8;&#x5316;&#xFF0C;&#x4F1A;&#x89E6;&#x53D1;&#x76F8;&#x5E94;&#x7684;&#x56DE;&#x8C03;&#x51FD;&#x6570;&#xFF0C;&#x4F7F;&#x5F97;&#x5BF9;&#x5E94;&#x7684;Topic&#x5206;&#x533A;&#x53D1;&#x751F;Leader Replica&#x7684;&#x9009;&#x4E3E;</p>
+<ol>
+<li>&#x83B7;&#x53D6;&#x6307;&#x5B9A;&#x7684;AR&#x5217;&#x8868;</li>
+<li>&#x9488;&#x5BF9;&#x6307;&#x5B9A;&#x7684;AR&#x5217;&#x8868;&#xFF0C;&#x5728;&#x7EBF;&#x7684;Broker Server&#x548C;&#x5F53;&#x524D;&#x7684;ISR&#x5217;&#x8868;&#x6C42;&#x4EA4;&#x96C6;</li>
+<li>&#x5982;&#x679C;&#x4EA4;&#x96C6;&#x4E0D;&#x4E3A;&#x7A7A;&#xFF0C;&#x5219;&#x9009;&#x4E3E;&#x6210;&#x529F;&#xFF0C;&#x5176;&#x7B2C;&#x4E00;&#x4E2A;Replica&#x5373;&#x4E3A;&#x65B0;&#x7684;leader&#xFF1B;&#x5426;&#x5219;&#x9009;&#x4E3E;&#x5931;&#x8D25;&#x3002;</li>
+</ol>
+<h4 id="preferredreplicapartitionleader">preferredReplicaPartitionLeader</h4>
+<ol>
+<li>&#x83B7;&#x53D6;&#x6307;&#x5B9A;&#x7684;AR&#x5217;&#x8868;</li>
+<li>&#x9009;&#x62E9;&#x7B2C;&#x4E00;&#x989D;Replica&#x4F5C;&#x4E3A;&#x7279;&#x5B9A;&#x7684;Leader Replica</li>
+<li>&#x5224;&#x65AD;&#x5F85;&#x5B9A;&#x7684;Leader Replica&#x662F;&#x5426;&#x5728;&#x5728;&#x7EBF;&#x7684;Broker Server&#x4E2D;&#x548C;&#x5F53;&#x524D;&#x7684;ISR&#x5217;&#x8868;&#x4E2D;&#xFF0C;&#x5982;&#x679C;&#x662F;&#xFF0C;&#x5219;&#x9009;&#x4E3E;&#x6210;&#x529F;&#xFF0C;&#x5176;&#x7B2C;&#x4E00;&#x4E2A;Replica&#x5373;&#x6210;&#x4E3A;Leader&#xFF1B;&#x5426;&#x5219;&#x9009;&#x4E3E;&#x5931;&#x8D25;</li>
+</ol>
+<h4 id="controlledshutdownleader">ControlledShutdownLeader</h4>
+<p>&#x5F53;Broker Server&#x4E0B;&#x7EBF;&#x7684;&#x65F6;&#x5019;&#x4F1A;&#x5411;Leader&#x72B6;&#x6001;&#x7684;KafkaController&#x4E0B;&#x53D1;ContolledShutdownRequest&#x7684;&#x6307;&#x4EE4;&#xFF0C;KafkaController&#x63A5;&#x6536;&#x5230;&#x8BE5;&#x6307;&#x4EE4;&#x4E4B;&#x540E;&#x4F1A;&#x9488;&#x5BF9;&#x4F4D;&#x4E8E;&#x8BE5;Broker Server&#x4E0A;&#x7684;Leader Replica&#x7684;&#x5206;&#x533A;&#x91CD;&#x65B0;&#x8FDB;&#x884C;Leader replica&#x9009;&#x4E3E;</p>
+<ol>
+<li>&#x83B7;&#x53D6;&#x5206;&#x533A;&#x7684;ISR&#x5217;&#x8868;</li>
+<li>&#x5728;SIT&#x5217;&#x8868;&#x4E2D;&#x5254;&#x9664;&#x79BB;&#x7EBF;&#x7684;Replica&#x4F5C;&#x4E3A;&#x65B0;&#x7684;ISR&#x5217;&#x8868;</li>
+<li>&#x5982;&#x679C;&#x65B0;&#x7684;ISR&#x5217;&#x8868;&#x4E0D;&#x4E3A;&#x7A7A;&#xFF0C;&#x5219;&#x9009;&#x4E3E;&#x6210;&#x529F;&#xFF0C;&#x5176;&#x7B2C;&#x4E00;&#x4E2A;Replica&#x5373;&#x4E3A;&#x65B0;&#x7684;Leader&#xFF1B;&#x5426;&#x5219;&#x9009;&#x4E3E;&#x5931;&#x8D25;</li>
+</ol>
+<h2 id="&#x5982;&#x4F55;&#x5904;&#x7406;&#x6240;&#x6709;replica&#x90FD;&#x4E0D;&#x5DE5;&#x4F5C;&#xFF1F;">&#x5982;&#x4F55;&#x5904;&#x7406;&#x6240;&#x6709;Replica&#x90FD;&#x4E0D;&#x5DE5;&#x4F5C;&#xFF1F;</h2>
+<p>&#x5728;ISR&#x4E2D;&#x81F3;&#x5C11;&#x6709;&#x4E00;&#x4E2A;follower&#x65F6;&#xFF0C;Kafka&#x53EF;&#x4EE5;&#x786E;&#x4FDD;&#x5DF2;&#x7ECF;commit&#x7684;&#x6570;&#x636E;&#x4E0D;&#x4E22;&#x5931;&#xFF0C;&#x4F46;&#x5982;&#x679C;&#x67D0;&#x4E2A;Partition&#x7684;&#x6240;&#x6709;Replica&#x90FD;&#x5B95;&#x673A;&#x4E86;&#xFF0C;&#x5C31;&#x65E0;&#x6CD5;&#x4FDD;&#x8BC1;&#x6570;&#x636E;&#x4E0D;&#x4E22;&#x5931;&#x4E86;&#x3002;&#x8FD9;&#x79CD;&#x60C5;&#x51B5;&#x4E0B;&#x6709;&#x4E24;&#x79CD;&#x53EF;&#x884C;&#x7684;&#x65B9;&#x6848;&#xFF1A;</p>
+<ol>
+<li>&#x7B49;&#x5F85;ISR&#x4E2D;&#x7684;&#x4EFB;&#x4E00;&#x4E2A;Replica&quot;&#x6D3B;&quot;&#x8FC7;&#x6765;&#xFF0C;&#x5E76;&#x4E14;&#x9009;&#x5B83;&#x4F5C;&#x4E3A;Leader</li>
+<li>&#x9009;&#x62E9;&#x7B2C;&#x4E00;&#x4E2A;&quot;&#x6D3B;&quot;&#x8FC7;&#x6765;&#x7684;Replica&#xFF08;&#x4E0D;&#x4E00;&#x5B9A;&#x662F;ISR&#x4E2D;&#x7684;&#xFF09;&#x4F5C;&#x4E3A;Leader</li>
+</ol>
+<p>&#x8FD9;&#x5C31;&#x9700;&#x8981;&#x5728;&#x53EF;&#x7528;&#x6027;&#x548C;&#x4E00;&#x81F4;&#x6027;&#x5F53;&#x4E2D;&#x4F5C;&#x51FA;&#x4E00;&#x4E2A;&#x7B80;&#x5355;&#x7684;&#x6298;&#x8877;&#x3002;&#x5982;&#x679C;&#x4E00;&#x5B9A;&#x8981;&#x7B49;&#x5F85;ISR&#x4E2D;&#x7684;Replica&#x201C;&#x6D3B;&#x201D;&#x8FC7;&#x6765;&#xFF0C;&#x90A3;&#x4E0D;&#x53EF;&#x7528;&#x7684;&#x65F6;&#x95F4;&#x5C31;&#x53EF;&#x80FD;&#x4F1A;&#x76F8;&#x5BF9;&#x8F83;&#x957F;&#x3002;&#x800C;&#x4E14;&#x5982;&#x679C;ISR&#x4E2D;&#x7684;&#x6240;&#x6709;Replica&#x90FD;&#x65E0;&#x6CD5;&#x201C;&#x6D3B;&#x201D;&#x8FC7;&#x6765;&#x4E86;&#xFF0C;&#x6216;&#x8005;&#x6570;&#x636E;&#x90FD;&#x4E22;&#x5931;&#x4E86;&#xFF0C;&#x8FD9;&#x4E2A;Partition&#x5C06;&#x6C38;&#x8FDC;&#x4E0D;&#x53EF;&#x7528;&#x3002;&#x9009;&#x62E9;&#x7B2C;&#x4E00;&#x4E2A;&#x201C;&#x6D3B;&#x201D;&#x8FC7;&#x6765;&#x7684;Replica&#x4F5C;&#x4E3A;Leader&#xFF0C;&#x800C;&#x8FD9;&#x4E2A;Replica&#x4E0D;&#x662F;ISR&#x4E2D;&#x7684;Replica&#xFF0C;&#x90A3;&#x5373;&#x4F7F;&#x5B83;&#x5E76;&#x4E0D;&#x4FDD;&#x8BC1;&#x5DF2;&#x7ECF;&#x5305;&#x542B;&#x4E86;&#x6240;&#x6709;&#x5DF2;commit&#x7684;&#x6D88;&#x606F;&#xFF0C;&#x5B83;&#x4E5F;&#x4F1A;&#x6210;&#x4E3A;Leader&#x800C;&#x4F5C;&#x4E3A;consumer&#x7684;&#x6570;&#x636E;&#x6E90;&#xFF08;&#x524D;&#x6587;&#x6709;&#x8BF4;&#x660E;&#xFF0C;&#x6240;&#x6709;&#x8BFB;&#x5199;&#x90FD;&#x7531;Leader&#x5B8C;&#x6210;&#xFF09;&#x3002;Kafka0.8.*&#x4F7F;&#x7528;&#x4E86;&#x7B2C;&#x4E8C;&#x79CD;&#x65B9;&#x5F0F;&#x3002;&#x6839;&#x636E;Kafka&#x7684;&#x6587;&#x6863;&#xFF0C;&#x5728;&#x4EE5;&#x540E;&#x7684;&#x7248;&#x672C;&#x4E2D;&#xFF0C;Kafka&#x652F;&#x6301;&#x7528;&#x6237;&#x901A;&#x8FC7;&#x914D;&#x7F6E;&#x9009;&#x62E9;&#x8FD9;&#x4E24;&#x79CD;&#x65B9;&#x5F0F;&#x4E2D;&#x7684;&#x4E00;&#x79CD;&#xFF0C;&#x4ECE;&#x800C;&#x6839;&#x636E;&#x4E0D;&#x540C;&#x7684;&#x4F7F;&#x7528;&#x573A;&#x666F;&#x9009;&#x62E9;&#x9AD8;&#x53EF;&#x7528;&#x6027;&#x8FD8;&#x662F;&#x5F3A;&#x4E00;&#x81F4;&#x6027;&#x3002; unclean.leader.election.enable &#x53C2;&#x6570;&#x51B3;&#x5B9A;&#x4F7F;&#x7528;&#x54EA;&#x79CD;&#x65B9;&#x6848;&#xFF0C;&#x9ED8;&#x8BA4;&#x662F;true&#xFF0C;&#x91C7;&#x7528;&#x7B2C;&#x4E8C;&#x79CD;&#x65B9;&#x6848;</p>
+<p><footer class="page-footer"><span class="copyright">Copyright @doctording all right reserved&#xFF0C;powered by Gitbook</span><span class="footer-modification">&#x8BE5;&#x6587;&#x4EF6;&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;
+2020-12-09 23:44:20
+</span></footer><div id="gitalk-container"></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script></p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="broker_kafkaapis.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: kafka broker 处理请求">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"controller & leader","level":"1.5.3","depth":2,"next":{"title":"[kafka Consumer]","level":"1.6","depth":1,"ref":"","articles":[{"title":"constumer","level":"1.6.1","depth":2,"path":"content/consumer.md","ref":"./content/consumer.md","articles":[]},{"title":"__consumer_offsets","level":"1.6.2","depth":2,"path":"content/consumer_offset.md","ref":"./content/consumer_offset.md","articles":[]},{"title":"再平衡","level":"1.6.3","depth":2,"path":"content/rebalance.md","ref":"./content/rebalance.md","articles":[]}]},"previous":{"title":"kafka broker 处理请求","level":"1.5.2","depth":2,"path":"content/broker_kafkaapis.md","ref":"./content/broker_kafkaapis.md","articles":[]},"dir":"ltr"},"config":{"plugins":["prism","-highlight","-lunr","-search","-sharing","ace","codeblock-filename","search-plus","sectionx","splitter","tbfed-pagefooter","expandable-chapters","back-to-top-button","code","uml","page-treeview","gittalk"],"styles":{"website":"styles/website.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright @doctording","modify_label":"该文件修改时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"page-treeview":{"collapsed":false,"copyright":"Copyright @doctording","minHeaderCount":"2","minHeaderDeep":"2"},"prism":{},"ace":{},"splitter":{},"code":{"copyButtons":true},"fontsettings":{"theme":"white","family":"sans","size":2},"sectionx":{},"uml":{"format":"svg"},"codeblock-filename":{},"back-to-top-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"gittalk":{"clientID":"094729e19245d3fe84aa","clientSecret":"6c4cf7b48e7ae41c20d453c24eb9d5469e4d19fb","repo":"sword_at_offer","owner":"doctording","admin":["doctording"],"distractionFreeMode":false},"expandable-chapters":{},"search-plus":{}},"theme":"default","author":"doctording","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"java-note","language":"zh-hans","gitbook":"*","description":"kafka源码阅读"},"file":{"path":"content/broker_controller.md","mtime":"2020-12-09T15:44:20.119Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-01-13T01:27:59.243Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-ace/ace/ace.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-ace/ace.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-plus/jquery.mark.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search-plus/search.js"></script>
+        
+    
+        
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sectionx/sectionx.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-splitter/splitter.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-expandable-chapters/expandable-chapters.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-code/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-gittalk/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>3 kafka Brokers · java-note</title>
+        <title>kafka broker 理论知识 · java-note</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -89,10 +89,8 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="consumer.html" />
+    <link rel="next" href="broker_kafkaapis.html" />
     
-    
-    <link rel="prev" href="producer.html" />
     
 
     </head>
@@ -139,7 +137,7 @@
                 <a href="basic.html">
             
                     
-                    1 kafka基础概念入门
+                    消息队列基础
             
                 </a>
             
@@ -147,12 +145,39 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3" data-path="producer.html">
+        <li class="chapter " data-level="1.3" data-path="kafka_basic.html">
+            
+                <a href="kafka_basic.html">
+            
+                    
+                    kafka基础
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" >
+            
+                <span>
+            
+                    
+                    [kafka Producer]
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="producer.html">
             
                 <a href="producer.html">
             
                     
-                    2 kafka Producer
+                    KafkaProducer
             
                 </a>
             
@@ -160,12 +185,44 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.4" data-path="broker.html">
+        <li class="chapter " data-level="1.4.2" data-path="producer2.html">
+            
+                <a href="producer2.html">
+            
+                    
+                    如何处理粘包/拆包问题
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" >
+            
+                <span>
+            
+                    
+                    [kafka Broker & zookeeper]
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter active" data-level="1.5.1" data-path="broker.html">
             
                 <a href="broker.html">
             
                     
-                    3 kafka Brokers
+                    kafka broker 理论知识
             
                 </a>
             
@@ -173,12 +230,101 @@
             
         </li>
     
-        <li class="chapter " data-level="1.5" data-path="consumer.html">
+        <li class="chapter " data-level="1.5.2" data-path="broker_kafkaapis.html">
+            
+                <a href="broker_kafkaapis.html">
+            
+                    
+                    kafka broker 处理请求
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5.3" data-path="broker_controller.html">
+            
+                <a href="broker_controller.html">
+            
+                    
+                    controller & leader
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" >
+            
+                <span>
+            
+                    
+                    [kafka Consumer]
+            
+                </span>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.6.1" data-path="consumer.html">
             
                 <a href="consumer.html">
             
                     
-                    4 kafka Consumer
+                    constumer
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.2" data-path="consumer_offset.html">
+            
+                <a href="consumer_offset.html">
+            
+                    
+                    __consumer_offsets
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6.3" data-path="rebalance.html">
+            
+                <a href="rebalance.html">
+            
+                    
+                    再平衡
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="pro.html">
+            
+                <a href="pro.html">
+            
+                    
+                    kafka常见面试题
             
                 </a>
             
@@ -216,7 +362,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >3 kafka Brokers</a>
+        <a href=".." >kafka broker 理论知识</a>
     </h1>
 </div>
 
@@ -231,9 +377,186 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="broker">Broker</h1>
+                                <div class="treeview__container"><div class="treeview__container-title"><span class="treeview__main-title">Treeview</span><span class="treeview__copyright">Copyright @doctording all right reserved, powered by <a href="https://github.com/aleen42" target="_blank">aleen42</a></span></div><ul>
+<li><div><a href="#broker">Broker</a><i class="level__parent level__item level__parent--opened" state="opened" onclick="var curState = this.getAttribute(&apos;state&apos;);var nextState = curState === &apos;opened&apos; ? &apos;hidden&apos; : &apos;opened&apos;;this.setAttribute(&apos;state&apos;, nextState);this.className = this.className.split(curState).join(nextState);var list = this.parentNode.nextElementSibling;if (nextState === &apos;hidden&apos;) {    list.style.display = &apos;none&apos;;} else {    list.style.display = &apos;block&apos;;}"></i></div>
+<ul>
+<li><div><a href="#&#x5B58;&#x50A8;&#x6587;&#x4EF6;">&#x5B58;&#x50A8;&#x6587;&#x4EF6;</a><i class="level__parent level__item level__parent--opened" state="opened" onclick="var curState = this.getAttribute(&apos;state&apos;);var nextState = curState === &apos;opened&apos; ? &apos;hidden&apos; : &apos;opened&apos;;this.setAttribute(&apos;state&apos;, nextState);this.className = this.className.split(curState).join(nextState);var list = this.parentNode.nextElementSibling;if (nextState === &apos;hidden&apos;) {    list.style.display = &apos;none&apos;;} else {    list.style.display = &apos;block&apos;;}"></i></div>
+<ul>
+<li><div><a href="#&#x7D22;&#x5F15;&#x7684;&#x7A00;&#x758F;&#x5B58;&#x50A8;&#xFF08;&#x7C7B;&#x4F3C;&#x8DF3;&#x8868;&#xFF09;">&#x7D22;&#x5F15;&#x7684;&#x7A00;&#x758F;&#x5B58;&#x50A8;&#xFF08;&#x7C7B;&#x4F3C;&#x8DF3;&#x8868;&#xFF09;</a><i></i></div></li>
+</ul></li>
+<li><div><a href="#leader&#x9009;&#x4E3E;">leader&#x9009;&#x4E3E;</a><i class="level__parent level__item level__parent--opened" state="opened" onclick="var curState = this.getAttribute(&apos;state&apos;);var nextState = curState === &apos;opened&apos; ? &apos;hidden&apos; : &apos;opened&apos;;this.setAttribute(&apos;state&apos;, nextState);this.className = this.className.split(curState).join(nextState);var list = this.parentNode.nextElementSibling;if (nextState === &apos;hidden&apos;) {    list.style.display = &apos;none&apos;;} else {    list.style.display = &apos;block&apos;;}"></i></div>
+<ul>
+<li><div><a href="#kafka-controller-&#x9009;&#x4E3E;">Kafka Controller &#x9009;&#x4E3E;</a><i></i></div></li>
+<li><div><a href="#partition-leader&#x9009;&#x4E3E;&#x7684;&#x89E6;&#x53D1;">partition leader&#x9009;&#x4E3E;&#x7684;&#x89E6;&#x53D1;</a><i></i></div></li>
+<li><div><a href="#&#x5982;&#x4F55;&#x9009;&#x4E3E;&#x51FA;-partition-leader&#xFF1F;">&#x5982;&#x4F55;&#x9009;&#x4E3E;&#x51FA; partition leader&#xFF1F;</a><i></i></div></li>
+</ul></li>
+<li><div><a href="#isr">ISR</a><i class="level__parent level__item level__parent--opened" state="opened" onclick="var curState = this.getAttribute(&apos;state&apos;);var nextState = curState === &apos;opened&apos; ? &apos;hidden&apos; : &apos;opened&apos;;this.setAttribute(&apos;state&apos;, nextState);this.className = this.className.split(curState).join(nextState);var list = this.parentNode.nextElementSibling;if (nextState === &apos;hidden&apos;) {    list.style.display = &apos;none&apos;;} else {    list.style.display = &apos;block&apos;;}"></i></div>
+<ul>
+<li><div><a href="#hw-leo&#xFF08;leader-follower&#x7684;&#x6728;&#x6876;&#x7406;&#x8BBA;&#x77ED;&#x677F;&#x7406;&#x8BBA;&#xFF09;">HW LEO&#xFF08;leader follower&#x7684;&#x6728;&#x6876;&#x7406;&#x8BBA;/&#x77ED;&#x677F;&#x7406;&#x8BBA;&#xFF09;</a><i class="level__parent level__item level__parent--opened" state="opened" onclick="var curState = this.getAttribute(&apos;state&apos;);var nextState = curState === &apos;opened&apos; ? &apos;hidden&apos; : &apos;opened&apos;;this.setAttribute(&apos;state&apos;, nextState);this.className = this.className.split(curState).join(nextState);var list = this.parentNode.nextElementSibling;if (nextState === &apos;hidden&apos;) {    list.style.display = &apos;none&apos;;} else {    list.style.display = &apos;block&apos;;}"></i></div>
+<ul>
+<li><div><a href="#high-watermark&#x7684;&#x66F4;&#x65B0;">High Watermark&#x7684;&#x66F4;&#x65B0;</a><i></i></div></li>
+</ul></li>
+</ul></li>
+<li><div><a href="#kafka&#x96C6;&#x7FA4;&#x600E;&#x4E48;&#x8BFB;&#x53D6;&#x5199;&#x5165;&#x6570;&#x636E;&#x5230;&#x6307;&#x5B9A;&#x7684;broker&#x5206;&#x533A;&#xFF0C;&#x4ECE;&#x6307;&#x5B9A;broker&#x7684;offset&#x5F00;&#x59CB;&#x6D88;&#x8D39;&#xFF1F;">kafka&#x96C6;&#x7FA4;&#x600E;&#x4E48;&#x8BFB;&#x53D6;/&#x5199;&#x5165;&#x6570;&#x636E;&#x5230;&#x6307;&#x5B9A;&#x7684;broker&#x5206;&#x533A;&#xFF0C;&#x4ECE;&#x6307;&#x5B9A;broker&#x7684;offset&#x5F00;&#x59CB;&#x6D88;&#x8D39;&#xFF1F;</a><i></i></div></li>
+<li><div><a href="#zookeeper-&#x5728;-kafka-&#x4E2D;&#x7684;&#x4F5C;&#x7528;">Zookeeper &#x5728; Kafka &#x4E2D;&#x7684;&#x4F5C;&#x7528;</a><i class="level__parent level__item level__parent--opened" state="opened" onclick="var curState = this.getAttribute(&apos;state&apos;);var nextState = curState === &apos;opened&apos; ? &apos;hidden&apos; : &apos;opened&apos;;this.setAttribute(&apos;state&apos;, nextState);this.className = this.className.split(curState).join(nextState);var list = this.parentNode.nextElementSibling;if (nextState === &apos;hidden&apos;) {    list.style.display = &apos;none&apos;;} else {    list.style.display = &apos;block&apos;;}"></i></div>
+<ul>
+<li><div><a href="#broker&#x6CE8;&#x518C;">Broker&#x6CE8;&#x518C;</a><i></i></div></li>
+<li><div><a href="#topic&#x6CE8;&#x518C;">Topic&#x6CE8;&#x518C;</a><i></i></div></li>
+<li><div><a href="#&#x751F;&#x4EA7;&#x8005;&#x8D1F;&#x8F7D;&#x5747;&#x8861;">&#x751F;&#x4EA7;&#x8005;&#x8D1F;&#x8F7D;&#x5747;&#x8861;</a><i></i></div></li>
+<li><div><a href="#&#x6D88;&#x8D39;&#x8005;&#x8D1F;&#x8F7D;&#x5747;&#x8861;">&#x6D88;&#x8D39;&#x8005;&#x8D1F;&#x8F7D;&#x5747;&#x8861;</a><i></i></div></li>
+<li><div><a href="#&#x5206;&#x533A;-&#x4E0E;-&#x6D88;&#x8D39;&#x8005;-&#x7684;&#x5173;&#x7CFB;">&#x5206;&#x533A; &#x4E0E; &#x6D88;&#x8D39;&#x8005; &#x7684;&#x5173;&#x7CFB;</a><i></i></div></li>
+<li><div><a href="#&#x6D88;&#x8D39;&#x8FDB;&#x5EA6;offset-&#x8BB0;&#x5F55;10&#x4E4B;&#x524D;&#x7684;&#x7248;&#x672C;">&#x6D88;&#x8D39;&#x8FDB;&#x5EA6;Offset &#x8BB0;&#x5F55;(1.0&#x4E4B;&#x524D;&#x7684;&#x7248;&#x672C;)</a><i></i></div></li>
+</ul></li>
+<li><div><a href="#broker&#x5904;&#x7406;&#x6E90;&#x7801;">broker&#x5904;&#x7406;&#x6E90;&#x7801;</a><i class="level__parent level__item level__parent--opened" state="opened" onclick="var curState = this.getAttribute(&apos;state&apos;);var nextState = curState === &apos;opened&apos; ? &apos;hidden&apos; : &apos;opened&apos;;this.setAttribute(&apos;state&apos;, nextState);this.className = this.className.split(curState).join(nextState);var list = this.parentNode.nextElementSibling;if (nextState === &apos;hidden&apos;) {    list.style.display = &apos;none&apos;;} else {    list.style.display = &apos;block&apos;;}"></i></div>
+<ul>
+<li><div><a href="#&#x901A;&#x4FE1;&#x534F;&#x8BAE;">&#x901A;&#x4FE1;&#x534F;&#x8BAE;</a><i></i></div></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+
+<h1 id="broker">Broker</h1>
+<h2 id="&#x5B58;&#x50A8;&#x6587;&#x4EF6;">&#x5B58;&#x50A8;&#x6587;&#x4EF6;</h2>
+<p><img src="../imgs/kafka_store.png" alt=""></p>
+<p>log&#x9ED8;&#x8BA4;&#x4FDD;&#x7559;168&#x5C0F;&#x65F6;(7&#x5929;)&#xFF0C;&#x9ED8;&#x8BA4;&#x4E00;&#x4E2A;segment&#x6587;&#x4EF6;&#x5927;&#x5C0F;1G&#xFF0C;&#x5426;&#x5219;&#x4EA7;&#x751F;&#x65B0;&#x6587;&#x4EF6;</p>
+<ul>
+<li><code>.log</code>&#x5B58;&#x50A8;&#x6570;&#x636E;</li>
+<li><code>.index</code>&#x5B58;&#x50A8;&#x7D22;&#x5F15;(&#x7C7B;&#x4F3C;&#x8DF3;&#x8868;&#x7684;&#x7D22;&#x5F15;)</li>
+</ul>
+<pre class="language-"><code class="lang-java">############################# <span class="token class-name">Log</span> <span class="token class-name">Retention</span> <span class="token class-name">Policy</span> #############################
+
+# <span class="token class-name">The</span> following configurations control the disposal of log segments<span class="token punctuation">.</span> <span class="token class-name">The</span> policy can
+# be set <span class="token keyword">to</span> <span class="token namespace">delete</span> segments after a period of time<span class="token punctuation">,</span> or after a given size has accumulated<span class="token punctuation">.</span>
+# <span class="token class-name">A</span> segment will be deleted whenever <span class="token operator">*</span>either<span class="token operator">*</span> of these criteria are met<span class="token punctuation">.</span> <span class="token class-name">Deletion</span> always happens
+# from the end of the log<span class="token punctuation">.</span>
+
+# <span class="token class-name">The</span> minimum age of a log file <span class="token keyword">to</span> <span class="token namespace">be</span> eligible <span class="token keyword">for</span> deletion due <span class="token keyword">to</span> <span class="token namespace">age</span>
+log<span class="token punctuation">.</span>retention<span class="token punctuation">.</span>hours<span class="token operator">=</span><span class="token number">168</span>
+
+# <span class="token class-name">A</span> size<span class="token operator">-</span>based retention policy <span class="token keyword">for</span> logs<span class="token punctuation">.</span> <span class="token class-name">Segments</span> are pruned from the log unless the remaining
+# segments drop below log<span class="token punctuation">.</span>retention<span class="token punctuation">.</span>bytes<span class="token punctuation">.</span> <span class="token class-name">Functions</span> independently of log<span class="token punctuation">.</span>retention<span class="token punctuation">.</span>hours<span class="token punctuation">.</span>
+#log<span class="token punctuation">.</span>retention<span class="token punctuation">.</span>bytes<span class="token operator">=</span><span class="token number">1073741824</span>
+
+# <span class="token class-name">The</span> maximum size of a log segment file<span class="token punctuation">.</span> <span class="token class-name">When</span> <span class="token keyword">this</span> size is reached a <span class="token keyword">new</span> log segment will be created<span class="token punctuation">.</span>
+log<span class="token punctuation">.</span>segment<span class="token punctuation">.</span>bytes<span class="token operator">=</span><span class="token number">1073741824</span>
+
+# <span class="token class-name">The</span> interval at which log segments are checked <span class="token keyword">to</span> <span class="token namespace">see</span> <span class="token keyword">if</span> they can be deleted according
+# <span class="token keyword">to</span> <span class="token namespace">the</span> retention policies
+log<span class="token punctuation">.</span>retention<span class="token punctuation">.</span>check<span class="token punctuation">.</span>interval<span class="token punctuation">.</span>ms<span class="token operator">=</span><span class="token number">300000</span>
+</code></pre>
+<h3 id="&#x7D22;&#x5F15;&#x7684;&#x7A00;&#x758F;&#x5B58;&#x50A8;&#xFF08;&#x7C7B;&#x4F3C;&#x8DF3;&#x8868;&#xFF09;">&#x7D22;&#x5F15;&#x7684;&#x7A00;&#x758F;&#x5B58;&#x50A8;&#xFF08;&#x7C7B;&#x4F3C;&#x8DF3;&#x8868;&#xFF09;</h3>
+<p>&#x4E3A;&#x6570;&#x636E;&#x6587;&#x4EF6;&#x5EFA;&#x7D22;&#x5F15;&#x91C7;&#x53D6;&#x4E86;&#x7A00;&#x758F;&#x5B58;&#x50A8;&#xFF1A;&#x6BCF;&#x9694;&#x4E00;&#x5B9A;&#x5B57;&#x8282;&#x7684;&#x6570;&#x636E;&#x5EFA;&#x7ACB;&#x4E00;&#x6761;&#x7D22;&#x5F15;&#xFF08;&#x8FD9;&#x6837;&#x7684;&#x76EE;&#x7684;&#x662F;&#x4E3A;&#x4E86;&#x51CF;&#x5C11;&#x7D22;&#x5F15;&#x6587;&#x4EF6;&#x7684;&#x5927;&#x5C0F;&#xFF09;</p>
+<p><img src="../imgs/index.png" alt=""></p>
+<h2 id="leader&#x9009;&#x4E3E;">leader&#x9009;&#x4E3E;</h2>
+<p>leader&#x9009;&#x4E3E;&#x501F;&#x52A9;zookeeper&#x6700;&#x7B80;&#x5355;&#x6700;&#x76F4;&#x89C2;&#x7684;&#x65B9;&#x6848;&#x662F;:leader&#x5728;zk&#x4E0A;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x4E34;&#x65F6;&#x8282;&#x70B9;&#xFF0C;&#x6240;&#x6709;Follower&#x5BF9;&#x6B64;&#x8282;&#x70B9;&#x6CE8;&#x518C;&#x76D1;&#x542C;&#xFF0C;&#x5F53;leader&#x5B95;&#x673A;&#x65F6;&#xFF0C;&#x6B64;&#x65F6;ISR&#x91CC;&#x7684;&#x6240;&#x6709;Follower&#x90FD;&#x5C1D;&#x8BD5;&#x521B;&#x5EFA;&#x8BE5;&#x8282;&#x70B9;&#xFF0C;&#x800C;&#x521B;&#x5EFA;&#x6210;&#x529F;&#x8005;&#xFF08;Zookeeper&#x4FDD;&#x8BC1;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x80FD;&#x521B;&#x5EFA;&#x6210;&#x529F;&#xFF09;&#x5373;&#x662F;&#x65B0;&#x7684;Leader&#xFF0C;&#x5176;&#x5B83;Replica&#x5373;&#x4E3A;Follower&#x3002;</p>
+<p>&#x7F3A;&#x70B9;&#xFF1A;&#x5F53;kafka&#x96C6;&#x7FA4;&#x4E1A;&#x52A1;&#x5F88;&#x591A;&#xFF0C;partition&#x8FBE;&#x5230;&#x6210;&#x5343;&#x4E0A;&#x4E07;&#x65F6;&#xFF0C;&#x5F53;broker&#x5B95;&#x673A;&#x65F6;&#xFF0C;&#x9020;&#x6210;&#x96C6;&#x7FA4;&#x5185;&#x5927;&#x91CF;&#x7684;&#x8C03;&#x6574;&#xFF0C;&#x4F1A;&#x9020;&#x6210;&#x5927;&#x91CF;Watch&#x4E8B;&#x4EF6;&#x88AB;&#x89E6;&#x53D1;&#xFF0C;Zookeeper&#x8D1F;&#x8F7D;&#x4F1A;&#x8FC7;&#x91CD;&#xFF0C;&#x800C;zk&#x662F;&#x4E0D;&#x9002;&#x5408;&#x5927;&#x91CF;&#x5199;&#x64CD;&#x4F5C;&#x7684;&#x3002;</p>
+<p>kafka&#x5728;&#x6240;&#x6709;broker&#x4E2D;&#x9009;&#x51FA;&#x4E00;&#x4E2A;controller&#xFF0C;&#x6240;&#x6709;Partition&#x7684;Leader&#x9009;&#x4E3E;&#x90FD;&#x7531;controller&#x51B3;&#x5B9A;&#x3002;controller&#x4F1A;&#x5C06;Leader&#x7684;&#x6539;&#x53D8;&#x76F4;&#x63A5;&#x901A;&#x8FC7;RPC&#x7684;&#x65B9;&#x5F0F;&#xFF08;&#x6BD4;Zookeeper Queue&#x7684;&#x65B9;&#x5F0F;&#x66F4;&#x9AD8;&#x6548;&#xFF09;&#x901A;&#x77E5;&#x9700;&#x4E3A;&#x6B64;&#x4F5C;&#x51FA;&#x54CD;&#x5E94;&#x7684;Broker&#x3002;&#x540C;&#x65F6;controller&#x4E5F;&#x8D1F;&#x8D23;&#x589E;&#x5220;Topic&#x4EE5;&#x53CA;Replica&#x7684;&#x91CD;&#x65B0;&#x5206;&#x914D;&#x3002;</p>
+<p><img src="../imgs/kafka_broker_leader.webp" alt=""></p>
+<h3 id="kafka-controller-&#x9009;&#x4E3E;">Kafka Controller &#x9009;&#x4E3E;</h3>
+<p>Kafka Controller&#x7684;&#x9009;&#x4E3E;&#x662F;&#x4F9D;&#x8D56;Zookeeper&#x6765;&#x5B9E;&#x73B0;&#x7684;&#xFF0C;&#x5728;Kafka&#x96C6;&#x7FA4;&#x4E2D;&#x54EA;&#x4E2A;broker&#x80FD;&#x591F;&#x6210;&#x529F;&#x521B;&#x5EFA;<code>/controller</code>&#x8FD9;&#x4E2A;&#x4E34;&#x65F6;&#xFF08;EPHEMERAL&#xFF09;&#x8282;&#x70B9;,&#x5C31;&#x53EF;&#x4EE5;&#x6210;&#x4E3A;Kafka Controller&#x3002;</p>
+<p>controller&#x5B9E;&#x73B0;&#x5982;&#x4E0A;&#x529F;&#x80FD;&#xFF1A;</p>
+<ul>
+<li>brokers&#x5217;&#x8868;&#xFF1A;<code>ls /brokers/ids</code></li>
+<li>&#x67D0;&#x4E2A;broker&#x4FE1;&#x606F;&#xFF1A;<code>get /brokers/ids/0</code></li>
+<li>topic&#x4FE1;&#x606F;&#xFF1A;<code>get /brokers/topics/kafka10-topic-20170924</code></li>
+<li>partition&#x4FE1;&#x606F;&#xFF1A;<code>get /brokers/topics/kafka10-topic-20170924/partitions/0/state</code></li>
+<li>controller&#x4E2D;&#x5FC3;&#x8282;&#x70B9;&#x53D8;&#x66F4;&#x6B21;&#x6570;&#xFF1A;<code>get /controller_epoch</code></li>
+<li>conrtoller leader&#x4FE1;&#x606F;&#xFF1A;<code>get /controller</code></li>
+</ul>
+<p><img src="../imgs/kafka_controller.png" alt=""></p>
+<h3 id="partition-leader&#x9009;&#x4E3E;&#x7684;&#x89E6;&#x53D1;">partition leader&#x9009;&#x4E3E;&#x7684;&#x89E6;&#x53D1;</h3>
+<p>&#x5F53;&#x521B;&#x5EFA;&#x5206;&#x533A;&#xFF08;&#x521B;&#x5EFA;&#x4E3B;&#x9898;&#x6216;&#x589E;&#x52A0;&#x5206;&#x533A;&#x90FD;&#x6709;&#x521B;&#x5EFA;&#x5206;&#x533A;&#x7684;&#x52A8;&#x4F5C;&#xFF09;&#x6216;&#x5206;&#x533A;&#x4E0A;&#x7EBF;&#xFF08;&#x6BD4;&#x5982;&#x5206;&#x533A;&#x4E2D;&#x539F;&#x5148;&#x7684;leader&#x526F;&#x672C;&#x4E0B;&#x7EBF;&#xFF0C;&#x6B64;&#x65F6;&#x5206;&#x533A;&#x9700;&#x8981;&#x9009;&#x4E3E;&#x4E00;&#x4E2A;&#x65B0;&#x7684;leader&#x4E0A;&#x7EBF;&#x6765;&#x5BF9;&#x5916;&#x63D0;&#x4F9B;&#x670D;&#x52A1;&#xFF09;&#x7684;&#x65F6;&#x5019;&#x90FD;&#x9700;&#x8981;&#x6267;&#x884C;leader&#x7684;&#x9009;&#x4E3E;&#x52A8;&#x4F5C;&#x3002;&#x8FD8;&#x6709;&#x5206;&#x533A;&#x8FDB;&#x884C;&#x91CD;&#x5206;&#x914D;&#xFF08;reassign&#xFF09;&#x7684;&#x65F6;&#x5019;&#x4E5F;&#x9700;&#x8981;&#x6267;&#x884C;leader&#x7684;&#x9009;&#x4E3E;&#x52A8;&#x4F5C;&#x3002;</p>
+<h3 id="&#x5982;&#x4F55;&#x9009;&#x4E3E;&#x51FA;-partition-leader&#xFF1F;">&#x5982;&#x4F55;&#x9009;&#x4E3E;&#x51FA; partition leader&#xFF1F;</h3>
+<p>&#x4E0D;&#x540C;&#x573A;&#x666F;&#x4E0B;&#x7684;&#x9009;&#x4E3E;&#x601D;&#x8DEF;&#x4E0D;&#x540C;&#xFF1B;&#x57FA;&#x672C;&#x601D;&#x8DEF;&#x5982;&#x4E0B;</p>
+<ol>
+<li><p>&#x6309;&#x7167;AR&#x96C6;&#x5408;&#x4E2D;&#x526F;&#x672C;&#x7684;&#x987A;&#x5E8F;&#x67E5;&#x627E;&#x7B2C;&#x4E00;&#x4E2A;&#x5B58;&#x6D3B;&#x7684;&#x526F;&#x672C;&#xFF0C;&#x5E76;&#x4E14;&#x8FD9;&#x4E2A;&#x526F;&#x672C;&#x5728;ISR&#x96C6;&#x5408;&#x4E2D;&#x3002;</p>
+</li>
+<li><p>&#x4E00;&#x4E2A;&#x5206;&#x533A;&#x7684;AR&#x96C6;&#x5408;&#x5728;&#x5206;&#x914D;&#x7684;&#x65F6;&#x5019;&#x5C31;&#x88AB;&#x6307;&#x5B9A;&#xFF0C;&#x5E76;&#x4E14;&#x53EA;&#x8981;&#x4E0D;&#x53D1;&#x751F;&#x91CD;&#x5206;&#x914D;&#x7684;&#x60C5;&#x51B5;&#xFF0C;&#x96C6;&#x5408;&#x5185;&#x90E8;&#x526F;&#x672C;&#x7684;&#x987A;&#x5E8F;&#x662F;&#x4FDD;&#x6301;&#x4E0D;&#x53D8;&#x7684;&#xFF0C;&#x800C;&#x5206;&#x533A;&#x7684;ISR&#x96C6;&#x5408;&#x4E2D;&#x526F;&#x672C;&#x7684;&#x987A;&#x5E8F;&#x53EF;&#x80FD;&#x4F1A;&#x6539;&#x53D8;&#x3002;&#x6CE8;&#x610F;&#x8FD9;&#x91CC;&#x662F;&#x6839;&#x636E;AR&#x7684;&#x987A;&#x5E8F;&#x800C;&#x4E0D;&#x662F;ISR&#x7684;&#x987A;&#x5E8F;&#x8FDB;&#x884C;&#x9009;&#x4E3E;&#x7684;&#x3002;</p>
+</li>
+<li><p>&#x5206;&#x533A;&#x8FDB;&#x884C;&#x91CD;&#x5206;&#x914D;&#xFF08;reassign&#xFF09;&#x7684;&#x65F6;&#x5019;&#x4E5F;&#x9700;&#x8981;&#x6267;&#x884C;leader&#x7684;&#x9009;&#x4E3E;&#x52A8;&#x4F5C;&#x3002;
+&#x601D;&#x8DEF;&#xFF1A;&#x4ECE;&#x91CD;&#x5206;&#x914D;&#x7684;AR&#x5217;&#x8868;&#x4E2D;&#x627E;&#x5230;&#x7B2C;&#x4E00;&#x4E2A;&#x5B58;&#x6D3B;&#x7684;&#x526F;&#x672C;&#xFF0C;&#x4E14;&#x8FD9;&#x526F;&#x672C;&#x5728;&#x76EE;&#x524D;&#x7684;ISR&#x5217;&#x8868;&#x4E2D;&#x3002;</p>
+</li>
+<li><p>&#x53D1;&#x751F;&#x4F18;&#x5148;&#x526F;&#x672C;&#xFF08;preferred replica partition leader election&#xFF09;&#x7684;&#x9009;&#x4E3E;&#x65F6;&#xFF0C;&#x76F4;&#x63A5;&#x5C06;&#x4F18;&#x5148;&#x526F;&#x672C;&#x8BBE;&#x7F6E;&#x4E3A;leader&#x5373;&#x53EF;&#xFF0C;AR&#x96C6;&#x5408;&#x4E2D;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x526F;&#x672C;&#x5373;&#x4E3A;&#x4F18;&#x5148;&#x526F;&#x672C;&#x3002;</p>
+</li>
+<li><p>&#x5F53;&#x67D0;&#x8282;&#x70B9;&#x88AB;&#x4F18;&#x96C5;&#x5730;&#x5173;&#x95ED;&#xFF08;&#x4E5F;&#x5C31;&#x662F;&#x6267;&#x884C;ControlledShutdown&#xFF09;&#x65F6;&#xFF0C;&#x4F4D;&#x4E8E;&#x8FD9;&#x4E2A;&#x8282;&#x70B9;&#x4E0A;&#x7684;leader&#x526F;&#x672C;&#x90FD;&#x4F1A;&#x4E0B;&#x7EBF;&#xFF0C;&#x6240;&#x4EE5;&#x4E0E;&#x6B64;&#x5BF9;&#x5E94;&#x7684;&#x5206;&#x533A;&#x9700;&#x8981;&#x6267;&#x884C;leader&#x7684;&#x9009;&#x4E3E;&#x3002;&#x4ECE;AR&#x5217;&#x8868;&#x4E2D;&#x627E;&#x5230;&#x7B2C;&#x4E00;&#x4E2A;&#x5B58;&#x6D3B;&#x7684;&#x526F;&#x672C;&#xFF0C;&#x4E14;&#x8FD9;&#x4E2A;&#x526F;&#x672C;&#x5728;&#x76EE;&#x524D;&#x7684;ISR&#x5217;&#x8868;&#x4E2D;&#xFF0C;&#x4E0E;&#x6B64;&#x540C;&#x65F6;&#x8FD8;&#x8981;&#x786E;&#x4FDD;&#x8FD9;&#x4E2A;&#x526F;&#x672C;&#x4E0D;&#x5904;&#x4E8E;&#x6B63;&#x5728;&#x88AB;&#x5173;&#x95ED;&#x7684;&#x8282;&#x70B9;&#x4E0A;&#x3002;</p>
+</li>
+</ol>
+<h2 id="isr">ISR</h2>
+<p>&#x5206;&#x533A;&#x4E2D;&#x7684;&#x6240;&#x6709;&#x526F;&#x672C;&#x7EDF;&#x79F0;&#x4E3A;AR&#xFF08;Assigned Repllicas&#xFF09;&#x3002;</p>
+<p>&#x6240;&#x6709;&#x4E0E;leader&#x526F;&#x672C;&#x4FDD;&#x6301;&#x4E00;&#x5B9A;&#x7A0B;&#x5EA6;&#x540C;&#x6B65;&#x7684;&#x526F;&#x672C;&#xFF08;&#x5305;&#x62EC;Leader&#xFF09;&#x7EC4;&#x6210;ISR&#xFF08;In-Sync Replicas&#xFF09;&#xFF0C;ISR&#x96C6;&#x5408;&#x662F;AR&#x96C6;&#x5408;&#x4E2D;&#x7684;&#x4E00;&#x4E2A;&#x5B50;&#x96C6;&#x3002;</p>
+<p>ISR&#x96C6;&#x5408;&#x7684;&#x526F;&#x672C;&#x5FC5;&#x987B;&#x6EE1;&#x8DB3;&#xFF1A;&#x526F;&#x672C;&#x6240;&#x5728;&#x8282;&#x70B9;&#x5FC5;&#x987B;&#x7EF4;&#x6301;&#x7740;&#x4E0E;zookeeper&#x7684;&#x8FDE;&#x63A5;&#xFF1B;&#x526F;&#x672C;&#x6700;&#x540E;&#x4E00;&#x6761;&#x6D88;&#x606F;&#x7684;offset&#x4E0E;leader&#x526F;&#x672C;&#x6700;&#x540E;&#x4E00;&#x6761;&#x6D88;&#x606F;&#x7684;offset&#x4E4B;&#x95F4;&#x7684;&#x5DEE;&#x503C;&#x4E0D;&#x80FD;&#x8D85;&#x51FA;&#x6307;&#x5B9A;&#x7684;&#x9608;&#x503C;</p>
+<p>&#x6BCF;&#x4E2A;&#x5206;&#x533A;&#x7684;leader&#x526F;&#x672C;&#x90FD;&#x4F1A;&#x7EF4;&#x62A4;&#x6B64;&#x5206;&#x533A;&#x7684;ISR&#x96C6;&#x5408;&#xFF0C;&#x5199;&#x8BF7;&#x6C42;&#x9996;&#x5148;&#x7531;leader&#x526F;&#x672C;&#x5904;&#x7406;&#xFF0C;&#x4E4B;&#x540E;follower&#x526F;&#x672C;&#x4F1A;&#x4ECE;leader&#x526F;&#x672C;&#x4E0A;&#x62C9;&#x53D6;&#x5199;&#x5165;&#x7684;&#x6D88;&#x606F;&#xFF0C;&#x8FD9;&#x4E2A;&#x8FC7;&#x7A0B;&#x4F1A;&#x6709;&#x4E00;&#x5B9A;&#x7684;&#x5EF6;&#x8FDF;&#xFF0C;&#x5BFC;&#x81F4;follower&#x526F;&#x672C;&#x4E2D;&#x4FDD;&#x5B58;&#x7684;&#x6D88;&#x606F;&#x7565;&#x5C11;&#x4E8E;leader&#x526F;&#x672C;&#xFF0C;&#x53EA;&#x8981;&#x672A;&#x8D85;&#x51FA;&#x9608;&#x503C;&#x90FD;&#x662F;&#x53EF;&#x4EE5;&#x5BB9;&#x5FCD;&#x7684;</p>
+<h3 id="hw-leo&#xFF08;leader-follower&#x7684;&#x6728;&#x6876;&#x7406;&#x8BBA;&#x77ED;&#x677F;&#x7406;&#x8BBA;&#xFF09;">HW LEO&#xFF08;leader follower&#x7684;&#x6728;&#x6876;&#x7406;&#x8BBA;/&#x77ED;&#x677F;&#x7406;&#x8BBA;&#xFF09;</h3>
+<ul>
+<li><p>HW &#xFF08;High Watermark&#xFF09;&#x4FD7;&#x79F0;&#x9AD8;&#x6C34;&#x4F4D;&#xFF0C;&#x5B83;&#x6807;&#x8BC6;&#x4E86;&#x4E00;&#x4E2A;&#x7279;&#x5B9A;&#x7684;&#x6D88;&#x606F;&#x504F;&#x79FB;&#x91CF;&#xFF08;offset&#xFF09;&#xFF0C;&#x6D88;&#x8D39;&#x8005;&#x53EA;&#x80FD;&#x62C9;&#x53D6;&#x5230;&#x8FD9;&#x4E2A;offset&#x4E4B;&#x524D;&#x7684;&#x6D88;&#x606F;&#x3002;</p>
+</li>
+<li><p>LEO &#xFF08;Log End Offset&#xFF09;&#xFF0C;&#x6807;&#x8BC6;&#x5F53;&#x524D;&#x65E5;&#x5FD7;&#x6587;&#x4EF6;&#x4E2D;&#x4E0B;&#x4E00;&#x6761;&#x5F85;&#x5199;&#x5165;&#x7684;&#x6D88;&#x606F;&#x7684;offset&#x3002;LEO &#x7684;&#x5927;&#x5C0F;&#x76F8;&#x5F53;&#x4E8E;&#x5F53;&#x524D;&#x65E5;&#x5FD7;&#x5206;&#x533A;&#x4E2D;&#x6700;&#x540E;&#x4E00;&#x6761;&#x6D88;&#x606F;&#x7684;offset&#x503C;&#x52A0;1. &#x5206;&#x533A; ISR &#x96C6;&#x5408;&#x4E2D;&#x7684;&#x6BCF;&#x4E2A;&#x526F;&#x672C;&#x90FD;&#x4F1A;&#x7EF4;&#x62A4;&#x81EA;&#x8EAB;&#x7684; LEO &#xFF0C;&#x800C; ISR &#x96C6;&#x5408;&#x4E2D;&#x6700;&#x5C0F;&#x7684; LEO &#x5373;&#x4E3A;&#x5206;&#x533A;&#x7684; HW&#xFF0C;&#x5BF9;&#x6D88;&#x8D39;&#x8005;&#x800C;&#x8A00;&#x53EA;&#x80FD;&#x6D88;&#x8D39; HW &#x4E4B;&#x524D;&#x7684;&#x6D88;&#x606F;&#x3002;</p>
+</li>
+</ul>
+<p><img src="../imgs/hw_leo.png" alt=""></p>
+<p><img src="../imgs/hw_leo2.jpeg" alt=""></p>
+<ul>
+<li><p>leader LEO&#xFF1A;leader&#x7684;LEO&#x5C31;&#x4FDD;&#x5B58;&#x5728;&#x5176;&#x6240;&#x5728;&#x7684;broker&#x7684;&#x7F13;&#x5B58;&#x91CC;&#xFF0C;&#x5F53;leader&#x526F;&#x672C;log&#x6587;&#x4EF6;&#x5199;&#x5165;&#x6D88;&#x606F;&#x540E;&#xFF0C;&#x5C31;&#x4F1A;&#x66F4;&#x65B0;&#x81EA;&#x5DF1;&#x7684;LEO</p>
+</li>
+<li><p>remote LEO&#x548C;follower LEO&#xFF1A;remote LEO&#x662F;&#x4FDD;&#x5B58;&#x5728;leader&#x526F;&#x672C;&#x4E0A;&#x7684;follower&#x526F;&#x672C;&#x7684;LEO&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x51FA;leader&#x526F;&#x672C;&#x4E0A;&#x4FDD;&#x5B58;&#x6240;&#x6709;&#x526F;&#x672C;&#x7684;LEO&#xFF0C;&#x5F53;&#x7136;&#x4E5F;&#x5305;&#x62EC;&#x81EA;&#x5DF1;&#x7684;&#x3002;follower LEO&#x5C31;&#x662F;follower&#x526F;&#x672C;&#x7684;LEO</p>
+<ol>
+<li>&#x5982;&#x679C;&#x662F;remote LEO&#xFF0C;&#x66F4;&#x65B0;&#x524D;leader&#x9700;&#x8981;&#x786E;&#x8BA4;follower&#x7684;fetch&#x8BF7;&#x6C42;&#x5305;&#x542B;&#x7684;offset&#xFF0C;&#x8FD9;&#x4E2A;offset&#x5C31;&#x662F;follower&#x526F;&#x672C;&#x7684;LEO&#xFF0C;&#x6839;&#x636E;&#x5B83;&#x5BF9;remote LEO&#x8FDB;&#x884C;&#x66F4;&#x65B0;&#x3002;&#x5982;&#x679C;&#x66F4;&#x65B0;&#x65F6;&#x5C1A;&#x672A;&#x6536;&#x5230;fetch&#x8BF7;&#x6C42;&#xFF0C;&#x6216;&#x8005;fetch&#x8BF7;&#x6C42;&#x5728;&#x8BF7;&#x6C42;&#x961F;&#x5217;&#x4E2D;&#x6392;&#x961F;&#xFF0C;&#x5219;&#x4E0D;&#x505A;&#x66F4;&#x65B0;&#x3002;&#x53EF;&#x4EE5;&#x770B;&#x51FA;&#x5728;leader&#x526F;&#x672C;&#x7ED9;follower&#x526F;&#x672C;&#x8FD4;&#x56DE;&#x6570;&#x636E;&#x4E4B;&#x524D;&#xFF0C;remote LEO&#x5C31;&#x5148;&#x66F4;&#x65B0;&#x4E86;&#x3002;</li>
+<li>&#x5982;&#x679C;&#x662F;follower LEO&#xFF0C;&#x5B83;&#x7684;&#x66F4;&#x65B0;&#x662F;&#x5728;follower&#x526F;&#x672C;&#x5F97;&#x5230;leader&#x526F;&#x672C;&#x53D1;&#x9001;&#x7684;&#x6570;&#x636E;&#x5E76;&#x968F;&#x540E;&#x5199;&#x5165;&#x5230;log&#x6587;&#x4EF6;&#xFF0C;&#x5C31;&#x4F1A;&#x66F4;&#x65B0;&#x81EA;&#x5DF1;&#x7684;LEO&#x3002;</li>
+</ol>
+</li>
+</ul>
+<h4 id="high-watermark&#x7684;&#x66F4;&#x65B0;">High Watermark&#x7684;&#x66F4;&#x65B0;</h4>
+<ul>
+<li>leader&#x7684;HW&#x662F;&#x6240;&#x6709;&#x526F;&#x672C;&#x7684;&#x6700;&#x5C0F;LEO&#xFF1B;</li>
+<li>follower&#x7684;HW&#x662F;&#x4ECE;leader&#x540C;&#x6B65;&#x6D88;&#x606F;fetch&#x65F6;&#xFF0C;leader&#x7684;&#x8FD4;&#x56DE;&#x7684;HW&#x4E0E;&#x5F53;&#x524D;&#x526F;&#x672C;&#x7684;LEO&#x4E2D;&#x53D6;&#x8F83;&#x5C0F;&#x8005;&#xFF1B;</li>
+</ul>
+<p><img src="../imgs/hw_leo3.png" alt=""></p>
+<ol>
+<li>follower&#x4ECE;leader&#x540C;&#x6B65;&#x6570;&#x636E;&#xFF0C;&#x53D1;&#x9001;fetch&#x8BF7;&#x6C42;</li>
+<li>follower&#x83B7;&#x53D6;&#x5230;&#x6570;&#x636E;&#x540E;&#x5199;&#x672C;&#x5730;&#x78C1;&#x76D8;</li>
+<li>follower&#x66F4;&#x65B0;&#x5F53;&#x524D;&#x526F;&#x672C;&#x7684;LEO</li>
+<li>follower&#x518D;&#x6B21;&#x4ECE;leader&#x540C;&#x6B65;&#x6570;&#x636E;&#xFF0C;&#x540C;&#x65F6;fetch&#x8BF7;&#x6C42;&#x91CC;&#x5305;&#x542B;&#x4E86;&#x81EA;&#x5DF1;&#x7684;LEO&#xFF08;&#x5373;&#x628A;&#x81EA;&#x5DF1;&#x7684;LEO&#x544A;&#x8BC9;leader&#xFF09;</li>
+<li>leader&#x66F4;&#x65B0;&#x4FDD;&#x5B58;&#x7684;follower LEO</li>
+<li>leader&#x53D6;&#x6240;&#x6709;&#x526F;&#x672C;&#x6700;&#x5C0F;&#x7684;LEO&#x4F5C;&#x4E3A;HW&#xFF08;leader&#x6839;&#x636E;&#x53D6;&#x77ED;&#x677F;LEO&#xFF0C;&#x6700;&#x4E3A;&#x6700;&#x540E;&#x7684;LEO&#xFF09;</li>
+</ol>
+<h2 id="kafka&#x96C6;&#x7FA4;&#x600E;&#x4E48;&#x8BFB;&#x53D6;&#x5199;&#x5165;&#x6570;&#x636E;&#x5230;&#x6307;&#x5B9A;&#x7684;broker&#x5206;&#x533A;&#xFF0C;&#x4ECE;&#x6307;&#x5B9A;broker&#x7684;offset&#x5F00;&#x59CB;&#x6D88;&#x8D39;&#xFF1F;">kafka&#x96C6;&#x7FA4;&#x600E;&#x4E48;&#x8BFB;&#x53D6;/&#x5199;&#x5165;&#x6570;&#x636E;&#x5230;&#x6307;&#x5B9A;&#x7684;broker&#x5206;&#x533A;&#xFF0C;&#x4ECE;&#x6307;&#x5B9A;broker&#x7684;offset&#x5F00;&#x59CB;&#x6D88;&#x8D39;&#xFF1F;</h2>
+<ul>
+<li>&#x5411;&#x6307;&#x5B9A;&#x7684;partition&#x53D1;&#x9001;&#x6570;&#x636E;</li>
+</ul>
+<p><code>ProducerRecord</code> new&#x7684;&#x65F6;&#x5019;&#x53EF;&#x4EE5;&#x6307;&#x5B9A;<code>partition</code></p>
+<ul>
+<li>&#x4ECE;&#x6307;&#x5B9A;&#x7684;partition&#x5F00;&#x59CB;&#x6D88;&#x8D39;&#x6570;&#x636E;</li>
+</ul>
+<p>consumer&#x53EF;&#x4EE5;&#x6307;&#x5B9A;&#x4ECE;&#x7279;&#x5B9A;offset&#x5F00;&#x59CB;&#x6D88;&#x8D39;&#x6570;&#x636E;</p>
+<ul>
+<li>&#x4ECE;&#x6307;&#x5B9A;&#x7684;partition&#x7684;&#x6307;&#x5B9A;&#x7684;offset&#x5F00;&#x59CB;&#x6D88;&#x8D39;&#x6570;&#x636E;</li>
+</ul>
+<p>consumer.seek&#x53EF;&#x4EE5;&#x6307;&#x5B9A;</p>
+<h2 id="zookeeper-&#x5728;-kafka-&#x4E2D;&#x7684;&#x4F5C;&#x7528;">Zookeeper &#x5728; Kafka &#x4E2D;&#x7684;&#x4F5C;&#x7528;</h2>
+<h3 id="broker&#x6CE8;&#x518C;">Broker&#x6CE8;&#x518C;</h3>
+<p>Broker&#x662F;&#x5206;&#x5E03;&#x5F0F;&#x90E8;&#x7F72;&#x5E76;&#x4E14;&#x76F8;&#x4E92;&#x4E4B;&#x95F4;&#x76F8;&#x4E92;&#x72EC;&#x7ACB;&#xFF0C;&#x4F46;&#x662F;&#x9700;&#x8981;&#x6709;&#x4E00;&#x4E2A;&#x6CE8;&#x518C;&#x7CFB;&#x7EDF;&#x80FD;&#x591F;&#x5C06;&#x6574;&#x4E2A;&#x96C6;&#x7FA4;&#x4E2D;&#x7684;Broker&#x7BA1;&#x7406;&#x8D77;&#x6765;&#xFF0C;&#x6B64;&#x65F6;&#x5C31;&#x4F7F;&#x7528;&#x5230;&#x4E86;Zookeeper&#x3002;&#x5728;Zookeeper&#x4E0A;&#x4F1A;&#x6709;&#x4E00;&#x4E2A;&#x4E13;&#x95E8;&#x7528;&#x6765;&#x8FDB;&#x884C;Broker&#x670D;&#x52A1;&#x5668;&#x5217;&#x8868;&#x8BB0;&#x5F55;&#x7684;&#x8282;&#x70B9;&#x3002;</p>
+<h3 id="topic&#x6CE8;&#x518C;">Topic&#x6CE8;&#x518C;</h3>
+<p>&#x5728;Kafka&#x4E2D;&#xFF0C;&#x540C;&#x4E00;&#x4E2A;Topic&#x7684;&#x6D88;&#x606F;&#x4F1A;&#x88AB;&#x5206;&#x6210;&#x591A;&#x4E2A;&#x5206;&#x533A;&#x5E76;&#x5C06;&#x5176;&#x5206;&#x5E03;&#x5728;&#x591A;&#x4E2A;Broker&#x4E0A;&#xFF0C;&#x8FD9;&#x4E9B;&#x5206;&#x533A;&#x4FE1;&#x606F;&#x53CA;&#x4E0E;Broker&#x7684;&#x5BF9;&#x5E94;&#x5173;&#x7CFB;&#x4E5F;&#x90FD;&#x662F;&#x7531;Zookeeper&#x5728;&#x7EF4;&#x62A4;&#xFF0C;&#x7531;&#x4E13;&#x95E8;&#x7684;&#x8282;&#x70B9;&#x6765;&#x8BB0;&#x5F55;&#x3002;</p>
+<h3 id="&#x751F;&#x4EA7;&#x8005;&#x8D1F;&#x8F7D;&#x5747;&#x8861;">&#x751F;&#x4EA7;&#x8005;&#x8D1F;&#x8F7D;&#x5747;&#x8861;</h3>
+<p>&#x7531;&#x4E8E;&#x540C;&#x4E00;&#x4E2A;Topic&#x6D88;&#x606F;&#x4F1A;&#x88AB;&#x5206;&#x533A;&#x5E76;&#x5C06;&#x5176;&#x5206;&#x5E03;&#x5728;&#x591A;&#x4E2A;Broker&#x4E0A;&#xFF0C;&#x56E0;&#x6B64;&#xFF0C;&#x751F;&#x4EA7;&#x8005;&#x9700;&#x8981;&#x5C06;&#x6D88;&#x606F;&#x5408;&#x7406;&#x5730;&#x53D1;&#x9001;&#x5230;&#x8FD9;&#x4E9B;&#x5206;&#x5E03;&#x5F0F;&#x7684;Broker&#x4E0A;&#xFF0C;&#x90A3;&#x4E48;&#x5982;&#x4F55;&#x5B9E;&#x73B0;&#x751F;&#x4EA7;&#x8005;&#x7684;&#x8D1F;&#x8F7D;&#x5747;&#x8861;&#xFF0C;Kafka&#x652F;&#x6301;&#x4F20;&#x7EDF;&#x7684;&#x56DB;&#x5C42;&#x8D1F;&#x8F7D;&#x5747;&#x8861;&#xFF0C;&#x4E5F;&#x652F;&#x6301;Zookeeper&#x65B9;&#x5F0F;&#x5B9E;&#x73B0;&#x8D1F;&#x8F7D;&#x5747;&#x8861;&#x3002;</p>
+<p>&#x4F7F;&#x7528;Zookeeper&#x8FDB;&#x884C;&#x8D1F;&#x8F7D;&#x5747;&#x8861;&#xFF0C;&#x7531;&#x4E8E;&#x6BCF;&#x4E2A;Broker&#x542F;&#x52A8;&#x65F6;&#xFF0C;&#x90FD;&#x4F1A;&#x5B8C;&#x6210;Broker&#x6CE8;&#x518C;&#x8FC7;&#x7A0B;&#xFF0C;&#x751F;&#x4EA7;&#x8005;&#x4F1A;&#x901A;&#x8FC7;&#x8BE5;&#x8282;&#x70B9;&#x7684;&#x53D8;&#x5316;&#x6765;&#x52A8;&#x6001;&#x5730;&#x611F;&#x77E5;&#x5230;Broker&#x670D;&#x52A1;&#x5668;&#x5217;&#x8868;&#x7684;&#x53D8;&#x66F4;&#xFF0C;&#x8FD9;&#x6837;&#x5C31;&#x53EF;&#x4EE5;&#x5B9E;&#x73B0;&#x52A8;&#x6001;&#x7684;&#x8D1F;&#x8F7D;&#x5747;&#x8861;&#x673A;&#x5236;&#x3002;</p>
+<h3 id="&#x6D88;&#x8D39;&#x8005;&#x8D1F;&#x8F7D;&#x5747;&#x8861;">&#x6D88;&#x8D39;&#x8005;&#x8D1F;&#x8F7D;&#x5747;&#x8861;</h3>
+<p>&#x4E0E;&#x751F;&#x4EA7;&#x8005;&#x7C7B;&#x4F3C;&#xFF0C;Kafka&#x4E2D;&#x7684;&#x6D88;&#x8D39;&#x8005;&#x540C;&#x6837;&#x9700;&#x8981;&#x8FDB;&#x884C;&#x8D1F;&#x8F7D;&#x5747;&#x8861;&#x6765;&#x5B9E;&#x73B0;&#x591A;&#x4E2A;&#x6D88;&#x8D39;&#x8005;&#x5408;&#x7406;&#x5730;&#x4ECE;&#x5BF9;&#x5E94;&#x7684;Broker&#x670D;&#x52A1;&#x5668;&#x4E0A;&#x63A5;&#x6536;&#x6D88;&#x606F;&#xFF0C;&#x6BCF;&#x4E2A;&#x6D88;&#x8D39;&#x8005;&#x5206;&#x7EC4;&#x5305;&#x542B;&#x82E5;&#x5E72;&#x6D88;&#x8D39;&#x8005;&#xFF0C;&#x6BCF;&#x6761;&#x6D88;&#x606F;&#x90FD;&#x53EA;&#x4F1A;&#x53D1;&#x9001;&#x7ED9;&#x5206;&#x7EC4;&#x4E2D;&#x7684;&#x4E00;&#x4E2A;&#x6D88;&#x8D39;&#x8005;&#xFF0C;&#x4E0D;&#x540C;&#x7684;&#x6D88;&#x8D39;&#x8005;&#x5206;&#x7EC4;&#x6D88;&#x8D39;&#x81EA;&#x5DF1;&#x7279;&#x5B9A;&#x7684;Topic&#x4E0B;&#x9762;&#x7684;&#x6D88;&#x606F;&#xFF0C;&#x4E92;&#x4E0D;&#x5E72;&#x6270;&#x3002;</p>
+<h3 id="&#x5206;&#x533A;-&#x4E0E;-&#x6D88;&#x8D39;&#x8005;-&#x7684;&#x5173;&#x7CFB;">&#x5206;&#x533A; &#x4E0E; &#x6D88;&#x8D39;&#x8005; &#x7684;&#x5173;&#x7CFB;</h3>
+<p>&#x5728;Kafka&#x4E2D;&#xFF0C;&#x89C4;&#x5B9A;&#x4E86;&#x6BCF;&#x4E2A;&#x6D88;&#x606F;&#x5206;&#x533A; &#x53EA;&#x80FD;&#x88AB;&#x540C;&#x7EC4;&#x7684;&#x4E00;&#x4E2A;&#x6D88;&#x8D39;&#x8005;&#x8FDB;&#x884C;&#x6D88;&#x8D39;&#xFF0C;&#x56E0;&#x6B64;&#xFF0C;&#x9700;&#x8981;&#x5728; Zookeeper &#x4E0A;&#x8BB0;&#x5F55; &#x6D88;&#x606F;&#x5206;&#x533A; &#x4E0E; Consumer &#x4E4B;&#x95F4;&#x7684;&#x5173;&#x7CFB;&#xFF0C;&#x6BCF;&#x4E2A;&#x6D88;&#x8D39;&#x8005;&#x4E00;&#x65E6;&#x786E;&#x5B9A;&#x4E86;&#x5BF9;&#x4E00;&#x4E2A;&#x6D88;&#x606F;&#x5206;&#x533A;&#x7684;&#x6D88;&#x8D39;&#x6743;&#x529B;&#xFF0C;&#x9700;&#x8981;&#x5C06;&#x5176;Consumer ID &#x5199;&#x5165;&#x5230; Zookeeper &#x5BF9;&#x5E94;&#x6D88;&#x606F;&#x5206;&#x533A;&#x7684;&#x4E34;&#x65F6;&#x8282;&#x70B9;&#x4E0A;</p>
+<h3 id="&#x6D88;&#x8D39;&#x8FDB;&#x5EA6;offset-&#x8BB0;&#x5F55;10&#x4E4B;&#x524D;&#x7684;&#x7248;&#x672C;">&#x6D88;&#x8D39;&#x8FDB;&#x5EA6;Offset &#x8BB0;&#x5F55;(1.0&#x4E4B;&#x524D;&#x7684;&#x7248;&#x672C;)</h3>
+<p>&#x5728;&#x6D88;&#x8D39;&#x8005;&#x5BF9;&#x6307;&#x5B9A;&#x6D88;&#x606F;&#x5206;&#x533A;&#x8FDB;&#x884C;&#x6D88;&#x606F;&#x6D88;&#x8D39;&#x7684;&#x8FC7;&#x7A0B;&#x4E2D;&#xFF0C;&#x9700;&#x8981;&#x5B9A;&#x65F6;&#x5730;&#x5C06;&#x5206;&#x533A;&#x6D88;&#x606F;&#x7684;&#x6D88;&#x8D39;&#x8FDB;&#x5EA6;Offset&#x8BB0;&#x5F55;&#x5230;Zookeeper&#x4E0A;&#xFF0C;&#x4EE5;&#x4FBF;&#x5728;&#x8BE5;&#x6D88;&#x8D39;&#x8005;&#x8FDB;&#x884C;&#x91CD;&#x542F;&#x6216;&#x8005;&#x5176;&#x4ED6;&#x6D88;&#x8D39;&#x8005;&#x91CD;&#x65B0;&#x63A5;&#x7BA1;&#x8BE5;&#x6D88;&#x606F;&#x5206;&#x533A;&#x7684;&#x6D88;&#x606F;&#x6D88;&#x8D39;&#x540E;&#xFF0C;&#x80FD;&#x591F;&#x4ECE;&#x4E4B;&#x524D;&#x7684;&#x8FDB;&#x5EA6;&#x5F00;&#x59CB;&#x7EE7;&#x7EED;&#x8FDB;&#x884C;&#x6D88;&#x606F;&#x6D88;&#x8D39;&#x3002;</p>
+<p>&#x8865;&#x5145;&#xFF1A;</p>
+<p><font color="red">&#x65E9;&#x671F;&#x7248;&#x672C;&#x7684; kafka &#x7528; zk &#x505A; meta &#x4FE1;&#x606F;&#x5B58;&#x50A8;</font>&#xFF0C;consumer &#x7684;&#x6D88;&#x8D39;&#x72B6;&#x6001;&#xFF0C;group &#x7684;&#x7BA1;&#x7406;&#x4EE5;&#x53CA; offse t&#x7684;&#x503C;&#x3002;&#x8003;&#x8651;&#x5230;zk&#x672C;&#x8EAB;&#x7684;&#x4E00;&#x4E9B;&#x56E0;&#x7D20;&#x4EE5;&#x53CA;&#x6574;&#x4E2A;&#x67B6;&#x6784;&#x8F83;&#x5927;&#x6982;&#x7387;&#x5B58;&#x5728;&#x5355;&#x70B9;&#x95EE;&#x9898;&#xFF0C;<font color="red">&#x65B0;&#x7248;&#x672C;&#x4E2D;&#x786E;&#x5B9E;&#x9010;&#x6E10;&#x5F31;&#x5316;&#x4E86;zookeeper&#x7684;&#x4F5C;&#x7528;</font>&#x3002;&#x65B0;&#x7684;consumer&#x4F7F;&#x7528;&#x4E86;kafka&#x5185;&#x90E8;&#x7684;group coordination&#x534F;&#x8BAE;&#xFF0C;&#x4E5F;&#x51CF;&#x5C11;&#x4E86;&#x5BF9;zookeeper&#x7684;&#x4F9D;&#x8D56;&#x3002;</p>
+<h2 id="broker&#x5904;&#x7406;&#x6E90;&#x7801;">broker&#x5904;&#x7406;&#x6E90;&#x7801;</h2>
+<h3 id="&#x901A;&#x4FE1;&#x534F;&#x8BAE;">&#x901A;&#x4FE1;&#x534F;&#x8BAE;</h3>
+<ul>
+<li>Producer&#x4E0E;Kafka&#x96C6;&#x7FA4;&#xFF1A;Producer&#x9700;&#x8981;&#x5229;&#x7528;ProducerRequest&#x548C;TopicMetadataRequest&#x6765;&#x5B8C;&#x6210;Topic&#x5143;&#x6570;&#x636E;&#x7684;&#x67E5;&#x8BE2;&#x3001;&#x6D88;&#x606F;&#x7684;&#x53D1;&#x9001;</li>
+<li>Consumer&#x548C;Kafka&#x96C6;&#x7FA4;&#xFF1A;Consumer&#x9700;&#x8981;&#x5229;&#x7528;TopicMetadataRequest&#x8BF7;&#x6C42;&#x3001;FetchRequest&#x8BF7;&#x6C42;&#x548C;ConsumerMetadataRequest&#x8BF7;&#x6C42;&#x6765;&#x5B8C;&#x6210;Topic&#x5143;&#x6570;&#x636E;&#x7684;&#x67E5;&#x8BE2;&#x3001;&#x6D88;&#x606F;&#x7684;&#x8BA2;&#x9605;&#x3001;&#x5386;&#x53F2;&#x504F;&#x79FB;&#x91CF;&#x7684;&#x67E5;&#x8BE2;&#x3001;&#x504F;&#x79FB;&#x91CF;&#x7684;&#x63D0;&#x4EA4;&#xFF0C;&#x5F53;&#x524D;&#x504F;&#x79FB;&#x91CF;&#x7684;&#x67E5;&#x8BE2;</li>
+</ul>
+<p><img src="../imgs/broker_request.jpeg" alt=""></p>
 <p><footer class="page-footer"><span class="copyright">Copyright @doctording all right reserved&#xFF0C;powered by Gitbook</span><span class="footer-modification">&#x8BE5;&#x6587;&#x4EF6;&#x4FEE;&#x6539;&#x65F6;&#x95F4;&#xFF1A;
-2020-08-18 12:49:23
+2020-12-10 00:28:53
 </span></footer><div id="gitalk-container"></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script></p>
 
                                 
@@ -262,12 +585,8 @@
 
             
                 
-                <a href="producer.html" class="navigation navigation-prev " aria-label="Previous page: 2 kafka Producer">
-                    <i class="fa fa-angle-left"></i>
-                </a>
                 
-                
-                <a href="consumer.html" class="navigation navigation-next " aria-label="Next page: 4 kafka Consumer">
+                <a href="broker_kafkaapis.html" class="navigation navigation-next navigation-unique" aria-label="Next page: kafka broker 处理请求">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -278,7 +597,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"3 kafka Brokers","level":"1.4","depth":1,"next":{"title":"4 kafka Consumer","level":"1.5","depth":1,"path":"content/consumer.md","ref":"./content/consumer.md","articles":[]},"previous":{"title":"2 kafka Producer","level":"1.3","depth":1,"path":"content/producer.md","ref":"./content/producer.md","articles":[]},"dir":"ltr"},"config":{"plugins":["prism","-highlight","-lunr","-search","-sharing","ace","codeblock-filename","search-plus","sectionx","splitter","tbfed-pagefooter","expandable-chapters","back-to-top-button","code","uml","page-treeview","gittalk"],"styles":{"website":"styles/website.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright @doctording","modify_label":"该文件修改时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"page-treeview":{"collapsed":false,"copyright":"Copyright @doctording","minHeaderCount":"2","minHeaderDeep":"2"},"prism":{},"ace":{},"splitter":{},"code":{"copyButtons":true},"fontsettings":{"theme":"white","family":"sans","size":2},"sectionx":{},"uml":{"format":"svg"},"codeblock-filename":{},"back-to-top-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"gittalk":{"clientID":"094729e19245d3fe84aa","clientSecret":"6c4cf7b48e7ae41c20d453c24eb9d5469e4d19fb","repo":"sword_at_offer","owner":"doctording","admin":["doctording"],"distractionFreeMode":false},"expandable-chapters":{},"search-plus":{}},"theme":"default","author":"doctording","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"java-note","language":"zh-hans","gitbook":"*","description":"kafka源码阅读"},"file":{"path":"content/broker.md","mtime":"2020-08-18T04:49:23.006Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2020-08-19T15:30:26.740Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"kafka broker 理论知识","level":"1.5.1","depth":2,"next":{"title":"kafka broker 处理请求","level":"1.5.2","depth":2,"path":"content/broker_kafkaapis.md","ref":"./content/broker_kafkaapis.md","articles":[]},"previous":{"title":"[kafka Broker & zookeeper]","level":"1.5","depth":1,"ref":"","articles":[{"title":"kafka broker 理论知识","level":"1.5.1","depth":2,"path":"content/broker.md","ref":"./content/broker.md","articles":[]},{"title":"kafka broker 处理请求","level":"1.5.2","depth":2,"path":"content/broker_kafkaapis.md","ref":"./content/broker_kafkaapis.md","articles":[]},{"title":"controller & leader","level":"1.5.3","depth":2,"path":"content/broker_controller.md","ref":"./content/broker_controller.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["prism","-highlight","-lunr","-search","-sharing","ace","codeblock-filename","search-plus","sectionx","splitter","tbfed-pagefooter","expandable-chapters","back-to-top-button","code","uml","page-treeview","gittalk"],"styles":{"website":"styles/website.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright @doctording","modify_label":"该文件修改时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"page-treeview":{"collapsed":false,"copyright":"Copyright @doctording","minHeaderCount":"2","minHeaderDeep":"2"},"prism":{},"ace":{},"splitter":{},"code":{"copyButtons":true},"fontsettings":{"theme":"white","family":"sans","size":2},"sectionx":{},"uml":{"format":"svg"},"codeblock-filename":{},"back-to-top-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"gittalk":{"clientID":"094729e19245d3fe84aa","clientSecret":"6c4cf7b48e7ae41c20d453c24eb9d5469e4d19fb","repo":"sword_at_offer","owner":"doctording","admin":["doctording"],"distractionFreeMode":false},"expandable-chapters":{},"search-plus":{}},"theme":"default","author":"doctording","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"java-note","language":"zh-hans","gitbook":"*","description":"kafka源码阅读"},"file":{"path":"content/broker.md","mtime":"2020-12-09T16:28:53.187Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-01-13T01:27:59.243Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
