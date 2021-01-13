@@ -1,30 +1,14 @@
 # Producer
 
-## record,partition,offset,replication等概念
-
-* 一个非常大的Topic可以被分成多个分区（partition）, 从而分配到多个broker中（分区可以存储在不同的服务器上，分区是对Topic中所包含数据集的物理分区）。kafka中的每一条消息（record）都会分配一个自增ID（Offset）。
-
-* 一个partition中的消息可以顺序发给消费者，不保证多个partition有序
-
-* 在数据持久化时，每条record都是根据一定的分区规则路由到对应的Partition中，并append在log文件的尾部
-
-* Partition是用来存储数据的，但并不是最小的数据存储单元。Partition下还可以细分成Segment，每个Partition是由一个或多个Segment组成。每个Segment分别对应两个文件：一个是以.index结尾的索引文件，另一个是以.log结尾的数据文件，且两个文件的文件名完全相同。所有的Segment均存在于所属Partition的目录下。
-
-* Replication逻辑上是作用于Topic的，但实际上是体现在每一个Partition上。例如：有一个Topic，分区(partitions)数为3(分别为a, b, c)，副本因子(replication-factor)数也为3；其本质就是该Topic一共有3个a分区，3个b分区，3个c分区。
-
-* Leader Replica: 每一个Partition有且只有一个Replica可以作为Leader, 其负责处理所有Producer、Consumer的请求；与此同时，Leader还负责监管和维护ISR(In-Sync Replicas：副本同步队列)中所有follower的滞后状态。
-
-* Follower Replica: 除了Leader以外的所有Replica均为follower，其不处理任何来自客户端的请求；只通过Fetch Request拉取leader replica的数据进行同步
-
-## topic的创建和数据生成
+## topic的创建和数据生成和落磁盘文件
 
 * 创建topic名称为：`kafkatest`
 
 ![](../imgs/topic_create.png)
 
 * 三台broker(0,1,2), 设置topic的partition数目是2，replication备份因子是2
-    1. 对于partition 0，leader 是 3，follower 是 1
-    2. 对于partition 1，leader 是 1，follower 是 2
+    1. 对于partition 0，leader 是 3，follower 是 1，两个备份
+    2. 对于partition 1，leader 是 1，follower 是 2，两个备份
     
 ![](../imgs/topic_create_2.png)
 
@@ -37,7 +21,7 @@ b1
 c1
 ```
 
-### 消息在partition中的存储情况
+## 消息路由到不同的partition
 
 * `空`和`b1`存储到了`partition 0`中
 * `a1`和`c1`存储到了`partition 1`中
@@ -45,7 +29,6 @@ c1
 ![](../imgs/topic_create_3.png)
 
 ![](../imgs/topic_create_4.png)
-
 
 ### 查看磁盘上的`kafka-logs`文件目录下对应的topic文件
 
@@ -72,67 +55,42 @@ c1
 
 ![](../imgs/b3.png)
 
-### LogSegment
+### topic分partition的原因与实现
 
-为了防止Log文件过大，把log切分成很多个日志文件，每个日志文件对应一个LogSegment
+#### 分区的原因
 
-LogSegment 对应磁盘上的一个日志文件(`FileMessageSet`)和一个索引文件(`OffsetIndex`)，其中日志文件是用来记录消息的。索引文件是用来保存消息的索引。
+1. 方便在集群中扩展，每个Partition可以通过调整以适应它所在的机器，而一个topic又可以有多个Partition组成，因此整个集群就可以适应任意大小的数据了
+2. 可以提高并发，因为可以以Partition为单位读写了
 
-```java
-/**
- * A segment of the log. Each segment has two components: a log and an index. The log is a FileMessageSet containing
- * the actual messages. The index is an OffsetIndex that maps from logical offsets to physical file positions. Each
- * segment has a base offset which is an offset <= the least offset of any message in this segment and > any offset in
- * any previous segment.
- *
- * A segment with a base offset of [base_offset] would be stored in two files, a [base_offset].index and a [base_offset].log file.
- *
- * @param log The message set containing log entries
- * @param offsetIndex The offset index
- * @param timeIndex The timestamp index
- * @param baseOffset A lower bound on the offsets in this segment
- * @param indexIntervalBytes The approximate number of bytes between entries in the index
- * @param time The time instance
- */
-@nonthreadsafe
-class LogSegment private[log] (val log: FileRecords,
-                               val offsetIndex: OffsetIndex,
-                               val timeIndex: TimeIndex,
-                               val txnIndex: TransactionIndex,
-                               val baseOffset: Long,
-                               val indexIntervalBytes: Int,
-                               val rollJitterMs: Long,
-                               val maxSegmentMs: Long,
-                               val maxSegmentBytes: Int,
-                               val time:
-```
+#### 生产者发送进行分区的原则？
 
-## Producer 源码
+我们需要将producer发送的数据封装成一个ProducerRecord对象，然后发送
 
-### Producer的一些配置
+1. 指明 partition 的情况下，直接将指明的值直接作为要发送的 partiton 值；
+2. 没有指明 partition 值但有 key 的情况下，将 key 的 hash 值与topic的partition总数进行取余得到一个 partition 值；
+3. 既没有 partition 值又没有 key 值的情况下，第一次调用时随机生成一个整数（后面每次调用在这个整数上自增），将这个值与 topic 可用的 partition 总数**取余**得到 partition 值，也就是常说的 round-robin 算法（轮询）。
 
-#### acks
+### Producer如何将消息可靠的发送给Kafka集群
+
+#### ack应答机制（3种策略）
 
 acks指定了必须有多少个分区副本接收到了消息，生产者才会认为消息是发送成功的。
 
 1. acks=0，生产者成功写入消息之前不会等待来自任何服务器的响应，这种配置，提高吞吐量，但是消息存在丢失风险。
-2. acks=1，只要集群的leader（master）收到了消息，生产者将会受到发送成功的一个响应，如果消息无撞到达首领节点（比如首领节点崩愤，新的首领还没有被选举出来），生产者会收到一个错误响应，为了避免数据丢失，生产者会重发消息。不过，如果一个没有收到消息的节点成为新首领，消息还是会丢失。这个时候的吞吐量取决于使用的是
-3. 同步发送还是异步发送。如果让发送客户端等待服务器的响应（通过调用Futu re 对象的get（）方法，显然会增加延迟（在网络上传输一个来回的延迟）。如果客户端使用回调，延迟问题就可以得到缓解，不过吞吐量还是会受发送中消息数量的限制（比如，生产者在收到服务器响应之前可以发送多少个消息）。
-acks=all，所有参与复制的节点全部收到消息的时候，生产者才会收到来自服务器的一个响应，这种模式最安全，但是吞吐量受限制，它可以保证不止一个服务器收到消息，就算某台服务器奔溃，那么整个集群还是会正产运转。
-
+2. acks=1，只要集群的leader（master）收到了消息，生产者将会受到发送成功的一个响应，如果消息无撞到达首领节点（比如首领节点崩溃，新的首领还没有被选举出来），生产者会收到一个错误响应，为了避免数据丢失，生产者会重发消息。不过，如果一个没有收到消息的节点成为新首领，消息还是会丢失。这个时候的吞吐量取决于使用的是同步发送还是异步发送。如果让发送客户端等待服务器的响应（通过调用Future 对象的get（）方法，显然会增加延迟（在网络上传输一个来回的延迟）。如果客户端使用回调，延迟问题就可以得到缓解，不过吞吐量还是会受发送中消息数量的限制（比如，生产者在收到服务器响应之前可以发送多少个消息）。
+3. acks=-1，所有参与复制的节点全部收到消息的时候，生产者才会收到来自服务器的一个响应，这种模式最安全，但是吞吐量受限制，它可以保证不止一个服务器收到消息，就算某台服务器奔溃，那么整个集群还是会正产运转。
 
 #### retries
 
-生产者从服务器收到的错误消息有可能是临时的，当生产者收到服务器发来的错误消息，会启动重试机制，当充实了n（设置的值）次，还是收到错误消息，那么将会返回错误。生产者会在每次重试之间间隔100ms，不过可以通过`retry.backoff.ms`改变这个间隔。
+生产者从服务器收到的错误消息有可能是临时的，当生产者收到服务器发来的错误消息，会启动重试机制，当重试了n（设置的值）次，还是收到错误消息，那么将会返回错误。生产者会在每次重试之间间隔100ms，不过可以通过`retry.backoff.ms`改变这个间隔。
 
 #### batch.size
 
-当多个消息发往 同一个分区，生产者会将他们放进同一个批次，该参数指定了一个批次可以使用的内存大小，按照字节数进行计算，不是消息个数，当批次被填满，批次里面所有得消息将会被发送，半满的批次，甚至只包含一个消息也可能会被发送，所以即使把批次设置的很大，也不会造成延迟，只是占用的内存打了一些而已。但是设置的太小，那么生产者将会频繁的发送小，增加一些额外的开销。
+当多个消息发往同一个分区，生产者会将他们放进同一个批次，该参数指定了一个批次可以使用的内存大小，按照字节数进行计算(不是消息个数)；当批次被填满，批次里面所有得消息将会被发送；半满的批次，甚至只包含一个消息也可能会被发送，所以即使把批次设置的很大，也不会造成延迟，只是占用的内存打了一些而已。但是设置的太小，那么生产者将会频繁的发送小，增加一些额外的开销。
 
 #### linger.ms
 
-该参数指定了生产者在发送批次之前等待更多消息加入批次的时间。KafkaProducer会在批次填满或linger.ms达到上限时把批次发送出去。默认情况下，只要有可用的线程， 生
-产者就会把消息发送出去，就算批次里只有一个消息。把linger.ms设置成比0大的数，让生产者在发送批次之前等待一会儿，使更多的消息加入到这个批次。虽然这样会增加延迟，但也会提升吞吐量（因为一次性发送更多的消息，每个消息的开销就变小了）
+该参数指定了生产者在发送批次之前等待更多消息加入批次的时间。KafkaProducer会在批次填满或linger.ms达到上限时把批次发送出去。默认情况下，只要有可用的线程， 生产者就会把消息发送出去，就算批次里只有一个消息。把linger.ms设置成比0大的数，让生产者在发送批次之前等待一会儿，使更多的消息加入到这个批次。虽然这样会增加延迟，但也会提升吞吐量（因为一次性发送更多的消息，每个消息的开销就变小了）
 
 #### requests.timeout.ms
 
@@ -142,7 +100,149 @@ acks=all，所有参与复制的节点全部收到消息的时候，生产者才
 
 指定了生产者收到服务器响应之前可以发送多少个消息。它的值越高，将会消耗更多的内存，不过也会提升吞吐量。设置为1，可以保证消息是按照发送的顺序写入服务器。即使发生了重试。
 
-### Producer执行流程
+### ISR 机制 和 数据一致性
+
+Leader维护了一个动态的in-sync replica set (ISR)，意为和leader保持同步的follower集合。当ISR中的follower完成数据的同步之后，leader就会给follower发送ack。如果follower长时间未向leader同步数据，则该follower将被踢出ISR，该时间阈值由replica.lag.time.max.ms参数设定。Leader发生故障之后，就会从ISR中选举新的leader
+
+<font color='red'>Kafka 的复制机制既不是完全的同步复制，也不是单纯的异步复制</font>。完全同步复制要求所有能工作的 Follower 都复制完，这条消息才会被认为 commit，这种复制方式极大的影响了吞吐率（高吞吐率是 Kafka 非常重要的一个特性）。而异步复制方式下，Follower 异步的从 Leader 复制数据，数据只要被 Leader 写入 log 就被认为已经 commit，这种情况下如果 Follower 都复制完都落后于 Leader，而如果 Leader 突然宕机，则会丢失数据。
+
+#### LEO & HW 保证副本的数据一致性
+
+* LEO：指的是每个副本最大的offset
+* HW：指的是消费者能见到的最大的offset，ISR队列中最小的LEO
+
+![](../imgs/hw_leo.png)
+
+![](../imgs/hw_leo2.jpeg)
+
+#### follower故障
+
+follower发生故障后会被临时踢出ISR，待该follower恢复后，follower会读取本地磁盘记录的上次的HW，并将log文件高于HW的部分截取掉，从HW开始向leader进行同步。等该follower的LEO大于等于该Partition的HW，即follower追上leader之后，就可以重新加入ISR了。
+
+#### leader故障
+
+leader发生故障之后，会从ISR中选出一个新的leader；之后，为保证多个副本之间的数据一致性，其余的follower会先将各自的log文件高于HW的部分截掉，然后从新的leader同步数据。
+
+注意：这只能保证副本之间的数据一致性，并不能保证数据不丢失或者不重复
+
+### 0.11版本之后 幂等 & Exactly Once 语义
+
+对于某些比较重要的消息，我们需要保证exactly once语义，即保证每条消息被发送且仅被发送一次。
+
+在0.11版本之后，Kafka Producer引入了幂等性机制（`idempotent` n. 幂等性），配合acks = -1时的at least once语义，实现了producer到broker的exactly once语义。
+
+`idempotent + at least once = exactly once`
+
+使用时，只需将`enable.idempotence`属性设置为true（kafka会自动将`acks`属性设为-1）
+
+#### 事务应用场景
+
+kafka的应用场景经常是应用先消费一个topic，然后做处理再发到另一个topic，这个`consume-transform-produce`过程需要放到一个事务里面，比如在消息处理或者发送的过程中如果失败了，消费位点也不能提交。
+
+#### 事务处理
+
+producer提供了`initTransactions`, `beginTransaction`, `sendOffsets`, `commitTransaction`, `abortTransaction` 五个事务方法。
+
+```java
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.OffsetAndMetadata;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.common.TopicPartition;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.Future;
+
+public class consumeTransformProduce {
+    private static Properties getProducerProps(){
+        Properties props =  new Properties();
+        props.put("bootstrap.servers", "47.52.199.51:9092");
+        props.put("retries", 3); // 重试次数
+        props.put("batch.size", 100); // 批量发送大小
+        props.put("buffer.memory", 33554432); // 缓存大小，根据本机内存大小配置
+        props.put("linger.ms", 1000); // 发送频率，满足任务一个条件发送
+        props.put("client.id", "producer-syn-2"); // 发送端id,便于统计
+        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        props.put("transactional.id","producer-2"); // 设置事务Id,每台机器唯一
+        props.put("enable.idempotence",true); // 设置幂等性
+        return props;
+    }
+
+    private static Properties getConsumerProps(){
+        Properties props =  new Properties();
+        props.put("bootstrap.servers", "47.52.199.51:9092");
+        props.put("group.id", "test_3");
+        props.put("session.timeout.ms", 30000);       // 如果其超时，将会可能触发rebalance并认为已经死去，重新选举Leader
+        props.put("enable.auto.commit", "false");      // 开启自动提交
+        props.put("auto.commit.interval.ms", "1000"); // 自动提交时间
+        props.put("auto.offset.reset","earliest"); // 从最早的offset开始拉取，latest:从最近的offset开始消费
+        props.put("client.id", "producer-syn-1"); // 发送端id,便于统计
+        props.put("max.poll.records","100"); // 每次批量拉取条数
+        props.put("max.poll.interval.ms","1000");
+        props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put("isolation.level","read_committed"); // 设置隔离级别
+        return props;
+    }
+    public static void main(String[] args) {
+        // 创建生产者
+        KafkaProducer<String, String> producer = new KafkaProducer<>(getProducerProps());
+        // 创建消费者
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(getConsumerProps());
+        // 初始化事务
+        producer.initTransactions();
+        // 订阅主题
+        consumer.subscribe(Arrays.asList("consumer-tran"));
+        for(;;){
+            // 开启事务
+            producer.beginTransaction();
+            // 接受消息
+            ConsumerRecords<String, String> records = consumer.poll(500);
+            // 处理逻辑
+            try {
+                Map<TopicPartition, OffsetAndMetadata> commits = new HashMap<>();
+                for(ConsumerRecord record : records){
+                    // 处理消息
+                    System.out.printf("offset = %d, key = %s, value = %s\n", record.offset(), record.key(), record.value());
+                    // 记录提交的偏移量
+                    commits.put(new TopicPartition(record.topic(), record.partition()),new OffsetAndMetadata(record.offset()));
+                    // 产生新消息
+                    Future<RecordMetadata> metadataFuture = producer.send(new ProducerRecord<>("consumer-send",record.value()+"send"));
+                }
+                // 提交偏移量
+                producer.sendOffsetsToTransaction(commits,"group0323");
+                // 事务提交
+                producer.commitTransaction();
+
+            }catch (Exception e){
+                e.printStackTrace();
+                producer.abortTransaction();
+            }
+        }
+    }
+}
+```
+
+## KafkaProducer源码
+
+### KafkaProducer 交互简图
+
+![](../imgs/kafka_producer_frame.png)
+
+所以重点要关心：1. 元数据，2. 数据如何发送
+
+同步发送如下图：
+
+![](../imgs/kafka_produce_sync.png)
+
+### 源码流程图
 
 ![](../imgs/producer3.png)
 
@@ -172,20 +272,135 @@ KafkaProducer
 					client.poll(pollTimeout, now);
 						NetworkClient poll()
 							this.selector.poll(Utils.min(timeout, metadataTimeout, requestTimeoutMs));
-
 ```
 
 ![](../imgs/producer1.png)
 
 ![](../imgs/producer2.png)
 
-### 序列化
+#### 元数据交互
+
+sender从kafka集群获取信息，然后更新Metadata；KafkaProducer先读取Metadata，然后才能确定开始消息写入流程
+
+可以看到Metadata是有多个客户端线程(即KafkaProducer线程)读，一个sender线程更新，因此它必须是线程安全的，查看源码可以看到其所有方法都是加上`synchronized`关键字的
+
+```java
+/**
+ * A class encapsulating some of the logic around metadata.
+ * <p>
+ * This class is shared by the client thread (for partitioning) and the background sender thread.
+ *
+ * Metadata is maintained for only a subset of topics, which can be added to over time. When we request metadata for a
+ * topic we don't have any metadata for it will trigger a metadata update.
+ * <p>
+ * If topic expiry is enabled for the metadata, any topic that has not been used within the expiry interval
+ * is removed from the metadata refresh set after an update. Consumers disable topic expiry since they explicitly
+ * manage topics while producers rely on topic expiry to limit the refresh set.
+ */
+public final class Metadata {
+    ...
+    public synchronized Cluster fetch()
+    public synchronized void add(String topic)
+    public synchronized long timeToNextUpdate(long nowMs)
+    public synchronized int requestUpdate()
+    public synchronized boolean updateRequested()
+    public synchronized void awaitUpdate(final int lastVersion, final long maxWaitMs)
+    ...
+}
+```
+
+* `org.apache.kafka.clients.producer.KafkaProducer#waitOnMetadata`
+
+```java
+/**
+ * Wait for cluster metadata including partitions for the given topic to be available.
+ * @param topic The topic we want metadata for
+ * @param partition A specific partition expected to exist in metadata, or null if there's no preference
+ * @param maxWaitMs The maximum time in ms for waiting on the metadata
+ * @return The cluster containing topic metadata and the amount of time we waited in ms
+ */
+private ClusterAndWaitTime waitOnMetadata(String topic, Integer partition, long maxWaitMs) throws InterruptedException {
+    /**
+     * metadata维护了topic和过期时间的Map结构(即 topic expiry)：Map<String, Long> topics;
+     * add 会判断是否命中了Map且时间过期判断并更新，否则要进行Metadata的更新（由sender线程负责更新）
+     * 注：add方法在新增topic时候才会`requestUpdateForNewTopics`，更新标记（Metadata的成员属性needUpdate）
+     */
+    // add topic to metadata topic list if it is not there already and reset expiry
+    metadata.add(topic);
+    Cluster cluster = metadata.fetch();
+    Integer partitionsCount = cluster.partitionCountForTopic(topic);
+    // Return cached metadata if we have it, and if the record's partition is either undefined
+    // or within the known partition range
+    // 指定分区空，或者是小于分区总数的和合理值，就返回
+    if (partitionsCount != null && (partition == null || partition < partitionsCount))
+        return new ClusterAndWaitTime(cluster, 0);
+
+    long begin = time.milliseconds();
+    long remainingWaitMs = maxWaitMs;
+    long elapsed;
+    // Issue metadata requests until we have metadata for the topic or maxWaitTimeMs is exceeded.
+    // In case we already have cached metadata for the topic, but the requested partition is greater
+    // than expected, issue an update request only once. This is necessary in case the metadata
+    // is stale and the number of partitions for this topic has increased in the meantime.
+    do {
+        // 需要更新元数据信息，并唤醒 sender 线程，去完成元数据更新
+        log.trace("Requesting metadata update for topic {}.", topic);
+        metadata.add(topic);
+        int version = metadata.requestUpdate();
+        sender.wakeup();
+        try {
+            // 开始更新元数据，否则要抛出 TimeoutException
+            metadata.awaitUpdate(version, remainingWaitMs);
+        } catch (TimeoutException ex) {
+            // Rethrow with original maxWaitMs to prevent logging exception with remainingWaitMs
+            throw new TimeoutException("Failed to update metadata after " + maxWaitMs + " ms.");
+        }
+        cluster = metadata.fetch();
+        elapsed = time.milliseconds() - begin;
+        if (elapsed >= maxWaitMs)
+            throw new TimeoutException("Failed to update metadata after " + maxWaitMs + " ms.");
+        if (cluster.unauthorizedTopics().contains(topic))
+            throw new TopicAuthorizationException(topic);
+        remainingWaitMs = maxWaitMs - elapsed;
+        partitionsCount = cluster.partitionCountForTopic(topic);
+    } while (partitionsCount == null);
+
+    if (partition != null && partition >= partitionsCount) {
+        throw new KafkaException(
+                String.format("Invalid partition given with record: %d is not in the range [0...%d).", partition, partitionsCount));
+    }
+
+    return new ClusterAndWaitTime(cluster, elapsed);
+}
+```
+
+元数据部分总结
+
+1. KafkaProducer主线程和sender线程通过wait/notify同步。主线程负责发出更新信号和读取元数据，sender线程负责更新集群元数据
+2. 为了避免频繁更新元数据给服务端造成压力，Metadata两次更新时间间隔不能小于refreshBackOffMs设计
+3. Metadata使用version来表示元信息的版本，更新后版本就加1，通过比较新旧版本来判断Metadata是否更新完成
+4. Metadata不是存放所有topic信息，而是维护使用到的topic的信息
+
+#### 元数据更新重难点
+
+刷新metadata并不仅在第一次初始化时做。为了能适应kafka broker运行中因为各种原因挂掉、partition改变等变化，eventHandler会定期的再去刷新一次该metadata，刷新的间隔用参数topic.metadata.refresh.interval.ms定义，默认值是10分钟
+
+
+* 调用send, 才会新建SyncProducer，只有调用send才会去定期刷新metadata在每次取metadata时，kafka会新建一个SyncProducer去取metadata，逻辑处理完后再close。
+
+* 根据当前SyncProducer(一个Broker的连接)取得的最新的完整的metadata，刷新ProducerPool中到broker的连接.每10分钟的刷新会直接重新把到每个broker的socket连接重建，意味着在这之后的第一个请求会有几百毫秒的延迟。如果不想要该延迟，把topic.metadata.refresh.interval.ms值改为-1，这样只有在发送失败时，才会重新刷新。
+
+* Kafka的集群中如果某个partition所在的broker挂了，可以检查错误后重启重新加入集群，手动做rebalance，producer的连接会再次断掉，直到rebalance完成，那么刷新后取到的连接着中就会有这个新加入的broker。
+
+#### 序列化
 
 Producer 端会对 record 的 key 和 value 值进行序列化操作，那么显然也会在 Consumer 端再进行相应的反序列化；
 
 Kafka 内部提供提供了序列化和反序列化算法
 
-### 计算 record 要发送到的 partition？
+#### 计算 record 要发送到的 partition？
+
+未指定分区的情况下，默认的分区策略如下：
 
 * 如果指定了partition就用指定的，否则有一个partition方法来计算
 
@@ -240,9 +455,11 @@ private int nextValue(String topic) {
 }
 ```
 
-### accumulator.append()
+<font color='red'>当然也可以自己实现`Partitioner`接口</font>
 
-#### RecordAccumulator
+#### accumulator.append()
+
+##### RecordAccumulator
 
 ```java
 /**
@@ -285,7 +502,7 @@ public final class RecordAccumulator {
 
 ![](../imgs/producer4.png)
 
-#### append方法的源码流程
+##### append方法的源码流程
 
 ```java
 /**
@@ -384,13 +601,13 @@ public RecordAppendResult append(TopicPartition tp,
 }
 ```
 
-### sender线程处理流程
+#### sender线程处理流程
 
 ![](../imgs/sender1.png)
 
-* 注： 在`new KafkaProducer<>(props);`的时候会启动sender线程
+* 注：在`new KafkaProducer<>(props);`的时候会启动sender线程
 
-#### sender源码
+##### sender源码
 
 ```java
 Sender 
@@ -613,7 +830,6 @@ boolean maybeExpire(int requestTimeoutMs, long retryBackoffMs, long now, long li
 
 调用`NetworkClient.poll()`方法，将KafkaChannel.send字段中保存的ClientRequest发送出去，并且还会处理服务端发回的响应、处理超时的请求、调用用户自定义的CallBack
 
-
 * NetworkClient.poll()
 
 ```java
@@ -756,7 +972,3 @@ public void poll(long timeout) throws IOException {
     addToCompletedReceives();
 }
 ```
-
-##### 如何处理粘包/拆包
-
-todo

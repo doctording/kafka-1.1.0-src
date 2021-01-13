@@ -1,4 +1,4 @@
-请访问: https://doctording.github.io/kafka-1.1.0-src/
+请访问: https://github.com/doctording/kafka-1.1.0-src
 
 欢迎:`star`，`fork`，`pr` 或 email
 

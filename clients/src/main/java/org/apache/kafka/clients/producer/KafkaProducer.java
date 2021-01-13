@@ -392,6 +392,8 @@ public class KafkaProducer<K, V> implements Producer<K, V> {
             short acks = configureAcks(config, transactionManager != null, log);
 
             this.apiVersions = new ApiVersions();
+            // RecordAccumulator TopicPartition 批次管理器
+            // ConcurrentMap<TopicPartition, Deque<ProducerBatch>> batches;
             this.accumulator = new RecordAccumulator(logContext,
                     config.getInt(ProducerConfig.BATCH_SIZE_CONFIG),
                     this.totalMemorySize,
@@ -403,6 +405,7 @@ public class KafkaProducer<K, V> implements Producer<K, V> {
                     apiVersions,
                     transactionManager);
             List<InetSocketAddress> addresses = ClientUtils.parseAndValidateAddresses(config.getList(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG));
+            // 元数据更新
             if (metadata != null) {
                 this.metadata = metadata;
             } else {
@@ -428,6 +431,7 @@ public class KafkaProducer<K, V> implements Producer<K, V> {
                     apiVersions,
                     throttleTimeSensor,
                     logContext);
+            // sender 线程
             this.sender = new Sender(logContext,
                     client,
                     this.metadata,
@@ -443,6 +447,7 @@ public class KafkaProducer<K, V> implements Producer<K, V> {
                     this.transactionManager,
                     apiVersions);
             String ioThreadName = NETWORK_THREAD_PREFIX + " | " + clientId;
+            // kafkaThread 启动
             this.ioThread = new KafkaThread(ioThreadName, this.sender, true);
             this.ioThread.start();
             this.errors = this.metrics.sensor("errors");
@@ -878,12 +883,18 @@ public class KafkaProducer<K, V> implements Producer<K, V> {
      * @return The cluster containing topic metadata and the amount of time we waited in ms
      */
     private ClusterAndWaitTime waitOnMetadata(String topic, Integer partition, long maxWaitMs) throws InterruptedException {
+        /**
+         * metadata维护了topic和过期时间的Map结构(即 topic expiry)：Map<String, Long> topics;
+         * add 会判断是否命中了Map且时间过期判断并更新，否则要进行Metadata的更新（由sender线程负责更新）
+         * 注：add方法在新增topic时候才会`requestUpdateForNewTopics`，更新标记（Metadata的成员属性needUpdate）
+         */
         // add topic to metadata topic list if it is not there already and reset expiry
         metadata.add(topic);
         Cluster cluster = metadata.fetch();
         Integer partitionsCount = cluster.partitionCountForTopic(topic);
         // Return cached metadata if we have it, and if the record's partition is either undefined
         // or within the known partition range
+        // 指定分区空，或者是小于分区总数的和合理值，就返回
         if (partitionsCount != null && (partition == null || partition < partitionsCount))
             return new ClusterAndWaitTime(cluster, 0);
 
@@ -895,11 +906,13 @@ public class KafkaProducer<K, V> implements Producer<K, V> {
         // than expected, issue an update request only once. This is necessary in case the metadata
         // is stale and the number of partitions for this topic has increased in the meantime.
         do {
+            // 需要更新元数据信息，并唤醒 sender 线程，去完成元数据更新
             log.trace("Requesting metadata update for topic {}.", topic);
             metadata.add(topic);
             int version = metadata.requestUpdate();
             sender.wakeup();
             try {
+                // 开始更新元数据，否则要抛出 TimeoutException
                 metadata.awaitUpdate(version, remainingWaitMs);
             } catch (TimeoutException ex) {
                 // Rethrow with original maxWaitMs to prevent logging exception with remainingWaitMs
